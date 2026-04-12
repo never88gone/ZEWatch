@@ -308,7 +308,6 @@
 		35B188E38DC5B131FF8AFC08 /* quants.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = quants.c; path = "llama.cpp/ggml/src/ggml-cpu/quants.c"; sourceTree = "<group>"; };
 		35C1BDEC20FA18AE940F5C56 /* qwen3.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = qwen3.cpp; path = llama.cpp/src/models/qwen3.cpp; sourceTree = "<group>"; };
 		3650E6BD4444DAFA4B7F869B /* step35-iswa.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "step35-iswa.cpp"; path = "llama.cpp/src/models/step35-iswa.cpp"; sourceTree = "<group>"; };
-		3803AE3C2F0D10490047BF4A /* ZEWatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZEWatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3803AE422F0D10490047BF4A /* ZEWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZEWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		382CD5D62F77B52E0015A355 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		386135242F72419200538B3A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -718,7 +717,6 @@
 		3803AE3D2F0D10490047BF4A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3803AE3C2F0D10490047BF4A /* ZEWatchApp.app */,
 				3803AE422F0D10490047BF4A /* ZEWatch.app */,
 				F1AFACC36A2B475EE6ED1DE0 /* ZEWatchCompanion.app */,
 			);
@@ -1360,17 +1358,17 @@
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Control HSBrowser on TV.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "识海感应您的肉身律动，以精准捕捉修行的点滴进步。";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nevergone.hulugeappstore.iosApp;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nevergone.zrxx.ios;
 				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = zrxxWatch_dev;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = zrxxIosWatchapp_dev;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -1403,17 +1401,17 @@
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Control HSBrowser on TV.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "识海感应您的肉身律动，以精准捕捉修行的点滴进步。";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nevergone.hulugeappstore.iosApp;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nevergone.zrxx.ios;
 				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = zrxxWach_dis;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = zrxxIosWatchapp_dis;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

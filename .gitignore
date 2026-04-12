@@ -3,3 +3,4 @@ build
 # 也可以忽略大文件夹（视具体放置结构而定）
 # ZEWatchCompanion/Models/*.gguf
 .agent
+ZEWatch.xcodeproj/project.xcworkspace/xcuserdata

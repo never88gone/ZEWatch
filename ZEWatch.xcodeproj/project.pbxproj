@@ -1176,7 +1176,12 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 876385K952;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 876385K952;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1202,8 +1207,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/llama.cpp/ggml/src";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.hulugeappstore.iosApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = zrxxiOS_dis;
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(inherited) $(SRCROOT)/ZEWatchCompanion";
 				SWIFT_OBJC_BRIDGING_HEADER = "ZEWatchCompanion/ZEWatchCompanion-Bridging-Header.h";
@@ -1338,28 +1345,32 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=watchos*]" = 876385K952;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZEWatch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "糖葫芦修仙";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "读取活动卡路里与步数以将其转化为修仙的真气。";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "记录您的正念吐纳记录。";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Control HSBrowser on TV.";
-				INFOPLIST_KEY_NSMotionUsageDescription = "Detect wrist gestures.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "识海感应您的肉身律动，以精准捕捉修行的点滴进步。";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nevergone.hulugeappstore.iosApp;
 				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.hulugeappstore.iosApp.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = hulugeappstoreIosAppWatch_dev;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = zrxxWatch_dev;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -1378,27 +1389,31 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=watchos*]" = 876385K952;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "糖葫芦修仙";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "读取活动卡路里与步数以将其转化为修仙的真气。";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "记录您的正念吐纳记录。";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Control HSBrowser on TV.";
-				INFOPLIST_KEY_NSMotionUsageDescription = "Detect wrist gestures.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "识海感应您的肉身律动，以精准捕捉修行的点滴进步。";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.nevergone.hulugeappstore.iosApp;
 				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.hulugeappstore.iosApp.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = hulugeappstoreIosAppWatch_dis;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = zrxxWach_dis;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -1421,7 +1436,12 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 876385K952;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 876385K952;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1447,8 +1467,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/llama.cpp/ggml/src";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.hulugeappstore.iosApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = zrxxiOS_dev;
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(inherited) $(SRCROOT)/ZEWatchCompanion";
 				SWIFT_OBJC_BRIDGING_HEADER = "ZEWatchCompanion/ZEWatchCompanion-Bridging-Header.h";

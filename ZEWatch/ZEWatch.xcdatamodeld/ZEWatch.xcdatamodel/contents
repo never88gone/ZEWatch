@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic" codeGenerationLanguage="Swift">
+    <entity name="PlayerProfile" representedClassName="PlayerProfile" syncable="YES">
+        <attribute name="boneRoot" optional="YES" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="cultivationBase" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lucky" optional="YES" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="physique" optional="YES" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="realm" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="wisdom" optional="YES" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="bodyLevel" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="swordLevel" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="talismanLevel" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="alchemyLevel" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="metalQi" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="woodQi" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="waterQi" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fireQi" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="earthQi" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="metalRoot" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="woodRoot" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="waterRoot" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="fireRoot" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="earthRoot" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="lastSettlementDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="grottoLevel" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="skills" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SkillManual" inverseName="profile" inverseEntity="SkillManual"/>
+    </entity>
+    <entity name="CultivationLog" representedClassName="CultivationLog" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="logType" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="SkillManual" representedClassName="SkillManual" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="skillType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="elementReq" optional="YES" attributeType="String"/>
+        <attribute name="costAmount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isUnlocked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="level" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PlayerProfile" inverseName="skills" inverseEntity="PlayerProfile"/>
+    </entity>
+    <elements>
+        <element name="PlayerProfile" positionX="-63" positionY="18" width="128" height="165"/>
+        <element name="CultivationLog" positionX="-63" positionY="-108" width="128" height="90"/>
+        <element name="SkillManual" positionX="120" positionY="18" width="128" height="165"/>
+    </elements>
+</model>
+

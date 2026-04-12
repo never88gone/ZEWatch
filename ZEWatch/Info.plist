@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>WKCompanionAppBundleIdentifier</key>
+	<string>com.nevergone.hulugeappstore.iosApp</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>读取活动卡路里与步数以将其转化为修仙的真气。</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>记录您的正念吐纳记录。</string>
+	<key>NSMotionUsageDescription</key>
+	<string>识海感应您的肉身律动，以精准捕捉修行的点滴进步。</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+</dict>
+</plist>

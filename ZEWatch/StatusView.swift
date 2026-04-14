@@ -128,6 +128,15 @@ struct StatusView: View {
                 .padding(.horizontal, 4)
                 .padding(.top, 6)
                 
+                NavigationLink(destination: WatchPrivacyPolicyView()) {
+                    Text("隐私政策")
+                        .font(.system(size: 11))
+                        .foregroundColor(.gray)
+                        .underline()
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 10)
+                
                 Spacer(minLength: 20)
             }
         }
@@ -473,4 +482,31 @@ extension Color {
     static let emerald = Color(red: 0.1, green: 0.7, blue: 0.4)
 }
 
+#endif
+
+#if os(watchOS)
+struct WatchPrivacyPolicyView: View {
+    let policyText = """
+    # 隐私政策
+    
+    应用名称: 糖葫芦修仙
+    
+    我们极其重视您的隐私。
+    
+    本应用绝对不会收集、传输或分享您的任何个人隐私信息。所有修行、境界与个人数据均完全保留在您的设备本地。
+    
+    若有任何疑问，请随时联络我们。
+    """
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text(LocalizedStringKey(policyText))
+                    .font(.system(size: 12))
+                    .padding()
+            }
+        }
+        .navigationTitle("隐私")
+    }
+}
 #endif

@@ -47,5 +47,14 @@
 ## 🤝 参与贡献
 本项目现已全面开源。无论你是对 AI 本地推理集成（`llama.cpp`）、watchOS 独占硬件交互开发（如数码表冠、触觉反馈），还是对极其“中二”的修真游戏玩法设计有独特想法，都欢迎提交 Pull Request 或者建立 Issue 探讨！
 
+## 📞 技术支持与联系
+
+如果您在使用中遇到任何问题，请参阅我们的 [用户支持页面 (SUPPORT.md)](SUPPORT.md)，其中包含：
+
+- **常见问题 (FAQ)**: 应用功能、HealthKit 授权、数据安全等常见疑问解答
+- **隐私政策**: 查阅 [PrivacyPolicy.md](PrivacyPolicy.md) 了解我们对数据安全的承诺
+- **问题反馈**: 通过 [GitHub Issues](https://github.com/never88gone/ZEWatch/issues) 提交 Bug 报告或功能建议
+- **联系邮箱**: never88gone@gmail.com
+
 ---
 *"灵气枯竭的末法时代，唯有自律，方可证道长生。"*

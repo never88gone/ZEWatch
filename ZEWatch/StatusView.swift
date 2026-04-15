@@ -128,6 +128,56 @@ struct StatusView: View {
                 .padding(.horizontal, 4)
                 .padding(.top, 6)
                 
+                // MARK: - 健康数据 (HealthKit) 标识面板
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.red)
+                            .font(.system(size: 12))
+                        Text("健康数据 (HealthKit)")
+                            .font(.system(size: 12, weight: .bold, design: .serif))
+                            .foregroundColor(.white)
+                    }
+                    
+                    HStack(spacing: 4) {
+                        Image(systemName: HealthManager.shared.isAuthorized ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
+                            .foregroundColor(HealthManager.shared.isAuthorized ? .green : .orange)
+                            .font(.system(size: 9))
+                        Text(HealthManager.shared.isAuthorized ? "已授权读取" : "未授权")
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundColor(HealthManager.shared.isAuthorized ? .green : .orange)
+                    }
+                    
+                    Divider().background(Color.gray.opacity(0.3))
+                    
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("本应用通过 Apple HealthKit 读取以下数据，全部在设备本地处理：")
+                            .font(.system(size: 8))
+                            .foregroundColor(.gray)
+                        
+                        healthDataRow(icon: "figure.walk", label: "步数", purpose: "→ 木灵气")
+                        healthDataRow(icon: "flame.fill", label: "活动卡路里", purpose: "→ 金灵气")
+                        healthDataRow(icon: "bed.double.fill", label: "睡眠时长", purpose: "→ 水灵气")
+                        healthDataRow(icon: "heart.text.square", label: "心率", purpose: "→ 奇遇触发")
+                        healthDataRow(icon: "figure.run", label: "运动记录", purpose: "→ 五行灵气")
+                        healthDataRow(icon: "figure.stand", label: "站立小时", purpose: "→ 木灵气")
+                    }
+                    
+                    Text("管理权限：系统设置 → 健康 → 数据访问")
+                        .font(.system(size: 7))
+                        .foregroundColor(.gray.opacity(0.7))
+                        .padding(.top, 2)
+                }
+                .padding(8)
+                .background(Color(white: 0.1))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.red.opacity(0.2), lineWidth: 0.5)
+                )
+                .padding(.horizontal, 4)
+                .padding(.top, 8)
+                
                 NavigationLink(destination: WatchPrivacyPolicyView()) {
                     Text("隐私政策")
                         .font(.system(size: 11))
@@ -146,6 +196,22 @@ struct StatusView: View {
         .navigationTitle("灵牌")
         .navigationBarTitleDisplayMode(.inline)
     }
+    private func healthDataRow(icon: String, label: String, purpose: String) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 8))
+                .foregroundColor(.cyan.opacity(0.7))
+                .frame(width: 12)
+            Text(label)
+                .font(.system(size: 8, weight: .medium))
+                .foregroundColor(.white.opacity(0.9))
+            Spacer()
+            Text(purpose)
+                .font(.system(size: 8, weight: .bold, design: .serif))
+                .foregroundColor(.cyan)
+        }
+    }
+    
     private func rootCell(label: String, value: Int16, isSpecial: Bool = false) -> some View {
         VStack(spacing: 2) {
             Text(label)

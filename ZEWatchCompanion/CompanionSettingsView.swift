@@ -26,6 +26,48 @@ struct CompanionSettingsView: View {
                     Text("修行偏好")
                 }
                 
+                // MARK: - 健康数据 (HealthKit)
+                Section {
+                    HStack {
+                        Label("授权状态", systemImage: "heart.fill")
+                            .foregroundColor(.red)
+                        Spacer()
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(.green)
+                            Text("已授权读取")
+                                .foregroundColor(.green)
+                        }
+                        .font(.callout)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("本应用通过 Apple HealthKit 读取以下健康数据，将其转化为游戏内的五行灵气。**所有数据仅在设备本地处理，绝不上传至任何服务器。**")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        Divider()
+                        
+                        companionHealthRow(icon: "figure.walk", label: "步数", element: "木灵气", color: .green)
+                        companionHealthRow(icon: "flame.fill", label: "活动卡路里", element: "金灵气", color: .orange)
+                        companionHealthRow(icon: "bed.double.fill", label: "睡眠分析", element: "水灵气", color: .blue)
+                        companionHealthRow(icon: "heart.text.square", label: "心率数据", element: "奇遇触发", color: .red)
+                        companionHealthRow(icon: "figure.run", label: "运动记录", element: "五行灵气", color: .cyan)
+                        companionHealthRow(icon: "figure.stand", label: "站立小时", element: "木灵气", color: .green)
+                    }
+                    
+                    Button {
+                        if let url = URL(string: "x-apple-health://") {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        Label("前往「健康」管理数据权限", systemImage: "arrow.up.forward.app.fill")
+                            .foregroundColor(.cultivPrimary)
+                    }
+                } header: {
+                    Text("健康数据 (HealthKit)")
+                }
+                
                 // MARK: - 识海阵法 (AI)
                 Section {
                     HStack {
@@ -99,6 +141,23 @@ struct CompanionSettingsView: View {
             .navigationTitle("洞府设置")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
+        }
+    }
+    
+    @ViewBuilder
+    private func companionHealthRow(icon: String, label: String, element: String, color: Color) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.caption2)
+                .foregroundColor(color)
+                .frame(width: 16)
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.primary)
+            Spacer()
+            Text(element)
+                .font(.caption.bold())
+                .foregroundColor(color)
         }
     }
 }

@@ -61,25 +61,35 @@ struct WatchFaceView: View {
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("炼体·金")
-                            .font(.system(size: 9, design: .serif))
-                            .foregroundColor(.orange)
+                        HStack(spacing: 2) {
+                            Text("炼体·金")
+                                .font(.system(size: 9, design: .serif))
+                                .foregroundColor(.orange)
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 6))
+                                .foregroundColor(.red.opacity(0.6))
+                        }
                         Text("\(Int(healthManager.todayEnergy))")
                             .font(.system(size: 15, weight: .bold, design: .serif))
                             .foregroundColor(.white)
-                        Text("阳气流转")
+                        Text("活动卡路里")
                             .font(.system(size: 8, design: .serif))
                             .foregroundColor(.gray)
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text("游历·木")
-                            .font(.system(size: 9, design: .serif))
-                            .foregroundColor(.green)
+                        HStack(spacing: 2) {
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 6))
+                                .foregroundColor(.red.opacity(0.6))
+                            Text("游历·木")
+                                .font(.system(size: 9, design: .serif))
+                                .foregroundColor(.green)
+                        }
                         Text("\(Int(healthManager.todaySteps))")
                             .font(.system(size: 15, weight: .bold, design: .serif))
                             .foregroundColor(.white)
-                        Text("凡尘寸步")
+                        Text("今日步数")
                             .font(.system(size: 8, design: .serif))
                             .foregroundColor(.gray)
                     }

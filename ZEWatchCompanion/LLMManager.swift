@@ -40,7 +40,12 @@ class LLMManager: ObservableObject {
         }
         
         do {
-            self.context = try await LlamaContext.create_context(path: finalPath)
+            // 通过 Task.detached 将底层耗时的 C 库初始化操作移至后台线程，防止阻塞主线程导致启动过慢
+            let newContext = try await Task.detached(priority: .userInitiated) {
+                return try await LlamaContext.create_context(path: finalPath)
+            }.value
+            
+            self.context = newContext
             modelLoaded = true
             statusMessage = "咳咳... 谁在那吵老夫睡觉？"
             

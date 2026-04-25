@@ -27,9 +27,9 @@
 	<key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
 	<string>用于分析修仙者的生命体征以辅助修行。</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>读取活动卡路里与步数以将其转化为修仙的真气。</string>
+	<string>糖葫芦修仙将访问您的活动能量消耗与步数数据，这些数据将被转化为游戏中的“炼体进度”和“身法修为”，使您的现实锻炼能直接提升角色的修行能力。所有数据仅保存在本地用于激励健身。</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>写入修仙产生的冥想时间与活动能量。</string>
+	<string>本应用会将您的冥想训练记录与活动消耗同步至健康 App，以便您在系统健康报告中完整追踪身心锻炼成果。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>我们需要您的位置来判断修士在人界的灵脉所处区域，以给予对应的五行共鸣加成。</string>
 	<key>UIApplicationSceneManifest</key>

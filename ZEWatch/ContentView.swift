@@ -13,6 +13,7 @@ struct ContentView: View {
     private var profiles: FetchedResults<PlayerProfile>
     
     @State private var showThunderstorm = false
+    @AppStorage("hasShownHealthKitOnboarding") private var hasShownHealthKitOnboarding = false
     
     var body: some View {
         if let player = profiles.first {
@@ -68,10 +69,18 @@ struct ContentView: View {
                         .transition(.opacity)
                         .zIndex(100)
                 }
+                
+                // HealthKit 引导 Overlay
+                if !hasShownHealthKitOnboarding {
+                    healthKitOnboardingView(player: player)
+                        .zIndex(200)
+                }
                 #endif
             }
             .onAppear {
-                requestAndSync(player: player)
+                if hasShownHealthKitOnboarding {
+                    requestAndSync(player: player)
+                }
                 // 初始化社交与通知
                 GameKitManager.shared.authenticateUser()
                 NotificationManager.shared.requestAuthorization()
@@ -90,7 +99,7 @@ struct ContentView: View {
                 #endif
             }
             .onChange(of: scenePhase) { newPhase in
-                if newPhase == .active {
+                if newPhase == .active && hasShownHealthKitOnboarding {
                     requestAndSync(player: player)
                 }
             }
@@ -98,6 +107,53 @@ struct ContentView: View {
             CreationView()
         }
     }
+    
+    #if os(watchOS)
+    private func healthKitOnboardingView(player: PlayerProfile) -> some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            ScrollView {
+                VStack(spacing: 8) {
+                    Image(systemName: "heart.text.square.fill")
+                        .font(.system(size: 32))
+                        .foregroundColor(.red)
+                        .padding(.top, 10)
+                    
+                    Text("Apple Health 同步")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                    
+                    Text("「糖葫芦修仙」需要读取您的 HealthKit 健康数据 (步数、运动、睡眠、心率等)，并将其转化为游戏内的「五行灵气」。")
+                        .font(.system(size: 11))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 4)
+                    
+                    Text("所有健康数据仅在本地处理，绝不上传任何服务器。")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.cyan)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 4)
+                        .padding(.top, 4)
+                    
+                    Button(action: {
+                        withAnimation {
+                            hasShownHealthKitOnboarding = true
+                        }
+                        requestAndSync(player: player)
+                    }) {
+                        Text("授予权限并开启修仙")
+                            .font(.system(size: 12, weight: .bold))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                    .padding(.top, 8)
+                    .padding(.bottom, 20)
+                }
+            }
+        }
+    }
+    #endif
     
     private func requestAndSync(player: PlayerProfile) {
         // 结算洞府收益

@@ -9,8 +9,8 @@
 		<string>remote-notification</string>
 	</array>
 	<key>NSHealthShareUsageDescription</key>
-	<string>糖葫芦修仙将访问您的活动能量消耗与步数数据，这些数据将被转化为游戏中的“炼体进度”和“身法修为”，使您的现实锻炼能直接提升角色的修行能力。所有数据仅保存在本地用于激励健身。</string>
+	<string>糖葫芦修仙将访问您的步数、活动能量、心率、睡眠、站立及运动记录。这些健康数据将被转化为游戏内的“五行灵气”与“奇遇机缘”，使您的现实锻炼直接提升角色的修行能力。所有数据仅在本地处理，用于激励健身。</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>本应用会将您的冥想训练记录与活动消耗同步至健康 App，以便您在系统健康报告中完整追踪身心锻炼成果。</string>
+	<string>本应用会将您的冥想训练记录与活动消耗同步至 Apple 健康，以便您在系统健康报告中完整追踪身心修炼成果。</string>
 </dict>
 </plist>

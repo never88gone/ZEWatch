@@ -55,7 +55,14 @@ struct WatchFaceView: View {
                 
                 HStack {
                     FixedDivider()
-                    Text("☯︎").font(.caption2).foregroundColor(.yellow.opacity(0.8))
+                    HStack(spacing: 2) {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 6))
+                            .foregroundColor(.red)
+                        Text("HealthKit")
+                            .font(.system(size: 7, weight: .bold))
+                            .foregroundColor(.gray.opacity(0.8))
+                    }
                     FixedDivider()
                 }
                 

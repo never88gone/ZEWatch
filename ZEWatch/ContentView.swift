@@ -137,18 +137,26 @@ struct ContentView: View {
                         .padding(.top, 4)
                     
                     Button(action: {
+                        // 稍微延迟调用，确保视图层级稳定，提高系统弹窗触发率
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            requestAndSync(player: player)
+                        }
                         withAnimation {
                             hasShownHealthKitOnboarding = true
                         }
-                        requestAndSync(player: player)
                     }) {
-                        Text("授予权限并开启修仙")
-                            .font(.system(size: 12, weight: .bold))
+                        Text("继续")
+                            .font(.system(size: 14, weight: .bold))
+                            .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.green)
+                    .tint(.blue)
                     .padding(.top, 8)
-                    .padding(.bottom, 20)
+                    
+                    Text("若点击无反应，请在系统「设置 > 健康」中手动开启权限")
+                        .font(.system(size: 8))
+                        .foregroundColor(.gray)
+                        .padding(.bottom, 20)
                 }
             }
         }
@@ -159,7 +167,7 @@ struct ContentView: View {
         // 结算洞府收益
         _ = CultivationEngine.shared.settleOfflineGains(profile: player, context: viewContext)
         
-        HealthManager.shared.requestAuthorization { success in
+        HealthManager.shared.requestAuthorization { success, error in
             if success {
                 Task {
                     await HealthManager.shared.syncElements(to: player, context: viewContext)
@@ -168,6 +176,9 @@ struct ContentView: View {
                     // 同步完灵气后，将最新状态发送至 iOS 端触发 AI 叙事
                     ConnectivityManager.shared.sendSyncData(player.toDictionary())
                 }
+            } else {
+                // 如果授权失败且没有错误，可能是之前拒绝过
+                print("HealthKit Authorization failed: \(String(describing: error))")
             }
         }
     }

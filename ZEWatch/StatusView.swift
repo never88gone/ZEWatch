@@ -45,6 +45,17 @@ struct StatusView: View {
                             .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
                     )
                     
+                    // 新增：明确标识数据来源
+                    HStack(spacing: 4) {
+                        Image(systemName: "heart.text.square.fill")
+                            .foregroundColor(.red)
+                            .font(.system(size: 8))
+                        Text("数据源自 Apple HealthKit")
+                            .font(.system(size: 8, weight: .medium))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.top, -4)
+                    
                     // 突破大键
                     if CultivationEngine.shared.canBreakthrough(profile: player) {
                         NavigationLink(destination: TribulationView(player: player)) {
@@ -143,9 +154,26 @@ struct StatusView: View {
                         Image(systemName: HealthManager.shared.isAuthorized ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
                             .foregroundColor(HealthManager.shared.isAuthorized ? .green : .orange)
                             .font(.system(size: 9))
-                        Text(HealthManager.shared.isAuthorized ? "已授权读取" : "未授权")
+                        Text(HealthManager.shared.isAuthorized ? "已连接 Apple Health" : "未连接健康应用")
                             .font(.system(size: 9, weight: .medium))
                             .foregroundColor(HealthManager.shared.isAuthorized ? .green : .orange)
+                        
+                        if !HealthManager.shared.isAuthorized {
+                            Button(action: {
+                                // 引导用户去设置
+                                if let url = URL(string: "ms-apple-health://") { // Watch 端的健康 URL
+                                    WKExtension.shared().openSystemURL(url)
+                                }
+                            }) {
+                                Text("去开启")
+                                    .font(.system(size: 8, weight: .bold))
+                                    .padding(.horizontal, 4)
+                                    .padding(.vertical, 2)
+                                    .background(Color.orange)
+                                    .cornerRadius(4)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                     
                     Divider().background(Color.gray.opacity(0.3))

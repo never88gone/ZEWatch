@@ -50,7 +50,7 @@ class LLMManager: ObservableObject {
             statusMessage = "咳咳... 谁在那吵老夫睡觉？"
             
             // 初始消息
-            messages.append(ChatMessage(role: .assistant, content: "（一个虚幻的老者身影从戒指中缓缓升起，斜着眼瞅了瞅你）\n\n小辈，看你这弱不禁风的样子，怕是连筑基都难。还不快如实招来，今日可曾偷懒？"))
+            messages.append(ChatMessage(role: .assistant, content: "小辈，今日为何无精打采？若再不磨炼筋骨，老夫这戒指可容不下你了。"))
             
         } catch {
             statusMessage = "唤醒失败：神魂受损"
@@ -80,16 +80,17 @@ class LLMManager: ObservableObject {
         let body = stats["bodyLevel"] as? Int16 ?? 1
         
         let systemPrompt = """
-        你是“墨老”，寄宿在戒指中的远古上仙残魂。你性格极度孤高、毒舌、严厉，偶尔会对后辈展现一丝“恨铁不成钢”的关照。
-        对方是一个资质平庸的修仙小辈。
+        你是“墨老”，寄宿在戒指中的远古上仙残魂。你性格孤高、毒舌、严厉，对后辈“恨铁不成钢”。
+        对方是修仙小辈。
         
-        【当前小辈状态】：境界【\(realmName)】 | 修为【\(base) 灵气】
+        【当前状态】：境界【\(realmName)】 | 修为【\(base) 灵气】
         
-        【核心戒律】（必须严格遵守）：
-        1. 必须完全沉浸于东方玄幻修仙角色，自称“老夫”，称对方“小辈”或“竖子”，绝不承认自己是系统或AI。
-        2. 说话用词偏古风，毒舌且傲娇，字数切记绝对不可超过60字！
-        3. 如果觉得小辈不够努力，尽情嘲讽；如果小辈有进步（如运动、坚持），给予肯定并且必须在话语最后加上机缘代码：[EVENT:ADD_CULTIVATION:X]（X填10到50）。
-        4. 你的回复务必干净利落，直接说出对话内容。
+        【核心戒律】：
+        1. 必须使用`<思维>你的思考过程</思维>`格式开头，展示你对小辈状态的分析，然后再输出对话。
+        2. 说话自称“老夫”，称对方“小辈”或“竖子”。用词古风，毒舌且傲娇。
+        3. 字数严格控制在30字以内！禁止任何场景描写或括号里的动作描述。
+        4. 进步（如运动、坚持）时，在对话最后加上机缘代码：[EVENT:ADD_CULTIVATION:X]（X为10-50）。
+        5. 不要重复对方的话，直接开始聊天。
         """
         
         var fullPrompt = "<|im_start|>system\n\\(systemPrompt)<|im_end|>\n"
@@ -127,11 +128,12 @@ class LLMManager: ObservableObject {
             let nextToken = await context.completion_loop()
             rawResponse += nextToken
             
-            // 实时过滤任何可能泄露的模型标记 (如 <|im_end|>, assistant, user 等)
+            // 实时过滤任何可能泄露的模型标记，并将 <think> 替换为中文 <思维>
             let filteredText = rawResponse
                 .replacingOccurrences(of: "<\\|.*?\\|>", with: "", options: .regularExpression)
+                .replacingOccurrences(of: "<think>", with: "<思维>")
+                .replacingOccurrences(of: "</think>", with: "</思维>")
                 .replacingOccurrences(of: "\\[EVENT:.*?\\]", with: "", options: .regularExpression)
-                // Filter out any standalone or prefixed 'user', 'assistant', 'system' (case insensitive) globally
                 .replacingOccurrences(of: "(?i)(?:user|assistant|system)[:\\n]?", with: "", options: .regularExpression)
             
             messages[msgIndex].content = filteredText.trimmingCharacters(in: .whitespacesAndNewlines)

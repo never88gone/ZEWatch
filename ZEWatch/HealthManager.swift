@@ -13,9 +13,9 @@ class HealthManager: ObservableObject {
     
     init() {}
     
-    func requestAuthorization(completion: @escaping (Bool) -> Void) {
+    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
         guard HKHealthStore.isHealthDataAvailable() else {
-            completion(false)
+            completion(false, nil)
             return
         }
         
@@ -25,16 +25,17 @@ class HealthManager: ObservableObject {
               let mindfulnessType = HKCategoryType.categoryType(forIdentifier: .mindfulSession),
               let sleepType = HKCategoryType.categoryType(forIdentifier: .sleepAnalysis),
               let standType = HKCategoryType.categoryType(forIdentifier: .appleStandHour) else {
-            completion(false)
+            completion(false, nil)
             return
         }
         
         let readTypes: Set<HKObjectType> = [stepType, energyType, heartRateType, mindfulnessType, sleepType, standType, HKObjectType.workoutType()]
         
+        // 在 watchOS 上，某些情况下需要确保在主线程发起请求，或者确保 healthStore 已就绪
         healthStore.requestAuthorization(toShare: nil, read: readTypes) { success, error in
             DispatchQueue.main.async {
                 self.isAuthorized = success
-                completion(success)
+                completion(success, error)
                 if success {
                     self.fetchTodaySteps()
                 }

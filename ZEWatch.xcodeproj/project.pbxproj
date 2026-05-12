@@ -54,7 +54,6 @@
 		386135352F72419200538B3A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 386135242F72419200538B3A /* Assets.xcassets */; };
 		386135372F72419200538B3A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3861352E2F72419200538B3A /* Localizable.strings */; };
 		38619CA72F8B3A2500B56B63 /* Qwen_Qwen3.5-0.8B-Q8_0.gguf in Resources */ = {isa = PBXBuildFile; fileRef = 38619CA62F8B3A2500B56B63 /* Qwen_Qwen3.5-0.8B-Q8_0.gguf */; };
-		38CA88962FB2CFFB00E29C61 /* llama_cpp.txt in Resources */ = {isa = PBXBuildFile; fileRef = 38CA88952FB2CFFB00E29C61 /* llama_cpp.txt */; };
 		38E13B742F738CEA0055BE24 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B6F2F738CEA0055BE24 /* CoreDataModels.swift */; };
 		38E13B752F738CEA0055BE24 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B732F738CEA0055BE24 /* Persistence.swift */; };
 		38E13B762F738CEA0055BE24 /* AICompanionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B6E2F738CEA0055BE24 /* AICompanionView.swift */; };
@@ -318,7 +317,6 @@
 		3861352F2F72419200538B3A /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		386135302F72419200538B3A /* WatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchApp.swift; sourceTree = "<group>"; };
 		38619CA62F8B3A2500B56B63 /* Qwen_Qwen3.5-0.8B-Q8_0.gguf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Qwen_Qwen3.5-0.8B-Q8_0.gguf"; sourceTree = "<group>"; };
-		38CA88952FB2CFFB00E29C61 /* llama_cpp.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = llama_cpp.txt; sourceTree = "<group>"; };
 		38E13B6E2F738CEA0055BE24 /* AICompanionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AICompanionView.swift; sourceTree = "<group>"; };
 		38E13B6F2F738CEA0055BE24 /* CoreDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
 		38E13B702F738CEA0055BE24 /* CreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
@@ -543,7 +541,6 @@
 		15D01C955AE1A9F5D43730F4 /* llama_cpp_sources */ = {
 			isa = PBXGroup;
 			children = (
-				38CA88952FB2CFFB00E29C61 /* llama_cpp.txt */,
 				38E13B822F7392860055BE24 /* llama.h */,
 				0BC35437F2614566D897D761 /* llama-model-loader.cpp */,
 				DDE195E3B53FC2C570F991FE /* llama-cparams.cpp */,
@@ -918,7 +915,6 @@
 				38E13B882F7412630055BE24 /* Launch Screen.storyboard in Resources */,
 				DF6BC230A9C10A1ACA036764 /* (null) in Resources */,
 				4497DF5098DA306B1F329A31 /* ggml-metal.metal in Resources */,
-				38CA88962FB2CFFB00E29C61 /* llama_cpp.txt in Resources */,
 				38619CA72F8B3A2500B56B63 /* Qwen_Qwen3.5-0.8B-Q8_0.gguf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

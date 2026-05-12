@@ -114,35 +114,60 @@ struct ContentView: View {
             Color.black.edgesIgnoringSafeArea(.all)
             ScrollView {
                 VStack(spacing: 8) {
-                    Image(systemName: "heart.text.square.fill")
-                        .font(.system(size: 32))
-                        .foregroundColor(.red)
-                        .padding(.top, 10)
+                    // HealthKit 品牌标识（满足 Guideline 2.5.1）
+                    HStack(spacing: 6) {
+                        Image(systemName: "heart.text.square.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(.red)
+                        Text("HealthKit")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.red)
+                    }
+                    .padding(.top, 10)
                     
-                    Text("Apple Health 同步")
-                        .font(.system(size: 14, weight: .bold))
+                    Text("Apple Health 数据同步")
+                        .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.white)
                     
-                    Text("「糖葫芦修仙」需要读取您的 HealthKit 健康数据 (步数、运动、睡眠、心率等)，并将其转化为游戏内的「五行灵气」。")
+                    Text("本应用通过 Apple HealthKit 读取以下健康数据，转化为游戏内的「五行灵气」：")
                         .font(.system(size: 11))
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 4)
                     
-                    Text("所有健康数据仅在本地处理，绝不上传任何服务器。")
+                    // 数据类型列表
+                    VStack(alignment: .leading, spacing: 3) {
+                        Label("步数 / 运动", systemImage: "figure.walk")
+                        Label("睡眠分析", systemImage: "moon.zzz")
+                        Label("心率", systemImage: "waveform.path.ecg")
+                        Label("消耗卡路里", systemImage: "flame")
+                    }
+                    .font(.system(size: 10))
+                    .foregroundColor(.cyan)
+                    .padding(.vertical, 4)
+                    
+                    Text("所有数据仅在设备本地处理，绝不上传任何服务器。")
                         .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(.cyan)
+                        .foregroundColor(.green)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 4)
-                        .padding(.top, 4)
                     
+                    // 修复：先发起 HealthKit 授权请求，在回调中再关闭引导页
+                    // 之前逻辑：先关闭 overlay 再请求 → watchOS 上系统弹窗触发失败
                     Button(action: {
-                        // 稍微延迟调用，确保视图层级稳定，提高系统弹窗触发率
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            requestAndSync(player: player)
-                        }
-                        withAnimation {
-                            hasShownHealthKitOnboarding = true
+                        HealthManager.shared.requestAuthorization { success, error in
+                            DispatchQueue.main.async {
+                                withAnimation {
+                                    hasShownHealthKitOnboarding = true
+                                }
+                                if success {
+                                    Task {
+                                        await HealthManager.shared.syncElements(to: player, context: viewContext)
+                                        GameKitManager.shared.submitScore(score: player.cultivationBase)
+                                        ConnectivityManager.shared.sendSyncData(player.toDictionary())
+                                    }
+                                }
+                            }
                         }
                     }) {
                         Text("继续")
@@ -153,9 +178,10 @@ struct ContentView: View {
                     .tint(.blue)
                     .padding(.top, 8)
                     
-                    Text("若点击无反应，请在系统「设置 > 健康」中手动开启权限")
+                    Text("若弹窗未出现，请在「设置 > 健康 > 应用」中手动开启")
                         .font(.system(size: 8))
                         .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
                         .padding(.bottom, 20)
                 }
             }

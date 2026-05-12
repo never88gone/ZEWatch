@@ -37,7 +37,7 @@ actor LlamaContext {
     private var tokens_list: [llama_token]
     
     var is_done: Bool = false
-    var n_len: Int32 = 512
+    var n_len: Int32 = 1024  // 提升到 1024，防止模型 think 耗尽 token 预算后没有正文输出
     var n_cur: Int32 = 0
     var n_decode: Int32 = 0
 

@@ -173,23 +173,52 @@ struct AICompanionView: View {
                 }
             }
         }
+        .overlay(
+            // 生成中显示半透明递色遮罩，让用户明确知道在等待
+            Group {
+                if llm.isGenerating {
+                    HStack(spacing: 8) {
+                        ProgressView()
+                            .tint(.cultivAccent)
+                            .scaleEffect(0.8)
+                        Text("墨老思念中...西勿打扰")
+                            .font(.caption)
+                            .foregroundColor(.cultivMuted)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(0.5))
+                    .cornerRadius(20)
+                }
+            }
+        )
     }
     
     private var inputArea: some View {
         HStack(spacing: 12) {
-            TextField("向墨老祈告...", text: $chatText)
+            TextField(llm.isGenerating ? "墨老思念中，请稍候..." : "向墨老祈告...", text: $chatText)
                 .textFieldStyle(.plain)
                 .padding(12)
                 .background(RoundedRectangle(cornerRadius: 20).fill(Color.white.opacity(0.05)))
                 .foregroundColor(.white)
+                .disabled(llm.isGenerating)
             
             Button {
                 sendMessage(chatText)
             } label: {
-                Image(systemName: "paperplane.fill")
-                    .foregroundColor(.black)
-                    .padding(10)
-                    .background(Circle().fill(chatText.isEmpty ? Color.cultivMuted : Color.cultivAccent))
+                ZStack {
+                    if llm.isGenerating {
+                        ProgressView()
+                            .tint(.cultivAccent)
+                            .scaleEffect(0.8)
+                            .padding(10)
+                            .background(Circle().fill(Color.cultivMuted.opacity(0.3)))
+                    } else {
+                        Image(systemName: "paperplane.fill")
+                            .foregroundColor(.black)
+                            .padding(10)
+                            .background(Circle().fill(chatText.isEmpty ? Color.cultivMuted : Color.cultivAccent))
+                    }
+                }
             }
             .disabled(chatText.isEmpty || llm.isGenerating)
         }

@@ -151,8 +151,12 @@ class SkillActionEngine: ObservableObject {
     }
     
     private func startHeartRateMonitoring(profile: PlayerProfile, context: NSManagedObjectContext) {
+        guard HealthManager.shared.isAuthorized else {
+            activeSkillResult = "尚未获得健康数据授权，无法感知气血。"
+            return
+        }
         guard let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return }
-        let healthStore = HKHealthStore()
+        let healthStore = HealthManager.shared.healthStore
         
         let query = HKObserverQuery(sampleType: heartRateType, predicate: nil) { [weak self] _, _, error in
             guard error == nil else { return }

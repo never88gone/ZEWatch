@@ -4,6 +4,7 @@ import UIKit
 struct CompanionSettingsView: View {
     @ObservedObject var player: PlayerProfile
     @ObservedObject var llm = LLMManager.shared
+    @ObservedObject var healthManager = HealthManager.shared
     
     @AppStorage("hapticFeedbackEnabled") private var hapticEnabled = true
     @AppStorage("autoSettleOfflineGains") private var autoSettle = true
@@ -32,14 +33,30 @@ struct CompanionSettingsView: View {
                         Label("授权状态", systemImage: "heart.fill")
                             .foregroundColor(.red)
                         Spacer()
-                        HStack(spacing: 4) {
-                            Image(systemName: "checkmark.seal.fill")
-                                .foregroundColor(.green)
-                            Text("已授权读取")
-                                .foregroundColor(.green)
+                        if healthManager.isAuthorized {
+                            HStack(spacing: 4) {
+                                Image(systemName: "checkmark.seal.fill")
+                                    .foregroundColor(.green)
+                                Text("已授权")
+                                    .foregroundColor(.green)
+                            }
+                        } else {
+                            Button {
+                                HealthManager.shared.requestAuthorization { success, error in
+                                    // 回调处理已在 HealthManager 中完成
+                                }
+                            } label: {
+                                Text("去授权")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(Color.cultivPrimary)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(6)
+                            }
                         }
-                        .font(.callout)
                     }
+                    .font(.callout)
                     
                     VStack(alignment: .leading, spacing: 6) {
                         Text("本应用通过 Apple HealthKit 读取以下健康数据，将其转化为游戏内的五行灵气。**所有数据仅在设备本地处理，绝不上传至任何服务器。**")

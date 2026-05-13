@@ -11,7 +11,16 @@ class HealthManager: ObservableObject {
     @Published var todaySteps: Double = 0
     @Published var todayEnergy: Double = 0
     
-    init() {}
+    init() {
+        checkCurrentAuthorizationStatus()
+    }
+    
+    func checkCurrentAuthorizationStatus() {
+        let hasRequested = UserDefaults.standard.bool(forKey: "hasRequestedHealthKitAuth")
+        DispatchQueue.main.async {
+            self.isAuthorized = hasRequested
+        }
+    }
     
     func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
         guard HKHealthStore.isHealthDataAvailable() else {
@@ -31,19 +40,23 @@ class HealthManager: ObservableObject {
         
         let readTypes: Set<HKObjectType> = [stepType, energyType, heartRateType, mindfulnessType, sleepType, standType, HKObjectType.workoutType()]
         
-        // 在 watchOS 上，某些情况下需要确保在主线程发起请求，或者确保 healthStore 已就绪
-        healthStore.requestAuthorization(toShare: nil, read: readTypes) { success, error in
-            DispatchQueue.main.async {
-                self.isAuthorized = success
-                completion(success, error)
-                if success {
-                    self.fetchTodaySteps()
+        // 在 watchOS 上，必须在主线程发起请求
+        DispatchQueue.main.async {
+            self.healthStore.requestAuthorization(toShare: nil, read: readTypes) { success, error in
+                DispatchQueue.main.async {
+                    if success {
+                        UserDefaults.standard.set(true, forKey: "hasRequestedHealthKitAuth")
+                        self.isAuthorized = true
+                        self.fetchTodaySteps()
+                    }
+                    completion(success, error)
                 }
             }
         }
     }
     
     func fetchTodaySteps() {
+        guard isAuthorized else { return }
         guard let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount) else { return }
         
         let now = Date()
@@ -113,6 +126,7 @@ class HealthManager: ObservableObject {
     }
     
     private func checkHeartRateSpike() {
+        guard isAuthorized else { return }
         guard let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return }
         
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)

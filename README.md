@@ -53,8 +53,11 @@
 
 - **常见问题 (FAQ)**: 应用功能、HealthKit 授权、数据安全等常见疑问解答
 - **隐私政策**: 查阅 [PrivacyPolicy.md](PrivacyPolicy.md) 了解我们对数据安全的承诺
-- **问题反馈**: 通过 [GitHub Issues](https://github.com/never88gone/ZEWatch/issues) 提交 Bug 报告或功能建议
-- **联系邮箱**: never88gone@gmail.com
+- **项目 GitHub**: [GitHub 仓库](https://github.com/never88gone/ZEWatch)
+- **Telegram 频道**: [糖葫芦 TVOS](https://t.me/tanghulutvos)
+- **联系邮箱**: hsb@myit2017.cn
+- **官方网站**: [www.myit2017.cn](https://www.myit2017.cn)
 
 ---
 *"灵气枯竭的末法时代，唯有自律，方可证道长生。"*
+

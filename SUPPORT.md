@@ -37,8 +37,10 @@ Thank you for using "Tanghulu Cultivation"! If you encounter any issues, please 
 
 If you have any questions, suggestions, or feedback, please contact us through:
 
-- **GitHub Issues**: [提交问题 / Submit an Issue](https://github.com/never88gone/ZEWatch/issues)
-- **Email**: never88gone@gmail.com
+- **GitHub**: [never88gone/ZEWatch](https://github.com/never88gone/ZEWatch)
+- **Telegram 频道 / Telegram Channel**: [糖葫芦 TVOS](https://t.me/tanghulutvos)
+- **Email**: hsb@myit2017.cn
+- **官网 / Website**: [https://www.myit2017.cn](https://www.myit2017.cn)
 
 我们会在收到消息后尽快回复您。  
 We will respond as soon as possible.

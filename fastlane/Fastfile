@@ -1,0 +1,32 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    # 1. 使用环境变量配置 App Store Connect API Key (不再依赖本地 p8 文件)
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"],
+      is_key_content_base64: true, # 告诉 Fastlane 内容是 Base64 编码的
+      in_house: false
+    )
+
+    # 2. 自动递增 build number (可使用 GitLab CI 的 pipeline ID)
+    if ENV["CI_PIPELINE_IID"]
+      increment_build_number(build_number: ENV["CI_PIPELINE_IID"])
+    end
+
+    # 3. 编译并打包应用
+    build_app(
+      project: "ZEWatch.xcodeproj",
+      scheme: "ZEWatchCompanion", # 若您的主 Scheme 名称是其他(例如 ZEWatch)，请修改此项
+      export_method: "app-store"
+    )
+
+    # 4. 上传到 TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

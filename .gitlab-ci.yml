@@ -1,0 +1,17 @@
+stages:
+  - deploy
+
+variables:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+
+deploy_to_testflight:
+  stage: deploy
+  # 触发条件：推送到 main 分支时自动打包
+  only:
+    - main
+  tags:
+    - ios # 注意：这里需要确保您的 GitLab Runner 注册时包含了 `ios` 这个 tag，并且该 runner 配置在 macOS 机器上
+  script:
+    - bundle install
+    - bundle exec fastlane beta

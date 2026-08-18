@@ -1,0 +1,2 @@
+app_identifier("com.nevergone.zrxx.ios") # 您的主 App Bundle Identifier
+apple_id("husanbo@126.com") # 您的 Apple ID

@@ -12,12 +12,14 @@ public struct ChatMessage: Identifiable, Equatable, Codable {
     public var content: String
     public let timestamp: Date
     public var isGenerating: Bool
+    public var hasClaimedReward: Bool
     
-    public init(id: UUID = UUID(), role: MessageRole, content: String, timestamp: Date = Date(), isGenerating: Bool = false) {
+    public init(id: UUID = UUID(), role: MessageRole, content: String, timestamp: Date = Date(), isGenerating: Bool = false, hasClaimedReward: Bool = false) {
         self.id = id
         self.role = role
         self.content = content
         self.timestamp = timestamp
         self.isGenerating = isGenerating
+        self.hasClaimedReward = hasClaimedReward
     }
 }

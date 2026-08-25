@@ -153,6 +153,40 @@ struct CompanionSettingsView: View {
                             .foregroundColor(.cultivPrimary)
                     }
                     
+                    if llm.isDownloading || llm.hasResumeData {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(llm.statusMessage)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            ProgressView(value: llm.downloadProgress)
+                                .tint(.cultivAccent)
+                            
+                            HStack {
+                                Text("\(formatBytes(llm.downloadedBytes)) / \(formatBytes(llm.totalBytes))")
+                                    .font(.caption2.monospacedDigit())
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(Int(llm.downloadProgress * 100))%")
+                                    .font(.caption2.monospacedDigit())
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            HStack {
+                                if llm.isDownloading {
+                                    Button("暂停") { llm.pauseDownload() }
+                                } else if llm.hasResumeData {
+                                    Button("继续") { llm.resumeDownload() }
+                                }
+                                Spacer()
+                                Button("取消", role: .destructive) { llm.cancelDownload() }
+                            }
+                            .buttonStyle(.bordered)
+                            .font(.caption)
+                        }
+                        .padding(.vertical, 8)
+                    }
+                    
                     if llm.isGenerating {
                         HStack {
                             Label("推演中", systemImage: "sparkles")
@@ -247,6 +281,13 @@ struct CompanionSettingsView: View {
                 .font(.caption.bold())
                 .foregroundColor(color)
         }
+    }
+    
+    private func formatBytes(_ bytes: Int64) -> String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = [.useMB, .useGB]
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: bytes)
     }
 }
 

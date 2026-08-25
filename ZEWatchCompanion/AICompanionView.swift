@@ -23,7 +23,7 @@ struct AICompanionView: View {
                                 emptyStateView
                             } else {
                                 ForEach(llm.messages) { msg in
-                                    MessageBubble(message: msg)
+                                    MessageBubble(message: msg, llm: llm, player: player)
                                 }
                             }
                             Color.clear
@@ -253,6 +253,11 @@ struct AICompanionView: View {
 
 struct MessageBubble: View {
     let message: ChatMessage
+    @ObservedObject var llm: LLMManager
+    @ObservedObject var player: PlayerProfile
+    
+    // 用于呼吸灯动画
+    @State private var isBreathing = false
     
     var body: some View {
         HStack {
@@ -270,29 +275,44 @@ struct MessageBubble: View {
             } else {
                 VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
                     if message.content.contains("【天降机缘】") {
-                        VStack(spacing: 8) {
-                            Text(message.content)
-                                .font(.system(.body, design: .serif))
-                                .textSelection(.enabled)
-                                .padding(12)
-                            
-                            Button(action: {
-                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                                // 实际可以调用 llm.addCultivation(...) 等逻辑
-                            }) {
-                                HStack {
-                                    Image(systemName: "gift.fill")
-                                    Text("开启机缘盲盒")
-                                }
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(LinearGradient(colors: [Color.yellow, Color.orange], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                .cornerRadius(8)
+                        let cleanText = message.content.replacingOccurrences(of: "【天降机缘】", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            if !cleanText.isEmpty {
+                                Text(cleanText)
+                                    .font(.system(.body, design: .serif))
+                                    .textSelection(.enabled)
                             }
-                            .padding(.bottom, 12)
+                            
+                            if !message.hasClaimedReward && !message.isGenerating {
+                                Button(action: {
+                                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                                    llm.claimReward(for: message.id, player: player)
+                                }) {
+                                    HStack {
+                                        Image(systemName: "gift.fill")
+                                        Text("开启机缘盲盒")
+                                    }
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(LinearGradient(colors: [Color.yellow, Color.orange], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .cornerRadius(8)
+                                    .shadow(color: .orange.opacity(0.5), radius: 5, x: 0, y: 2)
+                                }
+                            } else if message.hasClaimedReward {
+                                HStack {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                    Text("机缘已收纳")
+                                        .font(.caption)
+                                        .foregroundColor(.white.opacity(0.7))
+                                }
+                            }
                         }
+                        .padding(12)
                         .background(
                             BubbleShape(role: message.role)
                                 .fill(message.role == .user ? Color.cultivAccent.opacity(0.2) : Color.white.opacity(0.08))
@@ -311,9 +331,21 @@ struct MessageBubble: View {
                     }
                     
                     if message.isGenerating {
-                        ProgressView()
-                            .scaleEffect(0.7)
-                            .padding(.top, 4)
+                        HStack(spacing: 4) {
+                            Image(systemName: "sparkles")
+                                .foregroundColor(.cultivAccent)
+                                .scaleEffect(isBreathing ? 1.2 : 0.8)
+                                .opacity(isBreathing ? 1.0 : 0.4)
+                            Text("推演天机中...")
+                                .font(.caption)
+                                .foregroundColor(.cultivAccent.opacity(0.8))
+                        }
+                        .padding(.top, 4)
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                                isBreathing = true
+                            }
+                        }
                     }
                 }
                 .frame(maxWidth: UIScreen.main.bounds.width * 0.75, alignment: message.role == .user ? .trailing : .leading)

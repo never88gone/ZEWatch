@@ -37,19 +37,56 @@ class LLMManager: ObservableObject {
     // 下载相关状态
     @Published var isDownloading: Bool = false
     @Published var downloadProgress: Double = 0.0
+    @Published var downloadedBytes: Int64 = 0
+    @Published var totalBytes: Int64 = 0
+    @Published var hasResumeData: Bool = false
+    
+    private var currentDownloadTask: URLSessionDownloadTask?
+    private var resumeData: Data? {
+        didSet { hasResumeData = resumeData != nil }
+    }
 
     private var context: LlamaContext?
-    private var currentDownloadTask: URLSessionDownloadTask?
     
     private init() {
         NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification, object: nil, queue: .main) { [weak self] _ in
             self?.handleMemoryWarning()
         }
         fetchLocalModels()
+        loadHistory()
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - 历史消息持久化
+    private var historyFileURL: URL {
+        let fileManager = FileManager.default
+        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return documentDirectory.appendingPathComponent("chat_history.json")
+    }
+    
+    func saveHistory() {
+        do {
+            let data = try JSONEncoder().encode(messages)
+            try data.write(to: historyFileURL, options: .atomic)
+        } catch {
+            print("保存对话历史失败: \(error)")
+        }
+    }
+    
+    private func loadHistory() {
+        do {
+            guard FileManager.default.fileExists(atPath: historyFileURL.path) else { return }
+            let data = try Data(contents: historyFileURL)
+            let decoded = try JSONDecoder().decode([ChatMessage].self, from: data)
+            DispatchQueue.main.async {
+                self.messages = decoded
+            }
+        } catch {
+            print("加载对话历史失败: \(error)")
+        }
     }
     
     private func handleMemoryWarning() {
@@ -60,6 +97,7 @@ class LLMManager: ObservableObject {
             messages = lastMessages
         }
         messages.append(ChatMessage(role: .system, content: "【神魂受创】因天道反噬（内存告警），墨老神魂激荡，暂时遗忘了先前的对话。"))
+        saveHistory()
     }
     
     /// 刷新并获取沙盒中的模型列表
@@ -171,7 +209,10 @@ class LLMManager: ObservableObject {
             self.statusMessage = "咳咳... 谁在那吵老夫睡觉？"
             
             // 初始消息
-            messages.append(ChatMessage(role: .assistant, content: "小辈，今日为何无精打采？若再不磨炼筋骨，老夫这戒指可容不下你了。"))
+            if messages.isEmpty {
+                messages.append(ChatMessage(role: .assistant, content: "小辈，今日为何无精打采？若再不磨炼筋骨，老夫这戒指可容不下你了。"))
+                saveHistory()
+            }
             
         } catch {
             statusMessage = "唤醒失败：神魂受损"
@@ -291,6 +332,7 @@ class LLMManager: ObservableObject {
         
         messages[msgIndex].isGenerating = false
         isGenerating = false
+        saveHistory()
     }
     
     private func parseAndExecuteEvents(_ response: String, player: PlayerProfile) {
@@ -316,16 +358,24 @@ class LLMManager: ObservableObject {
             }
         }
         
-        // 兼容中文特殊指令
-        if !hasTriggeredEvent && response.contains("【天降机缘】") {
-            let randomValue = Int64.random(in: 10...100)
-            player.cultivationBase += randomValue
-            messages.append(ChatMessage(role: .system, content: "【机缘触发】一阵微风拂过，凭空掉落了一颗灵石，修为增加 \(randomValue) 点！"))
-            hasTriggeredEvent = true
-        }
-        
         if hasTriggeredEvent {
             try? player.managedObjectContext?.save()
+            saveHistory()
+        }
+    }
+    
+    func claimReward(for messageId: UUID, player: PlayerProfile) {
+        if let index = messages.firstIndex(where: { $0.id == messageId }) {
+            guard !messages[index].hasClaimedReward else { return }
+            messages[index].hasClaimedReward = true
+            
+            let randomValue = Int64.random(in: 10...100)
+            player.cultivationBase += randomValue
+            try? player.managedObjectContext?.save()
+            
+            // 发送系统回执
+            messages.append(ChatMessage(role: .system, content: "【机缘开启】你打开了墨老随手抛下的盲盒，获得 \(randomValue) 点修为！"))
+            saveHistory()
         }
     }
     
@@ -341,33 +391,50 @@ class LLMManager: ObservableObject {
     
     func downloadModel(from urlString: String) {
         guard let url = URL(string: urlString) else { return }
-        isDownloading = true
-        downloadProgress = 0.0
-        statusMessage = "正在接引戒灵下界..."
         
-        let configuration = URLSessionConfiguration.default
-        let session = URLSession(configuration: configuration, delegate: DownloadDelegate(progressHandler: { [weak self] progress in
+        // 只有重新开始下载时才清空 resumeData
+        resumeData = nil
+        startDownload(with: url)
+    }
+    
+    func resumeDownload() {
+        guard let resumeData = resumeData else { return }
+        // 从 resumeData 中恢复 URL
+        // 但由于 URLSession 的 API 限制，这里只能恢复任务，后续保存还需要知道文件名。
+        // 为了简化，我们假设断点续传时用固定的逻辑去处理。不过最好的办法是 startDownload 可以接管
+        isDownloading = true
+        statusMessage = "正在接续阵纹..."
+        
+        let session = URLSession(configuration: .default, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
             DispatchQueue.main.async {
                 self?.downloadProgress = progress
+                self?.downloadedBytes = downloaded
+                self?.totalBytes = total
             }
         }, completionHandler: { [weak self] localURL, error in
+            self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: nil) // 简化：如果有 error，可以通过 resumeData 继续；成功的话从 response 获取名字
+        }), delegateQueue: nil)
+        
+        let task = session.downloadTask(withResumeData: resumeData)
+        self.currentDownloadTask = task
+        task.resume()
+    }
+    
+    private func startDownload(with url: URL) {
+        isDownloading = true
+        downloadProgress = 0.0
+        downloadedBytes = 0
+        totalBytes = 0
+        statusMessage = "正在接引戒灵下界..."
+        
+        let session = URLSession(configuration: .default, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
             DispatchQueue.main.async {
-                self?.isDownloading = false
-                guard let self = self else { return }
-                
-                if let error = error {
-                    self.statusMessage = "接引失败: \(error.localizedDescription)"
-                    print("下载错误:", error)
-                    return
-                }
-                
-                guard let localURL = localURL else {
-                    self.statusMessage = "接引失败: 数据残缺"
-                    return
-                }
-                
-                self.saveDownloadedModel(from: localURL, filename: url.lastPathComponent)
+                self?.downloadProgress = progress
+                self?.downloadedBytes = downloaded
+                self?.totalBytes = total
             }
+        }, completionHandler: { [weak self] localURL, error in
+            self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: url)
         }), delegateQueue: nil)
         
         let task = session.downloadTask(with: url)
@@ -375,12 +442,50 @@ class LLMManager: ObservableObject {
         task.resume()
     }
     
+    private func handleDownloadCompletion(localURL: URL?, error: Error?, originalURL: URL?) {
+        DispatchQueue.main.async {
+            self.isDownloading = false
+            
+            if let error = error as NSError? {
+                if let resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
+                    self.resumeData = resumeData
+                    self.statusMessage = "接引已中断 (可恢复)"
+                } else {
+                    self.statusMessage = "接引失败: \(error.localizedDescription)"
+                }
+                print("下载错误:", error)
+                return
+            }
+            
+            guard let localURL = localURL else {
+                self.statusMessage = "接引失败: 数据残缺"
+                return
+            }
+            
+            // 尝试通过 URLResponse 获取建议文件名，或者使用 originalURL
+            let filename = self.currentDownloadTask?.response?.suggestedFilename ?? originalURL?.lastPathComponent ?? "model.gguf"
+            self.resumeData = nil
+            self.saveDownloadedModel(from: localURL, filename: filename)
+        }
+    }
+    
+    func pauseDownload() {
+        currentDownloadTask?.cancel(byProducingResumeData: { [weak self] data in
+            DispatchQueue.main.async {
+                self?.resumeData = data
+                self?.isDownloading = false
+                self?.statusMessage = "接引已暂停"
+            }
+        })
+    }
+    
     func cancelDownload() {
         currentDownloadTask?.cancel()
         currentDownloadTask = nil
         isDownloading = false
         downloadProgress = 0.0
-        statusMessage = "接引已中断"
+        resumeData = nil
+        statusMessage = "接引已取消"
     }
     
     private func saveDownloadedModel(from tempURL: URL, filename: String) {
@@ -414,17 +519,17 @@ class LLMManager: ObservableObject {
 
 // 辅助代理类，用于处理下载进度
 class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
-    var progressHandler: (Double) -> Void
+    var progressHandler: (Double, Int64, Int64) -> Void
     var completionHandler: (URL?, Error?) -> Void
     
-    init(progressHandler: @escaping (Double) -> Void, completionHandler: @escaping (URL?, Error?) -> Void) {
+    init(progressHandler: @escaping (Double, Int64, Int64) -> Void, completionHandler: @escaping (URL?, Error?) -> Void) {
         self.progressHandler = progressHandler
         self.completionHandler = completionHandler
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-        progressHandler(progress)
+        let progress = totalBytesExpectedToWrite > 0 ? Double(totalBytesWritten) / Double(totalBytesExpectedToWrite) : 0
+        progressHandler(progress, totalBytesWritten, totalBytesExpectedToWrite)
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {

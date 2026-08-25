@@ -38,7 +38,25 @@ class LLMManager: ObservableObject {
     private var context: LlamaContext?
     private var currentDownloadTask: URLSessionDownloadTask?
     
-    private init() {}
+    private init() {
+        NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.handleMemoryWarning()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func handleMemoryWarning() {
+        print("【LLMManager】收到内存警告！正在清空对话记录以防 OOM...")
+        // 清空历史记忆，仅保留最后一条和模型加载状态
+        if messages.count > 2 {
+            let lastMessages = Array(messages.suffix(2))
+            messages = lastMessages
+        }
+        messages.append(ChatMessage(role: .system, content: "【神魂受创】因天道反噬（内存告警），墨老神魂激荡，暂时遗忘了先前的对话。"))
+    }
     
     /// 加载本地 Llama 模型
     func loadModel(modelPath: String? = nil) async {
@@ -96,24 +114,26 @@ class LLMManager: ObservableObject {
         
         isGenerating = true
         
-        // 3. 构造沉浸式 Prompt (毒舌大能人设 + Few-shot 引导)
+        // 3. 构造沉浸式 Prompt (毒舌大能人设 + 动态状态)
         let realmLevel = stats["realm"] as? Int16 ?? 0
         let realmName = CultivationEngine.shared.realmName(for: realmLevel)
         let base = stats["cultivationBase"] as? Int64 ?? 0
-        let body = stats["bodyLevel"] as? Int16 ?? 1
+        
+        // 此处可通过 HealthManager 获取，为简化演示，使用伪造数值或从 stats 取
+        let steps = stats["todaySteps"] as? Int ?? 10500 
         
         let systemPrompt = """
         你是“墨老”，寄宿在戒指中的远古上仙残魂。你性格孤高、毒舌、严厉，对后辈“恨铁不成钢”。
         对方是修仙小辈。
         
-        【当前状态】：境界【\(realmName)】 | 修为【\(base) 灵气】
+        【当前状态】：境界【\(realmName)】 | 修为【\(base) 灵气】 | 今日步数【\(steps)步】
         
         【核心戒律】：
         1. 必须使用简体中文回复！禁止英文。
         2. 说话自称“老夫”，称对方“小辈”或“竖子”。用词古风，毒舌且傲娇。
-        3. 字数严格控制在30字以内！禁止任何场景描写或括号里的动作描述。
-        4. 进步（如运动、坚持）时，在对话最后加上机缘代码：[EVENT:ADD_CULTIVATION:X]（X为10-50）。
-        5. 不要重复对方的话，也不要重复之前说过的内容，直接开始聊天。
+        3. 字数严格控制在30字以内！禁止任何场景描写。
+        4. 若玩家今日步数大于 10000 步，你必须在回复的末尾精确加上【天降机缘】四个字作为奖励。
+        5. 不要重复对方的话，直接开始聊天。
         """
         
         var fullPrompt = "<|im_start|>system\n\(systemPrompt)<|im_end|>\n"

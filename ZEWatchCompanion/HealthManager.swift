@@ -10,6 +10,22 @@ class HealthManager: ObservableObject {
     @Published var todaySteps: Double = 0
     @Published var todayEnergy: Double = 0
     
+    // 防作弊硬顶：每日最高转化灵气上限
+    let dailyQiCap: Int64 = 10_000
+    
+    // PRD v2.0 转化规则
+    var convertedWoodQi: Int64 {
+        // 每 100 步 = 1 木灵气
+        let qi = Int64(todaySteps / 100.0)
+        return min(qi, dailyQiCap)
+    }
+    
+    var convertedMetalQi: Int64 {
+        // 每 10 Kcal = 1 金灵气
+        let qi = Int64(todayEnergy / 10.0)
+        return min(qi, dailyQiCap)
+    }
+    
     init() {
         checkCurrentAuthorizationStatus()
     }

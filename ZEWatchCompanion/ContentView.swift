@@ -28,6 +28,11 @@ struct ContentView: View {
     var body: some View {
         if let player = profiles.first {
             TabView {
+                DashboardView(player: player)
+                    .tabItem {
+                        Label("洞府", systemImage: "building.columns")
+                    }
+                
                 AICompanionView(player: player)
                     .tabItem {
                         Label("识海", systemImage: "aqi.high")
@@ -35,7 +40,7 @@ struct ContentView: View {
                 
                 CompanionSettingsView(player: player)
                     .tabItem {
-                        Label("洞府", systemImage: "gearshape.fill")
+                        Label("须弥戒", systemImage: "gearshape.fill")
                     }
             }
             .tint(.cultivPrimary)

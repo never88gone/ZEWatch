@@ -8,6 +8,7 @@ struct CompanionSettingsView: View {
     
     @AppStorage("hapticFeedbackEnabled") private var hapticEnabled = true
     @AppStorage("autoSettleOfflineGains") private var autoSettle = true
+    @State private var showingModelSelection = false
     
     var body: some View {
         NavigationStack {
@@ -87,16 +88,21 @@ struct CompanionSettingsView: View {
                 
                 // MARK: - 识海阵法 (AI)
                 Section {
-                    HStack {
-                        Label("天道模型", systemImage: "cpu")
-                        Spacer()
-                        HStack(spacing: 4) {
-                            Image(systemName: llm.modelLoaded ? "checkmark.circle.fill" : "exclamationmark.circle")
-                                .foregroundColor(llm.modelLoaded ? .green : .cultivAccent)
-                            Text(llm.modelLoaded ? "已连接" : "待唤醒")
-                                .foregroundColor(llm.modelLoaded ? .green : .cultivAccent)
+                    Button {
+                        showingModelSelection = true
+                    } label: {
+                        HStack {
+                            Label("天道模型 (更换/接引)", systemImage: "cpu")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            HStack(spacing: 4) {
+                                Image(systemName: llm.modelLoaded ? "checkmark.circle.fill" : "arrow.down.circle.fill")
+                                    .foregroundColor(llm.modelLoaded ? .green : .cultivAccent)
+                                Text(llm.modelLoaded ? "已连接" : "去下载")
+                                    .foregroundColor(llm.modelLoaded ? .green : .cultivAccent)
+                            }
+                            .font(.callout)
                         }
-                        .font(.callout)
                     }
                     
                     if llm.isGenerating {
@@ -155,9 +161,12 @@ struct CompanionSettingsView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("洞府设置")
+            .navigationTitle("须弥戒 (设置)")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .sheet(isPresented: $showingModelSelection) {
+                ModelSelectionView(llm: llm)
+            }
         }
     }
     

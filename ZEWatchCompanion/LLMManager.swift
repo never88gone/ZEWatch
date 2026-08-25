@@ -1,16 +1,42 @@
 import Foundation
 
 #if os(iOS)
+struct LLMModelOption: Identifiable {
+    let id = UUID()
+    let name: String
+    let description: String
+    let url: String
+    let sizeDesc: String
+}
+
 @MainActor
 class LLMManager: ObservableObject {
     static let shared = LLMManager()
+    
+    static let recommendedModels: [LLMModelOption] = [
+        // 中文/全能 尖端主力 (2026)
+        LLMModelOption(name: "Qwen3.5 4B", description: "全新一代千问3.5小旗舰，跨时代推理能力 (需3GB以上内存)", url: "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/Qwen3.5-4B-Q4_K_M.gguf", sizeDesc: "约 2.4 GB"),
+        LLMModelOption(name: "Qwen2.5 1.5B", description: "千问2.5代轻量能打，低配机型中文首选", url: "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf", sizeDesc: "约 1.1 GB"),
+        LLMModelOption(name: "Qwen2.5 0.5B", description: "千问2.5代极速版，极致省电，老机型流畅运行", url: "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf", sizeDesc: "约 390 MB"),
+        
+        // 国际顶尖微型架构 (2026)
+        LLMModelOption(name: "Gemma-4 E4B", description: "Google 2026最强E架构，媲美百亿参数巨兽", url: "https://huggingface.co/unsloth/gemma-4-E4B-it-GGUF/resolve/main/gemma-4-E4B-it-Q4_K_M.gguf", sizeDesc: "约 2.6 GB"),
+        
+        // 特色精选
+        LLMModelOption(name: "Yi-Coder 1.5B", description: "代码与逻辑强化版1.5B，适合严谨分析", url: "https://huggingface.co/MaziyarPanahi/Yi-Coder-1.5B-Chat-GGUF/resolve/main/Yi-Coder-1.5B-Chat-Q4_K_M.gguf", sizeDesc: "约 1.0 GB")
+    ]
     
     @Published var messages: [ChatMessage] = []
     @Published var isGenerating: Bool = false
     @Published var modelLoaded: Bool = false
     @Published var statusMessage: String = "未感应到戒灵..."
+    
+    // 下载相关状态
+    @Published var isDownloading: Bool = false
+    @Published var downloadProgress: Double = 0.0
 
     private var context: LlamaContext?
+    private var currentDownloadTask: URLSessionDownloadTask?
     
     private init() {}
     
@@ -18,24 +44,21 @@ class LLMManager: ObservableObject {
     func loadModel(modelPath: String? = nil) async {
         statusMessage = "正在唤醒戒灵..."
         
-        var path: String? = nil
-        let modelsPath = Bundle.main.bundlePath + "/Models"
         let fileManager = FileManager.default
+        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let modelsPath = documentDirectory.appendingPathComponent("Models").path
         
-        // 1. 先尝试在 Models 文件夹里找（如果是以蓝色 Folder Reference 形式被引入 Xcode）
-        if let files = try? fileManager.contentsOfDirectory(atPath: modelsPath),
+        var path: String? = nil
+        
+        if fileManager.fileExists(atPath: modelsPath),
+           let files = try? fileManager.contentsOfDirectory(atPath: modelsPath),
            let firstGGUF = files.first(where: { $0.hasSuffix(".gguf") }) {
             path = modelsPath + "/" + firstGGUF
         }
-        // 2. 如果没找到，则在根目录找（如果是以黄色 Group 形式被引入 Xcode，打包时会被 Flatten 到根目录）
-        else if let files = try? fileManager.contentsOfDirectory(atPath: Bundle.main.bundlePath),
-                let firstGGUF = files.first(where: { $0.hasSuffix(".gguf") }) {
-            path = Bundle.main.bundlePath + "/" + firstGGUF
-        }
         
         guard let finalPath = path else {
-            statusMessage = "戒灵沉睡，未见法器"
-            print("【LLM】错误：未能发现任何 .gguf 后缀的模型文件。请确保引用的模型已加入到 Target 的 'Copy Bundle Resources' 中。")
+            statusMessage = "戒灵沉睡，未见法器。请先下载模型。"
+            print("【LLM】错误：未能发现任何 .gguf 后缀的模型文件。请在界面上触发下载。")
             return
         }
         
@@ -196,6 +219,110 @@ class LLMManager: ObservableObject {
         guard modelLoaded, !isGenerating else { return }
         print("【LLM】天道意志后台感应到修行数据变化：\(stats)")
         // TODO: 后续可以自动触发老爷爷主动发送一句聊天或掉落机缘
+    }
+    
+    // MARK: - 下载模型
+    
+    func downloadModel(from urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        isDownloading = true
+        downloadProgress = 0.0
+        statusMessage = "正在接引戒灵下界..."
+        
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration, delegate: DownloadDelegate(progressHandler: { [weak self] progress in
+            DispatchQueue.main.async {
+                self?.downloadProgress = progress
+            }
+        }, completionHandler: { [weak self] localURL, error in
+            DispatchQueue.main.async {
+                self?.isDownloading = false
+                guard let self = self else { return }
+                
+                if let error = error {
+                    self.statusMessage = "接引失败: \(error.localizedDescription)"
+                    print("下载错误:", error)
+                    return
+                }
+                
+                guard let localURL = localURL else {
+                    self.statusMessage = "接引失败: 数据残缺"
+                    return
+                }
+                
+                self.saveDownloadedModel(from: localURL, filename: url.lastPathComponent)
+            }
+        }), delegateQueue: nil)
+        
+        let task = session.downloadTask(with: url)
+        self.currentDownloadTask = task
+        task.resume()
+    }
+    
+    func cancelDownload() {
+        currentDownloadTask?.cancel()
+        currentDownloadTask = nil
+        isDownloading = false
+        downloadProgress = 0.0
+        statusMessage = "接引已中断"
+    }
+    
+    private func saveDownloadedModel(from tempURL: URL, filename: String) {
+        let fileManager = FileManager.default
+        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let modelsDirectory = documentDirectory.appendingPathComponent("Models")
+        
+        do {
+            if !fileManager.fileExists(atPath: modelsDirectory.path) {
+                try fileManager.createDirectory(at: modelsDirectory, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            // 清空现有的所有模型文件以释放空间 (单法器模式)
+            if let files = try? fileManager.contentsOfDirectory(atPath: modelsDirectory.path) {
+                for file in files where file.hasSuffix(".gguf") {
+                    let oldFileURL = modelsDirectory.appendingPathComponent(file)
+                    try? fileManager.removeItem(at: oldFileURL)
+                    print("已清理旧模型: \(file)")
+                }
+            }
+            
+            let destinationURL = modelsDirectory.appendingPathComponent(filename)
+            try fileManager.moveItem(at: tempURL, to: destinationURL)
+            
+            statusMessage = "法器重铸成功，正在唤醒..."
+            Task {
+                await self.loadModel()
+            }
+        } catch {
+            statusMessage = "保存法器失败"
+            print("文件移动错误:", error)
+        }
+    }
+}
+
+// 辅助代理类，用于处理下载进度
+class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
+    var progressHandler: (Double) -> Void
+    var completionHandler: (URL?, Error?) -> Void
+    
+    init(progressHandler: @escaping (Double) -> Void, completionHandler: @escaping (URL?, Error?) -> Void) {
+        self.progressHandler = progressHandler
+        self.completionHandler = completionHandler
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        progressHandler(progress)
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        completionHandler(location, nil)
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if let error = error {
+            completionHandler(nil, error)
+        }
     }
 }
 #endif

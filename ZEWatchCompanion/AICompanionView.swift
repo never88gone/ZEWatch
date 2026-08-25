@@ -7,6 +7,7 @@ struct AICompanionView: View {
     @State private var chatText: String = ""
     @ObservedObject var llm = LLMManager.shared
     @Namespace private var bottomID
+    @State private var showingModelSelection = false
     
     var body: some View {
         NavigationStack {
@@ -65,21 +66,6 @@ struct AICompanionView: View {
             .navigationTitle("戒指里的老爷爷")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    if !llm.modelLoaded {
-                        Button {
-                            Task { await llm.loadModel() }
-                        } label: {
-                            Label("唤醒戒灵", systemImage: "bolt.ring.closed")
-                                .foregroundColor(.cultivAccent)
-                        }
-                    } else {
-                        Image(systemName: "checkmark.shield.fill")
-                            .foregroundColor(.green.opacity(0.6))
-                    }
-                }
-            }
         }
     }
     
@@ -151,10 +137,18 @@ struct AICompanionView: View {
             Image(systemName: "ellipsis.bubble")
                 .font(.system(size: 50))
                 .foregroundColor(.cultivMuted.opacity(0.3))
-            Text("纹章黯淡，戒灵沉睡中...")
+            
+            Text(llm.statusMessage)
                 .font(.system(.body, design: .serif))
                 .italic()
-                .foregroundColor(.cultivMuted.opacity(0.5))
+                .foregroundColor(.cultivMuted.opacity(0.8))
+                
+            if !llm.modelLoaded {
+                Text("请前往「须弥戒」接引法器 (下载模型)")
+                    .font(.subheadline)
+                    .foregroundColor(.cultivAccent)
+                    .padding(.top, 10)
+            }
         }
         .frame(maxWidth: .infinity)
     }
@@ -270,15 +264,46 @@ struct MessageBubble: View {
                     .frame(maxWidth: .infinity)
             } else {
                 VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
-                    Text(message.content)
-                        .font(.system(.body, design: .serif))
-                        .textSelection(.enabled)
-                        .padding(12)
+                    if message.content.contains("【天降机缘】") {
+                        VStack(spacing: 8) {
+                            Text(message.content)
+                                .font(.system(.body, design: .serif))
+                                .textSelection(.enabled)
+                                .padding(12)
+                            
+                            Button(action: {
+                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                                // 实际可以调用 llm.addCultivation(...) 等逻辑
+                            }) {
+                                HStack {
+                                    Image(systemName: "gift.fill")
+                                    Text("开启机缘盲盒")
+                                }
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(LinearGradient(colors: [Color.yellow, Color.orange], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                .cornerRadius(8)
+                            }
+                            .padding(.bottom, 12)
+                        }
                         .background(
                             BubbleShape(role: message.role)
                                 .fill(message.role == .user ? Color.cultivAccent.opacity(0.2) : Color.white.opacity(0.08))
                         )
                         .foregroundColor(.white)
+                    } else {
+                        Text(message.content)
+                            .font(.system(.body, design: .serif))
+                            .textSelection(.enabled)
+                            .padding(12)
+                            .background(
+                                BubbleShape(role: message.role)
+                                    .fill(message.role == .user ? Color.cultivAccent.opacity(0.2) : Color.white.opacity(0.08))
+                            )
+                            .foregroundColor(.white)
+                    }
                     
                     if message.isGenerating {
                         ProgressView()
@@ -304,6 +329,85 @@ struct BubbleShape: Shape {
             cornerRadii: CGSize(width: 14, height: 14)
         )
         return Path(path.cgPath)
+    }
+}
+
+struct ModelSelectionView: View {
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var llm: LLMManager
+    @State private var repoID: String = ""
+    @State private var filename: String = ""
+    @AppStorage("useHFMirror") private var useHFMirror = false
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section(header: Text("官方推荐法器 (模型)")) {
+                    ForEach(LLMManager.recommendedModels) { model in
+                        Button {
+                            // 如果开启了镜像加速，替换域名
+                            var finalURL = model.url
+                            if useHFMirror {
+                                finalURL = finalURL.replacingOccurrences(of: "huggingface.co", with: "hf-mirror.com")
+                            }
+                            llm.downloadModel(from: finalURL)
+                            dismiss()
+                        } label: {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text(model.name)
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    Text(model.sizeDesc)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Text(model.description)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+                
+                Section(header: Text("从 HuggingFace 直接下载"), footer: Text("输入仓库ID和GGUF文件名。示例：\n仓库ID: Qwen/Qwen1.5-0.5B-Chat-GGUF\n文件名: qwen1_5-0_5b-chat-q4_0.gguf")) {
+                    
+                    Toggle("国内网络加速 (hf-mirror.com)", isOn: $useHFMirror)
+                        .font(.subheadline)
+                    
+                    TextField("仓库ID (例如 TheBloke/TinyLlama...)", text: $repoID)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                    
+                    TextField("文件名 (例如 model.q4_k_m.gguf)", text: $filename)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                    
+                    Button("开始下载") {
+                        if !repoID.isEmpty && !filename.isEmpty {
+                            let domain = useHFMirror ? "hf-mirror.com" : "huggingface.co"
+                            let cleanRepo = repoID.trimmingCharacters(in: .whitespacesAndNewlines)
+                            let cleanFile = filename.trimmingCharacters(in: .whitespacesAndNewlines)
+                            let downloadURL = "https://\(domain)/\(cleanRepo)/resolve/main/\(cleanFile)"
+                            
+                            llm.downloadModel(from: downloadURL)
+                            dismiss()
+                        }
+                    }
+                    .disabled(repoID.isEmpty || filename.isEmpty)
+                }
+            }
+            .navigationTitle("识海法器集市")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("取消") { dismiss() }
+                }
+            }
+        }
     }
 }
 #endif

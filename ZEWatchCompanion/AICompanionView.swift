@@ -37,6 +37,11 @@ struct AICompanionView: View {
                     }
                     .onChange(of: llm.messages.last?.content) { _ in
                         proxy.scrollTo(bottomID)
+                        // 流式打印的极轻微震动反馈 (神念传音)
+                        if llm.isGenerating {
+                            let generator = UIImpactFeedbackGenerator(style: .rigid)
+                            generator.impactOccurred(intensity: 0.3)
+                        }
                     }
                 }
                 

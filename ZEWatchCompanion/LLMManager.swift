@@ -32,6 +32,7 @@ class LLMManager: ObservableObject {
     @Published var statusMessage: String = "未感应到戒灵..."
     
     @Published var localModels: [String] = []
+    @Published var currentModelFilename: String = ""
     
     // 下载相关状态
     @Published var isDownloading: Bool = false
@@ -114,6 +115,7 @@ class LLMManager: ObservableObject {
         self.context = nil
         self.modelLoaded = false
         self.statusMessage = "戒灵沉睡..."
+        self.currentModelFilename = ""
     }
     
     /// 删除指定本地模型
@@ -164,8 +166,9 @@ class LLMManager: ObservableObject {
             }.value
             
             self.context = newContext
-            modelLoaded = true
-            statusMessage = "咳咳... 谁在那吵老夫睡觉？"
+            self.currentModelFilename = URL(fileURLWithPath: finalPath).lastPathComponent
+            self.modelLoaded = true
+            self.statusMessage = "咳咳... 谁在那吵老夫睡觉？"
             
             // 初始消息
             messages.append(ChatMessage(role: .assistant, content: "小辈，今日为何无精打采？若再不磨炼筋骨，老夫这戒指可容不下你了。"))
@@ -228,31 +231,34 @@ class LLMManager: ObservableObject {
         }
         
         // 历史消息从第一条 user 消息开始取，跳过欢迎消息，跳过 system 消息（气机提示）
-        // 避免 few-shot 末尾 assistant + 欢迎消息 assistant 两个连续 assistant 块导致模型错乱
         let allHistory = Array(messages.dropLast())
         let firstUserIdx = allHistory.firstIndex(where: { $0.role == .user }) ?? allHistory.startIndex
         let recentMessages = Array(allHistory[firstUserIdx...])
             .filter { $0.role != .system }   // 跳过【机缘】等 system 提示消息
-            .suffix(4)                        // 保留最近 4 条，减少输入 token 给生成留更多空间
+            .suffix(6)                        // 保留最近 6 条
+            
+        // 清理消息内容里的控制符，防止污染模型
+        var cleanedHistory: [ChatMessage] = []
         for msg in recentMessages {
-            let role = msg.role == .user ? "user" : "assistant"
-            // 清理控制符、前缀、think块（防止思考过程污染下轮对话）
             let cleanedContent = msg.content
                 .replacingOccurrences(of: "<\\|.*?\\|>", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "^(user|assistant|system):\\s*", with: "", options: [.regularExpression, .caseInsensitive])
                 .replacingOccurrences(of: "<think>[\\s\\S]*?</think>", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "<思维>[\\s\\S]*?</思维>", with: "", options: .regularExpression)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !cleanedContent.isEmpty else { continue }
-            fullPrompt += "<|im_start|>\(role)\n\(cleanedContent)<|im_end|>\n"
+            if !cleanedContent.isEmpty {
+                cleanedHistory.append(ChatMessage(role: msg.role, content: cleanedContent))
+            }
         }
-        // 注入 </think> 前缀：告诉推理模型"思考阶段已结束，直接输出正文"
-        // 这是针对 Qwen-Thinking / DeepSeek-R1 等推理模型的标准技巧
-        // 避免模型在 <think> 里用英文大量分析，耗尽 token 预算后正文被截断
-        fullPrompt += "<|im_start|>assistant\n<think>\n\n</think>\n"
+        
+        let fullPrompt = PromptBuilder.build(
+            systemPrompt: systemPrompt,
+            history: cleanedHistory,
+            modelFilename: currentModelFilename
+        )
         
         // ===== 日志：打印完整 Prompt =====
-        print("\n╔══════════════════ 【LLM Prompt 开始】 ══════════════════╗\n" + fullPrompt + "\n╚══════════════════ 【LLM Prompt 结束】 ══════════════════╝")
+        print("\n╔══════════════════ 【LLM Prompt 开始 (\(PromptBuilder.detectTemplate(from: currentModelFilename)))】 ══════════════════╗\n" + fullPrompt + "\n╚══════════════════ 【LLM Prompt 结束】 ══════════════════╝")
         
         // 4. 执行推理
         await context?.completion_init(text: fullPrompt)
@@ -265,14 +271,16 @@ class LLMManager: ObservableObject {
             // 过滤控制符和 think 块（直接删除，不替换标签，避免污染历史）
             let filteredText = rawResponse
                 .replacingOccurrences(of: "<\\|.*?\\|>", with: "", options: .regularExpression)
+                .replacingOccurrences(of: "<start_of_turn>|<end_of_turn>|<\\|start_header_id\\|>|<\\|end_header_id\\|>|<\\|eot_id\\|>", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "<think>[\\s\\S]*?</think>", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "<think>[\\s\\S]*", with: "", options: .regularExpression) // think未闭合时也清除
                 .replacingOccurrences(of: "\\[EVENT:.*?\\]", with: "", options: .regularExpression)
-                .replacingOccurrences(of: "(?i)(?:user|assistant|system)[:\\n]?", with: "", options: .regularExpression)
+                .replacingOccurrences(of: "(?i)(?:user|assistant|system|model)[:\\n]?", with: "", options: .regularExpression)
             
             messages[msgIndex].content = filteredText.trimmingCharacters(in: .whitespacesAndNewlines)
             
-            try? await Task.sleep(nanoseconds: 5_000_000)
+            // 将延时从 5ms 调到 20ms (20_000_000 纳秒)，防止震动马达和 UI 线程被过度阻塞，达到丝滑的打字机震动效果
+            try? await Task.sleep(nanoseconds: 20_000_000)
         }
         
         // ===== 日志：打印原始响应 =====
@@ -286,27 +294,38 @@ class LLMManager: ObservableObject {
     }
     
     private func parseAndExecuteEvents(_ response: String, player: PlayerProfile) {
+        var hasTriggeredEvent = false
+        
         let pattern = "\\[EVENT:(.*?):(.*?)\\]"
-        guard let regex = try? NSRegularExpression(pattern: pattern) else { return }
-        
-        let nsRange = NSRange(response.startIndex..<response.endIndex, in: response)
-        let matches = regex.matches(in: response, range: nsRange)
-        
-        for match in matches {
-            if let typeRange = Range(match.range(at: 1), in: response),
-               let valueRange = Range(match.range(at: 2), in: response) {
-                let type = String(response[typeRange])
-                let valueStr = String(response[valueRange])
-                
-                if type == "ADD_CULTIVATION", let value = Int64(valueStr) {
-                    player.cultivationBase += value
-                    // 添加一个系统提示消息
-                    messages.append(ChatMessage(role: .system, content: "【机缘】老爷爷随手一指，你感觉到一股暖流涌入丹田，修为增加 \(value) 点！"))
+        if let regex = try? NSRegularExpression(pattern: pattern) {
+            let nsRange = NSRange(response.startIndex..<response.endIndex, in: response)
+            let matches = regex.matches(in: response, range: nsRange)
+            
+            for match in matches {
+                if let typeRange = Range(match.range(at: 1), in: response),
+                   let valueRange = Range(match.range(at: 2), in: response) {
+                    let type = String(response[typeRange])
+                    let valueStr = String(response[valueRange])
                     
-                    // 保存 CoreData (假设 player.managedObjectContext 存在)
-                    try? player.managedObjectContext?.save()
+                    if type == "ADD_CULTIVATION", let value = Int64(valueStr) {
+                        player.cultivationBase += value
+                        messages.append(ChatMessage(role: .system, content: "【机缘】老爷爷随手一指，修为增加 \(value) 点！"))
+                        hasTriggeredEvent = true
+                    }
                 }
             }
+        }
+        
+        // 兼容中文特殊指令
+        if !hasTriggeredEvent && response.contains("【天降机缘】") {
+            let randomValue = Int64.random(in: 10...100)
+            player.cultivationBase += randomValue
+            messages.append(ChatMessage(role: .system, content: "【机缘触发】一阵微风拂过，凭空掉落了一颗灵石，修为增加 \(randomValue) 点！"))
+            hasTriggeredEvent = true
+        }
+        
+        if hasTriggeredEvent {
+            try? player.managedObjectContext?.save()
         }
     }
     
@@ -416,6 +435,67 @@ class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
         if let error = error {
             completionHandler(nil, error)
         }
+    }
+}
+
+// MARK: - 动态提示词模版
+struct PromptBuilder {
+    enum ModelTemplate {
+        case chatML     // Qwen, Yi, DeepSeek
+        case gemma      // Gemma 2/4
+        case llama3     // Llama 3
+    }
+    
+    static func detectTemplate(from filename: String) -> ModelTemplate {
+        let name = filename.lowercased()
+        if name.contains("gemma") { return .gemma }
+        if name.contains("llama-3") || name.contains("llama3") { return .llama3 }
+        return .chatML // 默认兼容度最好的 ChatML
+    }
+    
+    static func build(systemPrompt: String, history: [ChatMessage], modelFilename: String) -> String {
+        let template = detectTemplate(from: modelFilename)
+        var fullPrompt = ""
+        
+        switch template {
+        case .chatML:
+            fullPrompt += "<|im_start|>system\n\(systemPrompt)<|im_end|>\n"
+            for msg in history {
+                let role = msg.role == .user ? "user" : "assistant"
+                fullPrompt += "<|im_start|>\(role)\n\(msg.content)<|im_end|>\n"
+            }
+            fullPrompt += "<|im_start|>assistant\n<think>\n\n</think>\n" // 为推理模型加入逃逸符
+            
+        case .gemma:
+            // Gemma 的特殊格式：不建议显式声明 system，通常合并到第一次 user prompt 中
+            let systemContext = systemPrompt + "\n\n"
+            var isFirstUser = true
+            
+            for msg in history {
+                let role = msg.role == .user ? "user" : "model"
+                fullPrompt += "<start_of_turn>\(role)\n"
+                if isFirstUser && msg.role == .user {
+                    fullPrompt += systemContext
+                    isFirstUser = false
+                }
+                fullPrompt += "\(msg.content)<end_of_turn>\n"
+            }
+            // 如果历史全是 assistant，补充一下
+            if isFirstUser {
+                fullPrompt = "<start_of_turn>user\n\(systemContext)<end_of_turn>\n" + fullPrompt
+            }
+            fullPrompt += "<start_of_turn>model\n"
+            
+        case .llama3:
+            fullPrompt += "<|start_header_id|>system<|end_header_id|>\n\n\(systemPrompt)<|eot_id|>"
+            for msg in history {
+                let role = msg.role == .user ? "user" : "assistant"
+                fullPrompt += "<|start_header_id|>\(role)<|end_header_id|>\n\n\(msg.content)<|eot_id|>"
+            }
+            fullPrompt += "<|start_header_id|>assistant<|end_header_id|>\n\n"
+        }
+        
+        return fullPrompt
     }
 }
 #endif

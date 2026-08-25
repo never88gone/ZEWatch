@@ -54,9 +54,9 @@
 - **常见问题 (FAQ)**: 应用功能、HealthKit 授权、数据安全等常见疑问解答
 - **隐私政策**: 查阅 [PrivacyPolicy.md](PrivacyPolicy.md) 了解我们对数据安全的承诺
 - **项目 GitHub**: [GitHub 仓库](https://github.com/never88gone/ZEWatch)
-- **Telegram 频道**: [糖葫芦 TVOS](https://t.me/tanghulutvos)
-- **联系邮箱**: hsb@myit2017.cn
-- **官方网站**: [www.myit2017.cn](https://www.myit2017.cn)
+- **Telegram 频道**: [https://t.me/tanghulutvos](https://t.me/tanghulutvos)
+- **联系邮箱**: support@thltv.com
+- **官方网站**: [https://www.thltv.com/](https://www.myit2017.cn)
 
 ---
 *"灵气枯竭的末法时代，唯有自律，方可证道长生。"*

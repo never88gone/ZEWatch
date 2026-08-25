@@ -31,6 +31,8 @@ class LLMManager: ObservableObject {
     @Published var modelLoaded: Bool = false
     @Published var statusMessage: String = "未感应到戒灵..."
     
+    @Published var localModels: [String] = []
+    
     // 下载相关状态
     @Published var isDownloading: Bool = false
     @Published var downloadProgress: Double = 0.0
@@ -42,6 +44,7 @@ class LLMManager: ObservableObject {
         NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification, object: nil, queue: .main) { [weak self] _ in
             self?.handleMemoryWarning()
         }
+        fetchLocalModels()
     }
     
     deinit {
@@ -58,8 +61,75 @@ class LLMManager: ObservableObject {
         messages.append(ChatMessage(role: .system, content: "【神魂受创】因天道反噬（内存告警），墨老神魂激荡，暂时遗忘了先前的对话。"))
     }
     
+    /// 刷新并获取沙盒中的模型列表
+    func fetchLocalModels() {
+        let fileManager = FileManager.default
+        let modelsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Models").path
+        
+        if fileManager.fileExists(atPath: modelsPath),
+           let files = try? fileManager.contentsOfDirectory(atPath: modelsPath) {
+            DispatchQueue.main.async {
+                self.localModels = files.filter { $0.hasSuffix(".gguf") }.sorted()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.localModels = []
+            }
+        }
+    }
+    
+    /// 导入外部模型文件
+    func importModel(from url: URL) {
+        let fileManager = FileManager.default
+        let modelsDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Models")
+        
+        do {
+            if !fileManager.fileExists(atPath: modelsDir.path) {
+                try fileManager.createDirectory(at: modelsDir, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            // 因为系统选择器返回的可能是安全书签，必须调用 startAccessingSecurityScopedResource
+            let startAccessing = url.startAccessingSecurityScopedResource()
+            defer {
+                if startAccessing {
+                    url.stopAccessingSecurityScopedResource()
+                }
+            }
+            
+            let destURL = modelsDir.appendingPathComponent(url.lastPathComponent)
+            if fileManager.fileExists(atPath: destURL.path) {
+                try fileManager.removeItem(at: destURL)
+            }
+            try fileManager.copyItem(at: url, to: destURL)
+            
+            print("模型导入成功: \(url.lastPathComponent)")
+            fetchLocalModels()
+        } catch {
+            print("模型导入失败: \(error)")
+        }
+    }
+    
+    /// 卸载当前模型并清理内存
+    func unloadModel() {
+        self.context = nil
+        self.modelLoaded = false
+        self.statusMessage = "戒灵沉睡..."
+    }
+    
+    /// 删除指定本地模型
+    func deleteModel(filename: String) {
+        let fileManager = FileManager.default
+        let fileURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Models").appendingPathComponent(filename)
+        do {
+            try fileManager.removeItem(at: fileURL)
+            fetchLocalModels()
+        } catch {
+            print("删除模型失败: \(error)")
+        }
+    }
+    
     /// 加载本地 Llama 模型
-    func loadModel(modelPath: String? = nil) async {
+    func loadModel(filename: String? = nil) async {
         statusMessage = "正在唤醒戒灵..."
         
         let fileManager = FileManager.default
@@ -68,15 +138,22 @@ class LLMManager: ObservableObject {
         
         var path: String? = nil
         
-        if fileManager.fileExists(atPath: modelsPath),
-           let files = try? fileManager.contentsOfDirectory(atPath: modelsPath),
-           let firstGGUF = files.first(where: { $0.hasSuffix(".gguf") }) {
-            path = modelsPath + "/" + firstGGUF
+        if let target = filename {
+            path = modelsPath + "/" + target
+        } else {
+            // 回退到查找第一个模型
+            if fileManager.fileExists(atPath: modelsPath),
+               let files = try? fileManager.contentsOfDirectory(atPath: modelsPath),
+               let firstGGUF = files.first(where: { $0.hasSuffix(".gguf") }) {
+                path = modelsPath + "/" + firstGGUF
+            }
         }
         
-        guard let finalPath = path else {
-            statusMessage = "戒灵沉睡，未见法器。请先下载模型。"
-            print("【LLM】错误：未能发现任何 .gguf 后缀的模型文件。请在界面上触发下载。")
+        guard let finalPath = path, fileManager.fileExists(atPath: finalPath) else {
+            DispatchQueue.main.async {
+                self.statusMessage = "戒灵沉睡，未见指定法器。请检查文件是否存在。"
+                self.modelLoaded = false
+            }
             return
         }
         
@@ -297,21 +374,17 @@ class LLMManager: ObservableObject {
                 try fileManager.createDirectory(at: modelsDirectory, withIntermediateDirectories: true, attributes: nil)
             }
             
-            // 清空现有的所有模型文件以释放空间 (单法器模式)
-            if let files = try? fileManager.contentsOfDirectory(atPath: modelsDirectory.path) {
-                for file in files where file.hasSuffix(".gguf") {
-                    let oldFileURL = modelsDirectory.appendingPathComponent(file)
-                    try? fileManager.removeItem(at: oldFileURL)
-                    print("已清理旧模型: \(file)")
-                }
-            }
-            
             let destinationURL = modelsDirectory.appendingPathComponent(filename)
+            // 覆盖同名文件
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try fileManager.removeItem(at: destinationURL)
+            }
             try fileManager.moveItem(at: tempURL, to: destinationURL)
             
+            fetchLocalModels()
             statusMessage = "法器重铸成功，正在唤醒..."
             Task {
-                await self.loadModel()
+                await self.loadModel(filename: filename)
             }
         } catch {
             statusMessage = "保存法器失败"

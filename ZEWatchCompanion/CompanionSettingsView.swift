@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import UniformTypeIdentifiers
 
 struct CompanionSettingsView: View {
     @ObservedObject var player: PlayerProfile
@@ -8,7 +9,10 @@ struct CompanionSettingsView: View {
     
     @AppStorage("hapticFeedbackEnabled") private var hapticEnabled = true
     @AppStorage("autoSettleOfflineGains") private var autoSettle = true
+    @AppStorage("selectedModelName") private var selectedModelName: String = ""
+    
     @State private var showingModelSelection = false
+    @State private var showingFileImporter = false
     
     var body: some View {
         NavigationStack {
@@ -86,23 +90,67 @@ struct CompanionSettingsView: View {
                     Text("健康数据 (HealthKit)")
                 }
                 
-                // MARK: - 识海阵法 (AI)
+                // MARK: - 法器库管理 (多模型支持)
                 Section {
+                    // 已下载的本地模型列表
+                    ForEach(llm.localModels, id: \.self) { modelName in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(modelName)
+                                    .font(.subheadline)
+                                    .foregroundColor(selectedModelName == modelName ? .cultivPrimary : .primary)
+                                
+                                if selectedModelName == modelName {
+                                    Text(llm.modelLoaded ? "当前激活 (已连接)" : "默认法器 (未加载)")
+                                        .font(.caption2)
+                                        .foregroundColor(llm.modelLoaded ? .green : .orange)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            if selectedModelName != modelName {
+                                Button("激活") {
+                                    selectedModelName = modelName
+                                    llm.unloadModel()
+                                    Task {
+                                        await llm.loadModel(filename: modelName)
+                                    }
+                                }
+                                .buttonStyle(.bordered)
+                                .tint(.cultivPrimary)
+                                .font(.caption)
+                            }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            if selectedModelName != modelName {
+                                Button(role: .destructive) {
+                                    llm.deleteModel(filename: modelName)
+                                } label: {
+                                    Label("销毁", systemImage: "trash")
+                                }
+                            }
+                        }
+                    }
+                    
+                    if llm.localModels.isEmpty {
+                        Text("空空如也，戒灵无所依附")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
                     Button {
                         showingModelSelection = true
                     } label: {
-                        HStack {
-                            Label("天道模型 (更换/接引)", systemImage: "cpu")
-                                .foregroundColor(.primary)
-                            Spacer()
-                            HStack(spacing: 4) {
-                                Image(systemName: llm.modelLoaded ? "checkmark.circle.fill" : "arrow.down.circle.fill")
-                                    .foregroundColor(llm.modelLoaded ? .green : .cultivAccent)
-                                Text(llm.modelLoaded ? "已连接" : "去下载")
-                                    .foregroundColor(llm.modelLoaded ? .green : .cultivAccent)
-                            }
-                            .font(.callout)
-                        }
+                        Label("从天道接引 (网络下载法器)", systemImage: "icloud.and.arrow.down")
+                            .foregroundColor(.cultivPrimary)
+                    }
+                    
+                    Button {
+                        showingFileImporter = true
+                    } label: {
+                        Label("从须弥纳子导入 (本地文件导入)", systemImage: "folder.badge.plus")
+                            .foregroundColor(.cultivPrimary)
                     }
                     
                     if llm.isGenerating {
@@ -113,7 +161,7 @@ struct CompanionSettingsView: View {
                         }
                     }
                 } header: {
-                    Text("识海阵法 (AI)")
+                    Text("法器库 (识海阵法)")
                 }
                 
                 // MARK: - 道途统计
@@ -166,6 +214,20 @@ struct CompanionSettingsView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showingModelSelection) {
                 ModelSelectionView(llm: llm)
+            }
+            .fileImporter(
+                isPresented: $showingFileImporter,
+                allowedContentTypes: [.data],
+                allowsMultipleSelection: false
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    guard let url = urls.first else { return }
+                    // 因为我们可能需要权限去读它，LLMManager 里的 importModel 已经有处理 startAccessingSecurityScopedResource
+                    llm.importModel(from: url)
+                case .failure(let error):
+                    print("文件选择失败: \(error.localizedDescription)")
+                }
             }
         }
     }

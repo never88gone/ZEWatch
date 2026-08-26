@@ -194,12 +194,12 @@ struct AICompanionView: View {
     
     private var inputArea: some View {
         HStack(spacing: 12) {
-            TextField(llm.isGenerating ? "墨老思念中，请稍候..." : "向墨老祈告...", text: $chatText)
+            TextField(llm.isGenerating ? "墨老思念中，请稍候..." : (llm.isConversingDisabled ? "神魂受损，需静养..." : "向墨老祈告..."), text: $chatText)
                 .textFieldStyle(.plain)
                 .padding(12)
                 .background(RoundedRectangle(cornerRadius: 20).fill(Color.white.opacity(0.05)))
                 .foregroundColor(.white)
-                .disabled(llm.isGenerating)
+                .disabled(llm.isGenerating || llm.isConversingDisabled)
             
             Button {
                 sendMessage(chatText)
@@ -215,11 +215,11 @@ struct AICompanionView: View {
                         Image(systemName: "paperplane.fill")
                             .foregroundColor(.black)
                             .padding(10)
-                            .background(Circle().fill(chatText.isEmpty ? Color.cultivMuted : Color.cultivAccent))
+                            .background(Circle().fill(chatText.isEmpty || llm.isConversingDisabled ? Color.cultivMuted : Color.cultivAccent))
                     }
                 }
             }
-            .disabled(chatText.isEmpty || llm.isGenerating)
+            .disabled(chatText.isEmpty || llm.isGenerating || llm.isConversingDisabled)
         }
     }
     
@@ -235,7 +235,7 @@ struct AICompanionView: View {
             .background(Capsule().stroke(Color.cultivAccent.opacity(0.4), lineWidth: 1))
             .foregroundColor(.cultivAccent)
         }
-        .disabled(llm.isGenerating)
+        .disabled(llm.isGenerating || llm.isConversingDisabled)
     }
     
     private func sendMessage(_ text: String) {

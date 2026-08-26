@@ -40,6 +40,9 @@ class LLMManager: ObservableObject {
     @Published var downloadedBytes: Int64 = 0
     @Published var totalBytes: Int64 = 0
     @Published var hasResumeData: Bool = false
+    @Published var estimatedTimeRemaining: String = ""
+    
+    private var downloadStartTime: Date?
     
     private var currentDownloadTask: URLSessionDownloadTask?
     private var resumeData: Data? {
@@ -54,6 +57,7 @@ class LLMManager: ObservableObject {
         }
         fetchLocalModels()
         loadHistory()
+        checkOOMRecovery()
     }
     
     deinit {
@@ -89,6 +93,8 @@ class LLMManager: ObservableObject {
         }
     }
     
+    @Published var isConversingDisabled: Bool = false
+    
     private func handleMemoryWarning() {
         print("【LLMManager】收到内存警告！正在清空对话记录以防 OOM...")
         // 清空历史记忆，仅保留最后一条和模型加载状态
@@ -98,6 +104,32 @@ class LLMManager: ObservableObject {
         }
         messages.append(ChatMessage(role: .system, content: "【神魂受创】因天道反噬（内存告警），墨老神魂激荡，暂时遗忘了先前的对话。"))
         saveHistory()
+        UserDefaults.standard.set(Date(), forKey: "lastOOMDate")
+    }
+    
+    func checkOOMRecovery() {
+        if let lastOOM = UserDefaults.standard.object(forKey: "lastOOMDate") as? Date {
+            let elapsed = Date().timeIntervalSince(lastOOM)
+            if elapsed < 300 {
+                // 5 分钟内
+                DispatchQueue.main.async {
+                    self.isConversingDisabled = true
+                    if self.messages.last?.content.contains("神魂受创") == false {
+                        self.messages.append(ChatMessage(role: .system, content: "【神魂受创】墨老因强行推演反噬，神魂虚弱，需静养 5 分钟。"))
+                        self.saveHistory()
+                    }
+                }
+                
+                // 设置定时器解禁
+                DispatchQueue.main.asyncAfter(deadline: .now() + (300 - elapsed)) {
+                    self.isConversingDisabled = false
+                    self.messages.append(ChatMessage(role: .system, content: "【神魂归位】墨老长舒一口气：‘总算缓过来了...’"))
+                    self.saveHistory()
+                }
+            } else {
+                UserDefaults.standard.removeObject(forKey: "lastOOMDate")
+            }
+        }
     }
     
     /// 刷新并获取沙盒中的模型列表
@@ -399,20 +431,14 @@ class LLMManager: ObservableObject {
     
     func resumeDownload() {
         guard let resumeData = resumeData else { return }
-        // 从 resumeData 中恢复 URL
-        // 但由于 URLSession 的 API 限制，这里只能恢复任务，后续保存还需要知道文件名。
-        // 为了简化，我们假设断点续传时用固定的逻辑去处理。不过最好的办法是 startDownload 可以接管
         isDownloading = true
         statusMessage = "正在接续阵纹..."
+        downloadStartTime = Date()
         
         let session = URLSession(configuration: .default, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
-            DispatchQueue.main.async {
-                self?.downloadProgress = progress
-                self?.downloadedBytes = downloaded
-                self?.totalBytes = total
-            }
+            self?.updateDownloadProgress(progress: progress, downloaded: downloaded, total: total)
         }, completionHandler: { [weak self] localURL, error in
-            self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: nil) // 简化：如果有 error，可以通过 resumeData 继续；成功的话从 response 获取名字
+            self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: nil)
         }), delegateQueue: nil)
         
         let task = session.downloadTask(withResumeData: resumeData)
@@ -425,14 +451,12 @@ class LLMManager: ObservableObject {
         downloadProgress = 0.0
         downloadedBytes = 0
         totalBytes = 0
+        estimatedTimeRemaining = ""
         statusMessage = "正在接引戒灵下界..."
+        downloadStartTime = Date()
         
         let session = URLSession(configuration: .default, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
-            DispatchQueue.main.async {
-                self?.downloadProgress = progress
-                self?.downloadedBytes = downloaded
-                self?.totalBytes = total
-            }
+            self?.updateDownloadProgress(progress: progress, downloaded: downloaded, total: total)
         }, completionHandler: { [weak self] localURL, error in
             self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: url)
         }), delegateQueue: nil)
@@ -442,10 +466,35 @@ class LLMManager: ObservableObject {
         task.resume()
     }
     
+    private func updateDownloadProgress(progress: Double, downloaded: Int64, total: Int64) {
+        DispatchQueue.main.async {
+            self.downloadProgress = progress
+            self.downloadedBytes = downloaded
+            self.totalBytes = total
+            
+            if let startTime = self.downloadStartTime {
+                let elapsed = Date().timeIntervalSince(startTime)
+                if elapsed > 1.0 && downloaded > 0 { // 避免除以0，且至少等1秒才算
+                    let bytesPerSecond = Double(downloaded) / elapsed
+                    let remainingBytes = Double(total - downloaded)
+                    let remainingSeconds = remainingBytes / bytesPerSecond
+                    
+                    if remainingSeconds.isFinite && remainingSeconds > 0 {
+                        let formatter = DateComponentsFormatter()
+                        formatter.allowedUnits = [.hour, .minute, .second]
+                        formatter.unitsStyle = .abbreviated
+                        self.estimatedTimeRemaining = "预计剩余: " + (formatter.string(from: remainingSeconds) ?? "--")
+                    }
+                }
+            }
+        }
+    }
+        self.currentDownloadTask = task
+        task.resume()
+    }
+    
     private func handleDownloadCompletion(localURL: URL?, error: Error?, originalURL: URL?) {
         DispatchQueue.main.async {
-            self.isDownloading = false
-            
             if let error = error as NSError? {
                 if let resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData] as? Data {
                     self.resumeData = resumeData

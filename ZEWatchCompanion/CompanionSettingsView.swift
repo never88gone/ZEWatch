@@ -155,9 +155,17 @@ struct CompanionSettingsView: View {
                     
                     if llm.isDownloading || llm.hasResumeData {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text(llm.statusMessage)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                            HStack {
+                                Text(llm.statusMessage)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                if !llm.estimatedTimeRemaining.isEmpty && llm.isDownloading {
+                                    Text(llm.estimatedTimeRemaining)
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
                             
                             ProgressView(value: llm.downloadProgress)
                                 .tint(.cultivAccent)

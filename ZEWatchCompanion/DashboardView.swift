@@ -21,9 +21,8 @@ struct DashboardView: View {
             ZStack {
                 Color.cultivBg.ignoresSafeArea()
                 
-                // 时辰/天气动效背景 (此处用渐变+粒子替代)
-                LinearGradient(colors: [Color.cultivBg, Color.cultivPrimary.opacity(0.1)], startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
+                // 时辰/天气动效背景
+                TimeOfDayBackground()
                 
                 ScrollView {
                     VStack(spacing: 24) {
@@ -52,10 +51,24 @@ struct DashboardView: View {
                         
                         // 灵气面板
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("五行灵气转化")
-                                .font(.headline)
-                                .foregroundColor(.cultivText)
-                                .padding(.horizontal)
+                            HStack {
+                                Text("五行灵气转化")
+                                    .font(.headline)
+                                    .foregroundColor(.cultivText)
+                                Spacer()
+                                if HealthManager.shared.convertedWoodQi >= HealthManager.shared.dailyQiCap ||
+                                   HealthManager.shared.convertedMetalQi >= HealthManager.shared.dailyQiCap ||
+                                   HealthManager.shared.convertedWaterQi >= HealthManager.shared.dailyQiCap {
+                                    Text("根基不稳，灵气虚浮")
+                                        .font(.caption2)
+                                        .foregroundColor(.red)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.red.opacity(0.1))
+                                        .cornerRadius(4)
+                                }
+                            }
+                            .padding(.horizontal)
                             
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                                 QiCard(title: "金灵气", value: player.metalQi, color: .yellow, sourceText: "卡路里燃烧")
@@ -141,5 +154,41 @@ struct QiCard: View {
                 isFlipped.toggle()
             }
         }
+    }
+}
+
+struct TimeOfDayBackground: View {
+    @State private var hour = Calendar.current.component(.hour, from: Date())
+    
+    var body: some View {
+        ZStack {
+            if hour >= 6 && hour < 17 {
+                // 白天烈日
+                LinearGradient(colors: [Color.blue.opacity(0.3), Color.cultivBg], startPoint: .top, endPoint: .bottom)
+                Image(systemName: "sun.max.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120)
+                    .foregroundColor(.yellow.opacity(0.15))
+                    .offset(x: 100, y: -200)
+            } else if hour >= 17 && hour < 19 {
+                // 黄昏
+                LinearGradient(colors: [Color.orange.opacity(0.2), Color.cultivBg], startPoint: .top, endPoint: .bottom)
+            } else {
+                // 夜晚星空
+                LinearGradient(colors: [Color.black.opacity(0.8), Color.cultivBg], startPoint: .top, endPoint: .bottom)
+                // 简单的粒子特效示意
+                ForEach(0..<15, id: \.self) { i in
+                    Image(systemName: "sparkle")
+                        .font(.system(size: CGFloat.random(in: 10...20)))
+                        .foregroundColor(.white.opacity(Double.random(in: 0.1...0.5)))
+                        .offset(
+                            x: CGFloat.random(in: -180...180),
+                            y: CGFloat.random(in: -350...50)
+                        )
+                }
+            }
+        }
+        .ignoresSafeArea()
     }
 }

@@ -154,6 +154,10 @@ struct QiCard: View {
                 isFlipped.toggle()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(isFlipped ? "\(title) 的来源是 \(sourceText)" : "\(title), 当前拥有 \(value) 点")
+        .accessibilityHint("轻点两下翻转卡片")
+        .accessibilityAddTraits(.isButton)
     }
 }
 

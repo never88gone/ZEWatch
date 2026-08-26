@@ -302,6 +302,8 @@ struct MessageBubble: View {
                                     .cornerRadius(8)
                                     .shadow(color: .orange.opacity(0.5), radius: 5, x: 0, y: 2)
                                 }
+                                .accessibilityLabel("开启机缘盲盒")
+                                .accessibilityHint("点击开启机缘，获取随机修为奖励")
                             } else if message.hasClaimedReward {
                                 HStack {
                                     Image(systemName: "checkmark.circle.fill")

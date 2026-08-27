@@ -42,7 +42,7 @@ actor LlamaContext {
         self.model = model
         self.context = context
         self.tokens_list = []
-        self.batch = llama_batch_init(512, 0, 1)
+        self.batch = llama_batch_init(2048, 0, 1)
         self.temporary_invalid_cchars = []
         let sparams = llama_sampler_chain_default_params()
         self.sampling = llama_sampler_chain_init(sparams)
@@ -56,7 +56,7 @@ actor LlamaContext {
         llama_batch_free(batch)
         llama_model_free(model)
         llama_free(context)
-        llama_backend_free()
+        // llama_backend_free() 不要调用
     }
 
     static func create_context(path: String) throws -> LlamaContext {

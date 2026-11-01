@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA5B00012F738CEA0055BE24 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5F00012F738CEA0055BE24 /* DashboardView.swift */; };
 		0B73769A4CF9F1CD26571419 /* SkillLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C107C64561A3F37CEF4D44 /* SkillLibraryView.swift */; };
 		0CCF731515750270E088A5B3 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8240F240476E9C09A53260B7 /* ConnectivityManager.swift */; };
 		1BC88142BE4F23F76B736DB8 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4BF3CF72FB5388C1E4A687 /* Persistence.swift */; };
@@ -81,6 +82,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA5F00012F738CEA0055BE24 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		0065DFCA69B3EC786D4E4B62 /* LibLlama.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
 		0411356B86B1B7E51170928A /* WatchFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
 		1E74631DF8AC22CD72022E35 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				38CA88992FB461DF00E29C61 /* ZEWatchCompanion.entitlements */,
 				38CA88972FB4610E00E29C61 /* HealthManager.swift */,
 				38E13B6E2F738CEA0055BE24 /* AICompanionView.swift */,
+				DA5F00012F738CEA0055BE24 /* DashboardView.swift */,
 				38E13B6F2F738CEA0055BE24 /* CoreDataModels.swift */,
 				38E13B702F738CEA0055BE24 /* CreationView.swift */,
 				38E13B712F738CEA0055BE24 /* CultivationEngine.swift */,
@@ -367,7 +370,7 @@
 			mainGroup = 3803AE352F0D10490047BF4A;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				0727260F64031E34792E0010 /* XCRemoteSwiftPackageReference "llama.cpp" */,
+				F625A0A981D189D5E6FF12B6 /* XCLocalSwiftPackageReference "llama" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3803AE3D2F0D10490047BF4A /* Products */;
@@ -418,7 +421,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\nif [ $CONFIGURATION == Release ]; then\necho \"Bumping build number...\"\nbuildNumber=$(date +%Y%m%d%H%M%S)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\nelse\necho $CONFIGURATION \" build - Not bumping build number.\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\nif [ \"$CONFIGURATION\" == \"Release\" ]; then\nSHARED_BN_FILE=\"/tmp/zewatch_shared_build_number\"\nNOW_SEC=$(date +%s)\nif [ -f \"$SHARED_BN_FILE\" ]; then\nFILE_SEC=$(stat -f %m \"$SHARED_BN_FILE\" 2>/dev/null || echo 0)\nDIFF_SEC=$((NOW_SEC - FILE_SEC))\nif [ \"$DIFF_SEC\" -ge 0 ] && [ \"$DIFF_SEC\" -lt 90 ]; then\nbuildNumber=$(cat \"$SHARED_BN_FILE\")\nfi\nfi\nif [ -z \"$buildNumber\" ]; then\nbuildNumber=$(date +%Y%m%d%H%M%S)\necho \"$buildNumber\" > \"$SHARED_BN_FILE\"\nfi\necho \"Bumping build number to $buildNumber...\"\nif [ -n \"$INFOPLIST_FILE\" ] && [ -f \"$INFOPLIST_FILE\" ]; then\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\" 2>/dev/null || /usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string $buildNumber\" \"$INFOPLIST_FILE\" 2>/dev/null || true\nfi\nif [ -n \"$TARGET_BUILD_DIR\" ] && [ -n \"$INFOPLIST_PATH\" ] && [ -f \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\" ]; then\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\nfi\nelse\necho \"$CONFIGURATION build - Not bumping build number.\"\nfi\n";
 		};
 		38D0225E2FBDEBBF0088D72F /* Modity buildNumber */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -436,7 +439,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\nif [ $CONFIGURATION == Release ]; then\necho \"Bumping build number...\"\nbuildNumber=$(date +%Y%m%d%H%M%S)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\nelse\necho $CONFIGURATION \" build - Not bumping build number.\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\nif [ \"$CONFIGURATION\" == \"Release\" ]; then\nSHARED_BN_FILE=\"/tmp/zewatch_shared_build_number\"\nNOW_SEC=$(date +%s)\nif [ -f \"$SHARED_BN_FILE\" ]; then\nFILE_SEC=$(stat -f %m \"$SHARED_BN_FILE\" 2>/dev/null || echo 0)\nDIFF_SEC=$((NOW_SEC - FILE_SEC))\nif [ \"$DIFF_SEC\" -ge 0 ] && [ \"$DIFF_SEC\" -lt 90 ]; then\nbuildNumber=$(cat \"$SHARED_BN_FILE\")\nfi\nfi\nif [ -z \"$buildNumber\" ]; then\nbuildNumber=$(date +%Y%m%d%H%M%S)\necho \"$buildNumber\" > \"$SHARED_BN_FILE\"\nfi\necho \"Bumping build number to $buildNumber...\"\nif [ -n \"$INFOPLIST_FILE\" ] && [ -f \"$INFOPLIST_FILE\" ]; then\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\" 2>/dev/null || /usr/libexec/PlistBuddy -c \"Add :CFBundleVersion string $buildNumber\" \"$INFOPLIST_FILE\" 2>/dev/null || true\nfi\nif [ -n \"$TARGET_BUILD_DIR\" ] && [ -n \"$INFOPLIST_PATH\" ] && [ -f \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\" ]; then\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true\nfi\nelse\necho \"$CONFIGURATION build - Not bumping build number.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -455,6 +458,7 @@
 				38E13B742F738CEA0055BE24 /* CoreDataModels.swift in Sources */,
 				38E13B752F738CEA0055BE24 /* Persistence.swift in Sources */,
 				38E13B762F738CEA0055BE24 /* AICompanionView.swift in Sources */,
+				DA5B00012F738CEA0055BE24 /* DashboardView.swift in Sources */,
 				38E13B772F738CEA0055BE24 /* CreationView.swift in Sources */,
 				38E13B782F738CEA0055BE24 /* CultivationEngine.swift in Sources */,
 				38E13B792F738CEA0055BE24 /* GameKitManager.swift in Sources */,
@@ -530,7 +534,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 20261101181239;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 876385K952;
 				ENABLE_BITCODE = NO;
@@ -556,7 +560,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				MTL_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/llama.cpp/ggml/src";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -704,7 +708,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 20261101181239;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=watchos*]" = 876385K952;
 				ENABLE_PREVIEWS = YES;
@@ -723,7 +727,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -749,7 +753,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 20261101181239;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=watchos*]" = 876385K952;
 				ENABLE_PREVIEWS = YES;
@@ -767,7 +771,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -798,7 +802,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 20261101181239;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 876385K952;
 				ENABLE_BITCODE = NO;
@@ -824,7 +828,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				MTL_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/llama.cpp/ggml/src";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -878,6 +882,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		F625A0A981D189D5E6FF12B6 /* XCLocalSwiftPackageReference "llama" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/llama;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		0727260F64031E34792E0010 /* XCRemoteSwiftPackageReference "llama.cpp" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -892,7 +903,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		0BB66F311FD578122D14006D /* llama */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0727260F64031E34792E0010 /* XCRemoteSwiftPackageReference "llama.cpp" */;
+			package = F625A0A981D189D5E6FF12B6 /* XCLocalSwiftPackageReference "llama" */;
 			productName = llama;
 		};
 /* End XCSwiftPackageProductDependency section */

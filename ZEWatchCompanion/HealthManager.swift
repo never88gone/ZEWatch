@@ -143,11 +143,10 @@ class HealthManager: ObservableObject {
     }
     
     func checkActiveWorkout() {
-        let predicate = HKQuery.predicateForWorkouts(with: .notApplicable)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
         
         // 查询最近一次 workout
-        let query = HKSampleQuery(sampleType: HKObjectType.workoutType(), predicate: predicate, limit: 1, sortDescriptors: [sortDescriptor]) { _, samples, _ in
+        let query = HKSampleQuery(sampleType: HKObjectType.workoutType(), predicate: nil, limit: 1, sortDescriptors: [sortDescriptor]) { _, samples, _ in
             guard let workout = samples?.first as? HKWorkout else { return }
             // 如果结束时间是在未来，或者没有结束时间（某些状态下），则视作活跃
             // 通常活跃的 Workout 其 endDate = .distantFuture，或者我们可以直接通过 HKWorkoutSession 判断，

@@ -1,0 +1,74 @@
+appId: com.nevergone.zrxx.ios
+---
+- launchApp:
+    clearState: false
+
+# 步骤 1：验证首页纯净状态与无内置模型提示
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "识海空明 · 戒灵未凝"
+    timeout: 10000
+- assertVisible: "本法宝遵循极简轻灵原则，**安装包未内置大模型**。"
+- assertVisible: "前往设置挑选并接引法器"
+
+# 步骤 2：验证从首页跳转到设置页下载中心
+- tapOn:
+    id: "goto_settings_download_button"
+- extendedWaitUntil:
+    visible: "天道接引 · 官方默认大模型下载"
+    timeout: 10000
+- assertVisible: "国内网络镜像加速 (hf-mirror.com)"
+- assertVisible: "接引此法器（下载 约 390 MB）"
+
+# 步骤 3：验证下载逻辑（发起网络任务、出现引灵进度）
+- tapOn: "接引此法器（下载 约 390 MB）"
+- extendedWaitUntil:
+    visible: ".*天道引灵中.*"
+    timeout: 10000
+
+# 步骤 4：验证取消下载逻辑（任务终止、进度收起）
+- tapOn:
+    id: "cancel_download_button"
+- extendedWaitUntil:
+    notVisible: ".*天道引灵中.*"
+    timeout: 10000
+- assertVisible: "接引此法器（下载 约 390 MB）"
+
+# 步骤 5：注入测试模型并验证唤醒加载逻辑
+- runScript:
+    file: ../scripts/inject_test_model.sh
+
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "立即唤醒戒灵"
+    timeout: 10000
+- tapOn: "立即唤醒戒灵"
+- extendedWaitUntil:
+    visible: "向墨老祈告..."
+    timeout: 10000
+
+# 步骤 6：验证调用逻辑（发送对话、墨老回复）
+- tapOn: "向墨老祈告..."
+- inputText: "墨老，弟子今日当如何修炼？"
+- tapOn:
+    id: "send_message_button"
+- extendedWaitUntil:
+    visible: ".*老夫.*"
+    timeout: 15000
+
+# 步骤 7：验证删除逻辑（设置中销毁、沙盒清空、内存卸载）
+- tapOn: "须弥戒"
+- extendedWaitUntil:
+    visible: "法器库管理 (大模型)"
+    timeout: 10000
+- assertVisible: "qwen2.5-0.5b-instruct-q4_k_m.gguf"
+- tapOn: "Trash"
+- extendedWaitUntil:
+    visible: "法器囊空空如也（安装包未内置大模型，请点击下方下载）"
+    timeout: 8000
+
+# 步骤 8：验证删除后切回首页的联动恢复状态
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "识海空明 · 戒灵未凝"
+    timeout: 8000

@@ -1,0 +1,43 @@
+appId: com.nevergone.zrxx.ios
+---
+- launchApp:
+    clearState: false
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "立即唤醒戒灵"
+    timeout: 10000
+- tapOn: "立即唤醒戒灵"
+- extendedWaitUntil:
+    visible: "向墨老祈告..."
+    timeout: 10000
+- takeScreenshot: "03_chat_screen_ready"
+
+# 发送对话并验证墨老回复
+- tapOn: "向墨老祈告..."
+- inputText: "墨老，请传我无上修仙心法！"
+- tapOn:
+    id: "send_message_button"
+- extendedWaitUntil:
+    visible: ".*老夫.*"
+    timeout: 15000
+- takeScreenshot: "04_chat_response_received"
+
+# 切换须弥戒（设置），验证并销毁/删除大模型
+- tapOn: "须弥戒"
+- extendedWaitUntil:
+    visible: "法器库管理 (大模型)"
+    timeout: 10000
+- assertVisible: "qwen2.5-0.5b-instruct-q4_k_m.gguf"
+- takeScreenshot: "05_settings_models_list"
+- tapOn: "Trash"
+- extendedWaitUntil:
+    visible: "法器囊空空如也（安装包未内置大模型，请点击下方下载）"
+    timeout: 8000
+- takeScreenshot: "06_model_deleted_in_settings"
+
+# 切回识海，验证重新恢复空明挑选大模型引导
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "识海空明 · 挑选法器"
+    timeout: 8000
+- takeScreenshot: "07_back_to_initial_guide"

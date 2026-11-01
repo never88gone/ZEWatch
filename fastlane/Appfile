@@ -1,2 +1,4 @@
 app_identifier("com.nevergone.zrxx.ios") # 您的主 App Bundle Identifier
-apple_id("husanbo@126.com") # 您的 Apple ID
+
+# 优先从环境变量读取 Apple ID，避免在公开仓库中硬编码个人隐私信息
+apple_id(ENV["APPLE_ID"]) if ENV["APPLE_ID"]

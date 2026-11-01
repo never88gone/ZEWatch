@@ -10,6 +10,12 @@ struct CompanionSettingsView: View {
     @AppStorage("hapticFeedbackEnabled") private var hapticEnabled = true
     @AppStorage("autoSettleOfflineGains") private var autoSettle = true
     @AppStorage("selectedModelName") private var selectedModelName: String = ""
+    @AppStorage("modelDownloadSource") private var downloadSourceRaw = ModelDownloadSource.modelscope.rawValue
+    
+    private var downloadSource: ModelDownloadSource {
+        get { ModelDownloadSource(rawValue: downloadSourceRaw) ?? .modelscope }
+        set { downloadSourceRaw = newValue.rawValue }
+    }
     
     @State private var showingModelSelection = false
     @State private var showingFileImporter = false
@@ -31,6 +37,258 @@ struct CompanionSettingsView: View {
                 } header: {
                     Text("修行偏好")
                 }
+
+
+                
+                // MARK: - 法器库管理 (多模型支持)
+                Section {
+                    // 已下载的本地模型列表
+                    ForEach(llm.localModels, id: \.self) { modelName in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(modelName)
+                                    .font(.subheadline)
+                                    .foregroundColor(llm.currentModelFilename == modelName ? .cultivPrimary : .primary)
+                                
+                                if llm.currentModelFilename == modelName {
+                                    Text(llm.modelLoaded ? "当前激活 (已连接)" : "已就绪 (未加载)")
+                                        .font(.caption2.bold())
+                                        .foregroundColor(llm.modelLoaded ? .green : .orange)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            HStack(spacing: 8) {
+                                if llm.currentModelFilename != modelName {
+                                    Button("激活") {
+                                        selectedModelName = modelName
+                                        llm.unloadModel()
+                                        Task {
+                                            await llm.loadModel(filename: modelName)
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .tint(.cultivPrimary)
+                                    .font(.caption.bold())
+                                    .accessibilityIdentifier("activate_model_\(modelName)")
+                                }
+                                
+                                Button(role: .destructive) {
+                                    llm.deleteModel(filename: modelName)
+                                } label: {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.red)
+                                        .font(.subheadline)
+                                }
+                                .buttonStyle(.borderless)
+                                .accessibilityIdentifier("delete_model_\(modelName)")
+                            }
+                        }
+                        .accessibilityIdentifier("model_row_\(modelName)")
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                llm.deleteModel(filename: modelName)
+                            } label: {
+                                Label("销毁", systemImage: "trash")
+                            }
+                        }
+                    }
+                    
+                    if llm.localModels.isEmpty {
+                        Text("法器囊空空如也（安装包未内置大模型，请点击下方下载）")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    if llm.isDownloading || llm.hasResumeData || llm.downloadErrorText != nil {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("天道引灵中 · " + (llm.downloadingModelTitle.isEmpty ? "接引法器" : llm.downloadingModelTitle))
+                                    .font(.subheadline.bold())
+                                    .foregroundColor(.cultivAccent)
+                                Spacer()
+                                if !llm.downloadSpeedDesc.isEmpty && llm.isDownloading {
+                                    Text(llm.downloadSpeedDesc)
+                                        .font(.caption2.monospacedDigit())
+                                        .foregroundColor(.cultivAccent)
+                                }
+                                if !llm.estimatedTimeRemaining.isEmpty && llm.isDownloading {
+                                    Text(llm.estimatedTimeRemaining)
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            
+                            if let errorText = llm.downloadErrorText {
+                                HStack(alignment: .top, spacing: 6) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(.red)
+                                    Text(errorText)
+                                        .font(.caption2)
+                                        .foregroundColor(.red)
+                                }
+                                .padding(.vertical, 2)
+                            }
+                            
+                            ProgressView(value: llm.downloadProgress)
+                                .tint(llm.downloadErrorText != nil ? .red : .cultivAccent)
+                            
+                            HStack {
+                                Text("\(formatBytes(llm.downloadedBytes)) / \(formatBytes(llm.totalBytes))")
+                                    .font(.caption2.monospacedDigit())
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(Int(llm.downloadProgress * 100))%")
+                                    .font(.caption2.monospacedDigit().bold())
+                                    .foregroundColor(.primary)
+                            }
+                            
+                            HStack {
+                                if llm.isDownloading {
+                                    Button {
+                                        llm.pauseDownload()
+                                    } label: {
+                                        Label("暂停", systemImage: "pause.fill")
+                                    }
+                                    .accessibilityIdentifier("pause_download_button")
+                                } else if llm.hasResumeData {
+                                    Button {
+                                        llm.resumeDownload()
+                                    } label: {
+                                        Label("继续接引", systemImage: "play.fill")
+                                    }
+                                    .accessibilityIdentifier("resume_download_button")
+                                }
+                                Spacer()
+                                Button(role: .destructive) {
+                                    llm.cancelDownload()
+                                } label: {
+                                    Label("取消", systemImage: "xmark")
+                                }
+                                .accessibilityIdentifier("cancel_download_button")
+                            }
+                            .buttonStyle(.bordered)
+                            .font(.caption)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    
+                    if llm.isGenerating {
+                        HStack {
+                            Label("推演中", systemImage: "sparkles")
+                            Spacer()
+                            ProgressView().tint(.cultivPrimary)
+                        }
+                    }
+                } header: {
+                    Text("法器库管理 (大模型)")
+                } footer: {
+                    Text("本应用遵循轻量设计，未在安装包中内置任何大模型。所有模型均需按需从天道接引下载，或从本地导入 .gguf 文件。模型存储在手机沙盒中，可随时销毁以释放空间。")
+                }
+                
+                // MARK: - 官方默认大模型（接引下载专区）
+                Section {
+                    Picker("接引网络线路", selection: Binding(
+                        get: { ModelDownloadSource(rawValue: downloadSourceRaw) ?? .modelscope },
+                        set: { downloadSourceRaw = $0.rawValue }
+                    )) {
+                        ForEach(ModelDownloadSource.allCases) { source in
+                            Text(source.displayName).tag(source)
+                        }
+                    }
+                    .font(.subheadline)
+                    
+                    ForEach(LLMManager.recommendedModels) { model in
+                        let isDownloaded = llm.localModels.contains(model.filename)
+                        let isDownloadingThis = llm.isDownloading && (llm.downloadingModelTitle == model.name || llm.downloadingModelTitle.contains(model.filename))
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    HStack(spacing: 6) {
+                                        Text(model.name)
+                                            .font(.subheadline.bold())
+                                            .foregroundColor(.primary)
+                                        if model.isRecommended {
+                                            Text("官方推荐")
+                                                .font(.system(size: 9, weight: .bold))
+                                                .foregroundColor(.white)
+                                                .padding(.horizontal, 5)
+                                                .padding(.vertical, 1)
+                                                .background(Capsule().fill(Color.cultivAccent))
+                                        }
+                                    }
+                                    Text(model.tag)
+                                        .font(.caption2.bold())
+                                        .foregroundColor(.cultivSecondary)
+                                }
+                                
+                                Spacer()
+                                
+                                Text(model.sizeDesc)
+                                    .font(.caption2.monospacedDigit())
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Text(model.description)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .lineLimit(3)
+                            
+                            if isDownloaded {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                    Text(llm.currentModelFilename == model.filename ? "当前激活运行中" : "已下载就绪")
+                                        .font(.caption2.bold())
+                                        .foregroundColor(.green)
+                                }
+                                .padding(.top, 2)
+                            } else if isDownloadingThis {
+                                HStack(spacing: 6) {
+                                    ProgressView()
+                                        .scaleEffect(0.7)
+                                    Text("正在接引中 (\(Int(llm.downloadProgress * 100))%)...")
+                                        .font(.caption2)
+                                        .foregroundColor(.cultivAccent)
+                                }
+                                .padding(.top, 2)
+                            } else {
+                                Button {
+                                    llm.downloadModel(model, source: downloadSource)
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "arrow.down.circle.fill")
+                                        Text("接引此法器（下载 \(model.sizeDesc)）")
+                                    }
+                                    .font(.caption.bold())
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 6)
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .tint(.cultivPrimary)
+                                .accessibilityIdentifier("download_button_\(model.id)")
+                                .disabled(llm.isDownloading)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    
+                    Button {
+                        showingFileImporter = true
+                    } label: {
+                        Label("从须弥纳子导入 (本地文件导入)", systemImage: "folder.badge.plus")
+                            .font(.subheadline)
+                            .foregroundColor(.cultivPrimary)
+                    }
+                } header: {
+                    Text("天道接引 · 官方默认大模型下载")
+                } footer: {
+                    Text("所有模型均为手机端精选量化版。默认使用【阿里魔搭极速源】国内直连高速 CDN，下载速度达 15~30 MB/s；若受网络波动影响，亦可随时切换备用镜像或官方源。")
+                }
+
+
                 
                 // MARK: - 健康数据 (HealthKit)
                 Section {
@@ -90,122 +348,6 @@ struct CompanionSettingsView: View {
                     Text("健康数据 (HealthKit)")
                 }
                 
-                // MARK: - 法器库管理 (多模型支持)
-                Section {
-                    // 已下载的本地模型列表
-                    ForEach(llm.localModels, id: \.self) { modelName in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(modelName)
-                                    .font(.subheadline)
-                                    .foregroundColor(selectedModelName == modelName ? .cultivPrimary : .primary)
-                                
-                                if selectedModelName == modelName {
-                                    Text(llm.modelLoaded ? "当前激活 (已连接)" : "默认法器 (未加载)")
-                                        .font(.caption2)
-                                        .foregroundColor(llm.modelLoaded ? .green : .orange)
-                                }
-                            }
-                            
-                            Spacer()
-                            
-                            if selectedModelName != modelName {
-                                Button("激活") {
-                                    selectedModelName = modelName
-                                    llm.unloadModel()
-                                    Task {
-                                        await llm.loadModel(filename: modelName)
-                                    }
-                                }
-                                .buttonStyle(.bordered)
-                                .tint(.cultivPrimary)
-                                .font(.caption)
-                            }
-                        }
-                        .swipeActions(edge: .trailing) {
-                            if selectedModelName != modelName {
-                                Button(role: .destructive) {
-                                    llm.deleteModel(filename: modelName)
-                                } label: {
-                                    Label("销毁", systemImage: "trash")
-                                }
-                            }
-                        }
-                    }
-                    
-                    if llm.localModels.isEmpty {
-                        Text("空空如也，戒灵无所依附")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Button {
-                        showingModelSelection = true
-                    } label: {
-                        Label("从天道接引 (网络下载法器)", systemImage: "icloud.and.arrow.down")
-                            .foregroundColor(.cultivPrimary)
-                    }
-                    
-                    Button {
-                        showingFileImporter = true
-                    } label: {
-                        Label("从须弥纳子导入 (本地文件导入)", systemImage: "folder.badge.plus")
-                            .foregroundColor(.cultivPrimary)
-                    }
-                    
-                    if llm.isDownloading || llm.hasResumeData {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(llm.statusMessage)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                if !llm.estimatedTimeRemaining.isEmpty && llm.isDownloading {
-                                    Text(llm.estimatedTimeRemaining)
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            
-                            ProgressView(value: llm.downloadProgress)
-                                .tint(.cultivAccent)
-                            
-                            HStack {
-                                Text("\(formatBytes(llm.downloadedBytes)) / \(formatBytes(llm.totalBytes))")
-                                    .font(.caption2.monospacedDigit())
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text("\(Int(llm.downloadProgress * 100))%")
-                                    .font(.caption2.monospacedDigit())
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            HStack {
-                                if llm.isDownloading {
-                                    Button("暂停") { llm.pauseDownload() }
-                                } else if llm.hasResumeData {
-                                    Button("继续") { llm.resumeDownload() }
-                                }
-                                Spacer()
-                                Button("取消", role: .destructive) { llm.cancelDownload() }
-                            }
-                            .buttonStyle(.bordered)
-                            .font(.caption)
-                        }
-                        .padding(.vertical, 8)
-                    }
-                    
-                    if llm.isGenerating {
-                        HStack {
-                            Label("推演中", systemImage: "sparkles")
-                            Spacer()
-                            ProgressView().tint(.cultivPrimary)
-                        }
-                    }
-                } header: {
-                    Text("法器库 (识海阵法)")
-                }
-                
                 // MARK: - 道途统计
                 Section {
                     HStack {
@@ -254,6 +396,9 @@ struct CompanionSettingsView: View {
             .navigationTitle("须弥戒 (设置)")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .onAppear {
+                llm.fetchLocalModels()
+            }
             .sheet(isPresented: $showingModelSelection) {
                 ModelSelectionView(llm: llm)
             }

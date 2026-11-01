@@ -1,32 +1,184 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-    # 1. 使用环境变量配置 App Store Connect API Key (不再依赖本地 p8 文件)
-    app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"],
-      is_key_content_base64: true, # 告诉 Fastlane 内容是 Base64 编码的
-      in_house: false
-    )
+  before_all do
+    # 自动加载 App Store Connect API Key (优先从全局公用环境变量读取)
+    key_id = ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"]
+    issuer_id = ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"]
+    key_path = ENV["APP_STORE_CONNECT_API_KEY_KEY_FILEPATH"] ? File.expand_path(ENV["APP_STORE_CONNECT_API_KEY_KEY_FILEPATH"]) : nil
+    key_content = ENV["APP_STORE_CONNECT_API_KEY_KEY"]
 
-    # 2. 自动递增 build number (可使用 GitLab CI 的 pipeline ID)
-    if ENV["CI_PIPELINE_IID"]
-      increment_build_number(build_number: ENV["CI_PIPELINE_IID"])
+    if key_id && issuer_id
+      if key_path && File.exist?(key_path)
+        app_store_connect_api_key(
+          key_id: key_id,
+          issuer_id: issuer_id,
+          key_filepath: key_path,
+          in_house: false
+        )
+      elsif key_content && !key_content.empty?
+        # 智能识别：无论是纯文本 PEM 还是 Base64 编码，均可自适应解析
+        is_base64 = !key_content.include?("BEGIN PRIVATE KEY")
+        app_store_connect_api_key(
+          key_id: key_id,
+          issuer_id: issuer_id,
+          key_content: key_content,
+          is_key_content_base64: is_base64,
+          in_house: false
+        )
+      end
     end
+  end
 
-    # 3. 编译并打包应用
+  desc "CI/CD 自动化：自动递增 Build Number、编译打包并上传到 TestFlight"
+  lane :beta do |options|
+    # 1. 自动生成递增的 build number（保证始终大于线上历史构建号）
+    new_build = options[:build_number] || ENV["BUILD_NUMBER"] || Time.now.strftime("%Y%m%d%H%M%S")
+    increment_build_number(build_number: new_build)
+
+    team_id = ENV["DEVELOPMENT_TEAM"] || "876385K952"
+    ios_profile = ENV["PROVISIONING_PROFILE_IOS"] || "c91171c3-0cf8-4a27-a56d-fffabb9335ca"
+    watch_profile = ENV["PROVISIONING_PROFILE_WATCH"] || "979174ac-a4d2-41a2-8ae6-184495b67086"
+
+    # 2. 编译并打包应用
     build_app(
       project: "ZEWatch.xcodeproj",
-      scheme: "ZEWatchCompanion", # 若您的主 Scheme 名称是其他(例如 ZEWatch)，请修改此项
-      export_method: "app-store"
+      scheme: "ZEWatchCompanion",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "manual",
+        teamID: team_id,
+        provisioningProfiles: {
+          "com.nevergone.zrxx.ios" => ios_profile,
+          "com.nevergone.zrxx.ios.watch" => watch_profile
+        }
+      }
     )
 
-    # 4. 上传到 TestFlight
+    # 3. 上传到 TestFlight 分发测试
     upload_to_testflight(
       skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc "本地专用：仅上传元数据与截图到 App Store Connect（不提交审核，便于预览和反复修改）"
+  lane :upload_metadata do |options|
+    target_version = options[:app_version] || "1.0.2"
+
+    deliver(
+      force: true, # 跳过命令行 HTML 确认
+      skip_binary_upload: true,
+      app_version: target_version,
+      metadata_path: "./fastlane/metadata",
+      screenshots_path: "./fastlane/screenshots",
+      skip_screenshots: options[:skip_screenshots] || false,
+      overwrite_screenshots: false,
+      run_precheck_before_submit: false,
+      submit_for_review: false
+    )
+  end
+
+  desc "本地专用：指定已上传的构建版本、同步最新截图与元数据，并直接自动提交 App Store 审核"
+  lane :submit_review do |options|
+    target_build = options[:build_number] || "20261030213436"
+    target_version = options[:app_version] || "1.0.2"
+    skip_screens = options[:skip_screenshots] || false
+
+    deliver(
+      force: true, # 跳过命令行 HTML 确认交互
+      skip_binary_upload: true, # 不重新编译上传，直接挂载已处于 VALID 状态的构建包
+      app_version: target_version,
+      build_number: target_build,
+      metadata_path: "./fastlane/metadata",
+      screenshots_path: "./fastlane/screenshots",
+      skip_screenshots: skip_screens,
+      skip_metadata: options[:skip_metadata] || false,
+      overwrite_screenshots: false,
+      run_precheck_before_submit: false, # 禁用 API Key 不支持的 IAP 检查
+      submit_for_review: true, # 自动提交审核！
+      automatic_release: true, # 审核通过后自动发布
+      phased_release: false,
+      reject_if_possible: true, # 若已有待审版本则撤回并使用新版本重新提交
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
+    )
+  end
+
+  desc "本地专用：上传已构建好的 ipa、等待处理、关联版本并自动提交审核"
+  lane :upload_and_submit do |options|
+    target_version = options[:app_version] || "1.0.2"
+    target_build = options[:build_number] || "20261101181239"
+    ipa_path = options[:ipa] || "ZEWatchCompanion.ipa"
+
+    # 1. 上传二进制包并等待 Apple 服务端处理完成 (变为 VALID)
+    upload_to_testflight(
+      ipa: ipa_path,
+      skip_waiting_for_build_processing: false
+    )
+
+    # 2. 挂载已处理完毕的构建包并提交 App Store 审核
+    deliver(
+      force: true,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      app_version: target_version,
+      build_number: target_build,
+      metadata_path: "./fastlane/metadata",
+      overwrite_screenshots: false,
+      run_precheck_before_submit: false,
+      submit_for_review: true,
+      automatic_release: true,
+      phased_release: false,
+      reject_if_possible: true,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
+    )
+  end
+
+  desc "本地专用全流程：本地构建、上传二进制包、同步资料截图并提交审核"
+  lane :release do |options|
+    target_version = options[:app_version] || "1.0.2"
+    new_build = options[:build_number] || Time.now.strftime("%Y%m%d%H%M%S")
+
+    # 1. 自动递增并写入最新 build number
+    increment_build_number(build_number: new_build)
+
+    # 2. 编译并打包应用
+    build_app(
+      project: "ZEWatch.xcodeproj",
+      scheme: "ZEWatchCompanion",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "manual",
+        teamID: "876385K952",
+        provisioningProfiles: {
+          "com.nevergone.zrxx.ios" => "c91171c3-0cf8-4a27-a56d-fffabb9335ca",
+          "com.nevergone.zrxx.ios.watch" => "979174ac-a4d2-41a2-8ae6-184495b67086"
+        }
+      }
+    )
+
+    # 3. 上传二进制包、截图与元数据，并提交审核
+    deliver(
+      force: true,
+      app_version: target_version,
+      build_number: new_build,
+      metadata_path: "./fastlane/metadata",
+      screenshots_path: "./fastlane/screenshots",
+      overwrite_screenshots: false,
+      run_precheck_before_submit: false,
+      submit_for_review: true,
+      automatic_release: true,
+      phased_release: false,
+      reject_if_possible: true,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
     )
   end
 end

@@ -1,34 +1,115 @@
 import Foundation
+import UIKit
 
 #if os(iOS)
-struct LLMModelOption: Identifiable {
-    let id = UUID()
+enum ModelDownloadSource: String, CaseIterable, Identifiable {
+    case modelscope = "modelscope"
+    case hfMirror = "hfMirror"
+    case huggingface = "huggingface"
+    
+    var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .modelscope: return "🚀 阿里魔搭 (国内极速 · 推荐)"
+        case .hfMirror: return "⚡ HF-Mirror (国内备用镜像)"
+        case .huggingface: return "🌐 HuggingFace (全球官方直连)"
+        }
+    }
+    
+    var shortName: String {
+        switch self {
+        case .modelscope: return "魔搭极速源"
+        case .hfMirror: return "HF镜像源"
+        case .huggingface: return "HF官方源"
+        }
+    }
+}
+
+struct LLMModelOption: Identifiable, Equatable {
+    let id: String
     let name: String
+    let tag: String
     let description: String
-    let url: String
+    let modelscopeUrl: String
+    let mirrorUrl: String
+    let huggingfaceUrl: String
+    let filename: String
     let sizeDesc: String
+    let isRecommended: Bool
+    
+    /// 默认主 URL（优先使用阿里魔搭国内极速 CDN 直链）
+    var url: String { modelscopeUrl }
+    
+    func url(for source: ModelDownloadSource) -> String {
+        switch source {
+        case .modelscope: return modelscopeUrl
+        case .hfMirror: return mirrorUrl
+        case .huggingface: return huggingfaceUrl
+        }
+    }
 }
 
 @MainActor
 class LLMManager: ObservableObject {
     static let shared = LLMManager()
     
+    /// 默认精选法器（模型），不内置于应用安装包中，由用户按需挑选下载
     static let recommendedModels: [LLMModelOption] = [
-        // 中文/全能 尖端主力 (2026)
-        LLMModelOption(name: "Qwen3.5 4B", description: "全新一代千问3.5小旗舰，跨时代推理能力 (需3GB以上内存)", url: "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/Qwen3.5-4B-Q4_K_M.gguf", sizeDesc: "约 2.4 GB"),
-        LLMModelOption(name: "Qwen2.5 1.5B", description: "千问2.5代轻量能打，低配机型中文首选", url: "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf", sizeDesc: "约 1.1 GB"),
-        LLMModelOption(name: "Qwen2.5 0.5B", description: "千问2.5代极速版，极致省电，老机型流畅运行", url: "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf", sizeDesc: "约 390 MB"),
-        
-        // 国际顶尖微型架构 (2026)
-        LLMModelOption(name: "Gemma-4 E4B", description: "Google 2026最强E架构，媲美百亿参数巨兽", url: "https://huggingface.co/unsloth/gemma-4-E4B-it-GGUF/resolve/main/gemma-4-E4B-it-Q4_K_M.gguf", sizeDesc: "约 2.6 GB"),
-        
-        // 特色精选
-        LLMModelOption(name: "Yi-Coder 1.5B", description: "代码与逻辑强化版1.5B，适合严谨分析", url: "https://huggingface.co/MaziyarPanahi/Yi-Coder-1.5B-Chat-GGUF/resolve/main/Yi-Coder-1.5B-Chat-Q4_K_M.gguf", sizeDesc: "约 1.0 GB")
+        LLMModelOption(
+            id: "qwen2.5-0.5b",
+            name: "Qwen2.5 0.5B Instruct",
+            tag: "⚡ 极速轻量 · 首选推荐",
+            description: "千问2.5代极速版，内存占用极低（<600MB），不发热不掉帧，老旧机型亦能流畅秒回。",
+            modelscopeUrl: "https://modelscope.cn/api/v1/models/qwen/Qwen2.5-0.5B-Instruct-GGUF/repo?Revision=master&FilePath=qwen2.5-0.5b-instruct-q4_k_m.gguf",
+            mirrorUrl: "https://hf-mirror.com/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+            huggingfaceUrl: "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+            filename: "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+            sizeDesc: "约 390 MB",
+            isRecommended: true
+        ),
+        LLMModelOption(
+            id: "qwen2.5-1.5b",
+            name: "Qwen2.5 1.5B Instruct",
+            tag: "🔥 综合最佳 · 中文主力",
+            description: "千问2.5代小钢炮，古风语感出众，对答毒舌精辟，逻辑与文采兼备，推荐主流 iPhone 用户选择。",
+            modelscopeUrl: "https://modelscope.cn/api/v1/models/qwen/Qwen2.5-1.5B-Instruct-GGUF/repo?Revision=master&FilePath=qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            mirrorUrl: "https://hf-mirror.com/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            huggingfaceUrl: "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            filename: "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            sizeDesc: "约 1.1 GB",
+            isRecommended: true
+        ),
+        LLMModelOption(
+            id: "qwen2.5-coder-1.5b",
+            name: "Qwen2.5-Coder 1.5B",
+            tag: "🧠 严谨逻辑 · 适合格物",
+            description: "千问代码与推演强化版1.5B，逻辑缜密、条理分明，适合偏好推演格物致知的仙友。",
+            modelscopeUrl: "https://modelscope.cn/api/v1/models/qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/repo?Revision=master&FilePath=qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+            mirrorUrl: "https://hf-mirror.com/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/resolve/main/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+            huggingfaceUrl: "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/resolve/main/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+            filename: "qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+            sizeDesc: "约 1.1 GB",
+            isRecommended: false
+        ),
+        LLMModelOption(
+            id: "qwen2.5-3b",
+            name: "Qwen2.5 3B Instruct",
+            tag: "🔮 高配专属 · 深度推演",
+            description: "参数翻倍，上仙大能之威严更甚，推理更深邃，推荐 6GB+ 运存机型（如 iPhone 15 Pro / 16 等）。",
+            modelscopeUrl: "https://modelscope.cn/api/v1/models/qwen/Qwen2.5-3B-Instruct-GGUF/repo?Revision=master&FilePath=qwen2.5-3b-instruct-q4_k_m.gguf",
+            mirrorUrl: "https://hf-mirror.com/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf",
+            huggingfaceUrl: "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf",
+            filename: "qwen2.5-3b-instruct-q4_k_m.gguf",
+            sizeDesc: "约 2.0 GB",
+            isRecommended: false
+        )
     ]
     
     @Published var messages: [ChatMessage] = []
     @Published var isGenerating: Bool = false
     @Published var modelLoaded: Bool = false
+    @Published var isLoadingModel: Bool = false
+    @Published var loadErrorText: String? = nil
     @Published var statusMessage: String = "未感应到戒灵..."
     
     @Published var localModels: [String] = []
@@ -36,13 +117,18 @@ class LLMManager: ObservableObject {
     
     // 下载相关状态
     @Published var isDownloading: Bool = false
+    @Published var downloadingModelTitle: String = ""
     @Published var downloadProgress: Double = 0.0
     @Published var downloadedBytes: Int64 = 0
     @Published var totalBytes: Int64 = 0
+    @Published var downloadSpeedDesc: String = ""
     @Published var hasResumeData: Bool = false
     @Published var estimatedTimeRemaining: String = ""
+    @Published var downloadErrorText: String? = nil
     
+    private var pendingTargetFilename: String?
     private var downloadStartTime: Date?
+    private var lastLoggedPercent: Int = -1
     
     private var currentDownloadTask: URLSessionDownloadTask?
     private var resumeData: Data? {
@@ -83,11 +169,15 @@ class LLMManager: ObservableObject {
     private func loadHistory() {
         do {
             guard FileManager.default.fileExists(atPath: historyFileURL.path) else { return }
-            let data = try Data(contents: historyFileURL)
+            let data = try Data(contentsOf: historyFileURL)
             let decoded = try JSONDecoder().decode([ChatMessage].self, from: data)
-            DispatchQueue.main.async {
-                self.messages = decoded
+            // 过滤历史中所有内容为空的破损残差消息
+            var validMessages = decoded.filter { !$0.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+            // 若历史出现异常堆积或污染，仅保留最近2条
+            if validMessages.count > 4 {
+                validMessages = Array(validMessages.suffix(2))
             }
+            self.messages = validMessages
         } catch {
             print("加载对话历史失败: \(error)")
         }
@@ -133,20 +223,52 @@ class LLMManager: ObservableObject {
     }
     
     /// 刷新并获取沙盒中的模型列表
-    func fetchLocalModels() {
+    @discardableResult
+    func fetchLocalModels() -> [String] {
         let fileManager = FileManager.default
         let modelsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Models").path
         
         if fileManager.fileExists(atPath: modelsPath),
            let files = try? fileManager.contentsOfDirectory(atPath: modelsPath) {
-            DispatchQueue.main.async {
-                self.localModels = files.filter { $0.hasSuffix(".gguf") }.sorted()
+            let ggufFiles = files.filter { $0.hasSuffix(".gguf") }.sorted()
+            self.localModels = ggufFiles
+            if ggufFiles.isEmpty {
+                self.modelLoaded = false
+                self.isLoadingModel = false
+                self.currentModelFilename = ""
+                self.statusMessage = "戒灵沉睡，未感应到法器。请挑选并接引法器下界。"
             }
+            return ggufFiles
         } else {
-            DispatchQueue.main.async {
-                self.localModels = []
-            }
+            self.localModels = []
+            self.modelLoaded = false
+            self.isLoadingModel = false
+            self.currentModelFilename = ""
+            self.statusMessage = "戒灵沉睡，未感应到法器。请挑选并接引法器下界。"
+            return []
         }
+    }
+    
+    /// 格式化字节大小
+    func formatBytes(_ bytes: Int64) -> String {
+        guard bytes > 0 else { return "0 MB" }
+        let mb = Double(bytes) / (1024 * 1024)
+        if mb >= 1024 {
+            let gb = mb / 1024
+            return String(format: "%.2f GB", gb)
+        }
+        return String(format: "%.1f MB", mb)
+    }
+    
+    /// 获取指定沙盒模型的实际字节大小
+    func getModelFileSize(filename: String) -> Int64 {
+        let fileManager = FileManager.default
+        let path = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Models").appendingPathComponent(filename).path
+        if let attrs = try? fileManager.attributesOfItem(atPath: path),
+           let size = attrs[.size] as? Int64 {
+            return size
+        }
+        return 0
     }
     
     /// 导入外部模型文件
@@ -175,6 +297,11 @@ class LLMManager: ObservableObject {
             
             print("模型导入成功: \(url.lastPathComponent)")
             fetchLocalModels()
+            let importedFilename = url.lastPathComponent
+            UserDefaults.standard.set(importedFilename, forKey: "selectedModelName")
+            Task {
+                await self.loadModel(filename: importedFilename)
+            }
         } catch {
             print("模型导入失败: \(error)")
         }
@@ -184,6 +311,8 @@ class LLMManager: ObservableObject {
     func unloadModel() {
         self.context = nil
         self.modelLoaded = false
+        self.isLoadingModel = false
+        self.loadErrorText = nil
         self.statusMessage = "戒灵沉睡..."
         self.currentModelFilename = ""
     }
@@ -195,6 +324,14 @@ class LLMManager: ObservableObject {
         do {
             try fileManager.removeItem(at: fileURL)
             fetchLocalModels()
+            if currentModelFilename == filename {
+                unloadModel()
+                if let nextModel = localModels.first(where: { $0 != filename }) {
+                    Task {
+                        await loadModel(filename: nextModel)
+                    }
+                }
+            }
         } catch {
             print("删除模型失败: \(error)")
         }
@@ -202,32 +339,53 @@ class LLMManager: ObservableObject {
     
     /// 加载本地 Llama 模型
     func loadModel(filename: String? = nil) async {
-        statusMessage = "正在唤醒戒灵..."
+        let available = fetchLocalModels()
+        
+        var target: String? = filename
+        if target == nil {
+            target = UserDefaults.standard.string(forKey: "selectedModelName")
+        }
+        if target == nil || !available.contains(target!) {
+            target = available.first
+        }
+        
+        guard let finalTarget = target, !finalTarget.isEmpty else {
+            self.statusMessage = "戒灵沉睡，未感应到法器。请挑选并接引法器下界。"
+            self.modelLoaded = false
+            self.isLoadingModel = false
+            self.currentModelFilename = ""
+            return
+        }
         
         let fileManager = FileManager.default
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let modelsPath = documentDirectory.appendingPathComponent("Models").path
+        let finalPath = documentDirectory.appendingPathComponent("Models").appendingPathComponent(finalTarget).path
         
-        var path: String? = nil
-        
-        if let target = filename {
-            path = modelsPath + "/" + target
-        } else {
-            // 回退到查找第一个模型
-            if fileManager.fileExists(atPath: modelsPath),
-               let files = try? fileManager.contentsOfDirectory(atPath: modelsPath),
-               let firstGGUF = files.first(where: { $0.hasSuffix(".gguf") }) {
-                path = modelsPath + "/" + firstGGUF
-            }
-        }
-        
-        guard let finalPath = path, fileManager.fileExists(atPath: finalPath) else {
-            DispatchQueue.main.async {
-                self.statusMessage = "戒灵沉睡，未见指定法器。请检查文件是否存在。"
-                self.modelLoaded = false
-            }
+        guard fileManager.fileExists(atPath: finalPath) else {
+            self.statusMessage = "法器不存在，请挑选并接引法器下界。"
+            self.modelLoaded = false
+            self.isLoadingModel = false
+            self.currentModelFilename = ""
             return
         }
+        
+        let fileSize = getModelFileSize(filename: finalTarget)
+        print("【LLM】准备载入法器: \(finalTarget), 字节大小: \(fileSize) (\(formatBytes(fileSize)))")
+        
+        // 校验文件完整性：任何有效的量化 GGUF 模型至少应大于 50MB（0.5B 为 ~390MB）
+        if fileSize < 50 * 1024 * 1024 {
+            self.isLoadingModel = false
+            self.modelLoaded = false
+            let err = "法器残破不全（仅 \(formatBytes(fileSize))，可能接引中断），请清除后重新接引。"
+            self.loadErrorText = err
+            self.statusMessage = "唤醒失败：法器残损"
+            print("【LLM】\(err)")
+            return
+        }
+        
+        self.isLoadingModel = true
+        self.loadErrorText = nil
+        self.statusMessage = "正在唤醒戒灵..."
         
         do {
             // 通过 Task.detached 将底层耗时的 C 库初始化操作移至后台线程，防止阻塞主线程导致启动过慢
@@ -236,9 +394,13 @@ class LLMManager: ObservableObject {
             }.value
             
             self.context = newContext
-            self.currentModelFilename = URL(fileURLWithPath: finalPath).lastPathComponent
+            self.currentModelFilename = finalTarget
+            UserDefaults.standard.set(finalTarget, forKey: "selectedModelName")
             self.modelLoaded = true
+            self.isLoadingModel = false
+            self.loadErrorText = nil
             self.statusMessage = "咳咳... 谁在那吵老夫睡觉？"
+            print("【LLM】戒灵唤醒成功！当前法器: \(finalTarget)")
             
             // 初始消息
             if messages.isEmpty {
@@ -247,7 +409,10 @@ class LLMManager: ObservableObject {
             }
             
         } catch {
-            statusMessage = "唤醒失败：神魂受损"
+            self.isLoadingModel = false
+            self.modelLoaded = false
+            self.loadErrorText = "唤醒失败：\(error.localizedDescription)"
+            self.statusMessage = "唤醒失败：神魂受损"
             print("【LLM】加载异常：\(error)")
         }
     }
@@ -303,16 +468,16 @@ class LLMManager: ObservableObject {
             fullPrompt += "<|im_start|>\(shot.0)\n\(shot.1)<|im_end|>\n"
         }
         
-        // 历史消息从第一条 user 消息开始取，跳过欢迎消息，跳过 system 消息（气机提示）
-        let allHistory = Array(messages.dropLast())
-        let firstUserIdx = allHistory.firstIndex(where: { $0.role == .user }) ?? allHistory.startIndex
-        let recentMessages = Array(allHistory[firstUserIdx...])
-            .filter { $0.role != .system }   // 跳过【机缘】等 system 提示消息
-            .suffix(6)                        // 保留最近 6 条
+        // 历史消息从第一条有效对话开始取，截取过去规范轮次
+        let pastMessages = Array(messages.dropLast(2)) // 排除刚刚追加的 userMsg 和 assistant 占位
+        let firstUserIdx = pastMessages.firstIndex(where: { $0.role == .user }) ?? pastMessages.startIndex
+        let validPast = Array(pastMessages[firstUserIdx...])
+            .filter { $0.role != .system && !$0.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+            .suffix(2) // 保留最近至多 1 轮历史，保证极速响应且防发散
             
-        // 清理消息内容里的控制符，防止污染模型
+        // 清理消息内容里的控制符，防止污染模型，并确保历史严格交替
         var cleanedHistory: [ChatMessage] = []
-        for msg in recentMessages {
+        for msg in validPast {
             let cleanedContent = msg.content
                 .replacingOccurrences(of: "<\\|.*?\\|>", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "^(user|assistant|system):\\s*", with: "", options: [.regularExpression, .caseInsensitive])
@@ -320,14 +485,27 @@ class LLMManager: ObservableObject {
                 .replacingOccurrences(of: "<思维>[\\s\\S]*?</思维>", with: "", options: .regularExpression)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if !cleanedContent.isEmpty {
+                // 若连续两个同角色，移除前一个以维持严格对话交替
+                if let last = cleanedHistory.last, last.role == msg.role {
+                    cleanedHistory.removeLast()
+                }
                 cleanedHistory.append(ChatMessage(role: msg.role, content: cleanedContent))
             }
         }
         
-        let fullPrompt = PromptBuilder.build(
+        // 保证历史记录以 assistant 结尾（以便紧接着衔接当前新用户的提问）
+        if let last = cleanedHistory.last, last.role == .user {
+            cleanedHistory.removeLast()
+        }
+        
+        // 最后加入当前的用户消息
+        cleanedHistory.append(userMsg)
+        
+        fullPrompt = PromptBuilder.build(
             systemPrompt: systemPrompt,
             history: cleanedHistory,
-            modelFilename: currentModelFilename
+            modelFilename: currentModelFilename,
+            fewShots: fewShots
         )
         
         // ===== 日志：打印完整 Prompt =====
@@ -350,10 +528,19 @@ class LLMManager: ObservableObject {
                 .replacingOccurrences(of: "\\[EVENT:.*?\\]", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "(?i)(?:user|assistant|system|model)[:\\n]?", with: "", options: .regularExpression)
             
-            messages[msgIndex].content = filteredText.trimmingCharacters(in: .whitespacesAndNewlines)
+            let curContent = filteredText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !curContent.isEmpty {
+                messages[msgIndex].content = curContent
+            }
             
             // 将延时从 5ms 调到 20ms (20_000_000 纳秒)，防止震动马达和 UI 线程被过度阻塞，达到丝滑的打字机震动效果
             try? await Task.sleep(nanoseconds: 20_000_000)
+        }
+        
+        // 兜底保障：若模型生成因网络或早停完全为空，给出仙家威严台词
+        let finalTrimmed = messages[msgIndex].content.trimmingCharacters(in: .whitespacesAndNewlines)
+        if finalTrimmed.isEmpty {
+            messages[msgIndex].content = "墨老双目微阖，拂了拂衣袖：“小辈，天地灵气变化万千，休得在此嬉皮笑脸，速去吐纳炼体！”"
         }
         
         // ===== 日志：打印原始响应 =====
@@ -421,21 +608,55 @@ class LLMManager: ObservableObject {
     
     // MARK: - 下载模型
     
-    func downloadModel(from urlString: String) {
-        guard let url = URL(string: urlString) else { return }
+    /// 下载推荐的大模型（默认优先使用阿里魔搭国内极速直连源）
+    func downloadModel(_ model: LLMModelOption, source: ModelDownloadSource = .modelscope) {
+        let urlString = model.url(for: source)
+        guard let url = URL(string: urlString) else {
+            self.downloadErrorText = "无效的下载法阵地址"
+            return
+        }
         
-        // 只有重新开始下载时才清空 resumeData
-        resumeData = nil
-        startDownload(with: url)
+        self.downloadingModelTitle = model.name
+        self.downloadErrorText = nil
+        self.pendingTargetFilename = model.filename
+        self.resumeData = nil
+        startDownload(with: url, expectedFilename: model.filename)
+    }
+    
+    /// 兼容旧方法：根据镜像开关映射对应源
+    func downloadModel(_ model: LLMModelOption, useMirror: Bool) {
+        let source: ModelDownloadSource = useMirror ? .hfMirror : .modelscope
+        downloadModel(model, source: source)
+    }
+    
+    /// 根据自定义 URL 下载模型
+    func downloadModel(from urlString: String, filename: String? = nil) {
+        guard let url = URL(string: urlString) else {
+            self.downloadErrorText = "无效的接引地址"
+            return
+        }
+        
+        let resolvedFilename = filename ?? url.lastPathComponent
+        self.downloadingModelTitle = resolvedFilename
+        self.downloadErrorText = nil
+        self.pendingTargetFilename = resolvedFilename
+        self.resumeData = nil
+        startDownload(with: url, expectedFilename: resolvedFilename)
     }
     
     func resumeDownload() {
         guard let resumeData = resumeData else { return }
         isDownloading = true
+        downloadErrorText = nil
         statusMessage = "正在接续阵纹..."
         downloadStartTime = Date()
         
-        let session = URLSession(configuration: .default, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 60
+        config.timeoutIntervalForResource = 7200
+        config.waitsForConnectivity = true
+        
+        let session = URLSession(configuration: config, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
             self?.updateDownloadProgress(progress: progress, downloaded: downloaded, total: total)
         }, completionHandler: { [weak self] localURL, error in
             self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: nil)
@@ -446,16 +667,23 @@ class LLMManager: ObservableObject {
         task.resume()
     }
     
-    private func startDownload(with url: URL) {
+    private func startDownload(with url: URL, expectedFilename: String? = nil) {
         isDownloading = true
         downloadProgress = 0.0
         downloadedBytes = 0
         totalBytes = 0
+        downloadSpeedDesc = ""
         estimatedTimeRemaining = ""
-        statusMessage = "正在接引戒灵下界..."
+        downloadErrorText = nil
+        statusMessage = "正在接引戒灵法器下界..."
         downloadStartTime = Date()
         
-        let session = URLSession(configuration: .default, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 60
+        config.timeoutIntervalForResource = 7200
+        config.waitsForConnectivity = true
+        
+        let session = URLSession(configuration: config, delegate: DownloadDelegate(progressHandler: { [weak self] progress, downloaded, total in
             self?.updateDownloadProgress(progress: progress, downloaded: downloaded, total: total)
         }, completionHandler: { [weak self] localURL, error in
             self?.handleDownloadCompletion(localURL: localURL, error: error, originalURL: url)
@@ -474,23 +702,29 @@ class LLMManager: ObservableObject {
             
             if let startTime = self.downloadStartTime {
                 let elapsed = Date().timeIntervalSince(startTime)
-                if elapsed > 1.0 && downloaded > 0 { // 避免除以0，且至少等1秒才算
+                if elapsed > 0.5 && downloaded > 0 {
                     let bytesPerSecond = Double(downloaded) / elapsed
-                    let remainingBytes = Double(total - downloaded)
+                    let mbps = bytesPerSecond / (1024 * 1024)
+                    self.downloadSpeedDesc = String(format: "%.1f MB/s", mbps)
+                    
+                    let remainingBytes = Double(max(0, total - downloaded))
                     let remainingSeconds = remainingBytes / bytesPerSecond
                     
                     if remainingSeconds.isFinite && remainingSeconds > 0 {
                         let formatter = DateComponentsFormatter()
                         formatter.allowedUnits = [.hour, .minute, .second]
                         formatter.unitsStyle = .abbreviated
-                        self.estimatedTimeRemaining = "预计剩余: " + (formatter.string(from: remainingSeconds) ?? "--")
+                        self.estimatedTimeRemaining = "预计剩余 " + (formatter.string(from: remainingSeconds) ?? "--")
+                    }
+                    
+                    let curPercent = Int(progress * 100)
+                    if curPercent % 10 == 0 && curPercent != self.lastLoggedPercent {
+                        self.lastLoggedPercent = curPercent
+                        print("【真机接引中】\(curPercent)% (\(self.formatBytes(downloaded)) / \(self.formatBytes(total))) | 速度: \(self.downloadSpeedDesc) | \(self.estimatedTimeRemaining)")
                     }
                 }
             }
         }
-    }
-        self.currentDownloadTask = task
-        task.resume()
     }
     
     private func handleDownloadCompletion(localURL: URL?, error: Error?, originalURL: URL?) {
@@ -500,21 +734,32 @@ class LLMManager: ObservableObject {
                     self.resumeData = resumeData
                     self.statusMessage = "接引已中断 (可恢复)"
                 } else {
+                    self.downloadErrorText = error.localizedDescription
                     self.statusMessage = "接引失败: \(error.localizedDescription)"
                 }
+                self.isDownloading = false
                 print("下载错误:", error)
                 return
             }
             
             guard let localURL = localURL else {
+                self.downloadErrorText = "数据残缺，未能成功获取法器"
                 self.statusMessage = "接引失败: 数据残缺"
+                self.isDownloading = false
                 return
             }
             
-            // 尝试通过 URLResponse 获取建议文件名，或者使用 originalURL
-            let filename = self.currentDownloadTask?.response?.suggestedFilename ?? originalURL?.lastPathComponent ?? "model.gguf"
+            // 优先使用预设的文件名，其次使用 URL 建议文件名
+            var filename = self.pendingTargetFilename
+            if filename == nil || filename!.isEmpty {
+                filename = self.currentDownloadTask?.response?.suggestedFilename ?? originalURL?.lastPathComponent ?? "model.gguf"
+            }
+            if !filename!.hasSuffix(".gguf") {
+                filename! += ".gguf"
+            }
+            
             self.resumeData = nil
-            self.saveDownloadedModel(from: localURL, filename: filename)
+            self.saveDownloadedModel(from: localURL, filename: filename!)
         }
     }
     
@@ -533,7 +778,12 @@ class LLMManager: ObservableObject {
         currentDownloadTask = nil
         isDownloading = false
         downloadProgress = 0.0
+        downloadedBytes = 0
+        totalBytes = 0
+        downloadSpeedDesc = ""
+        downloadingModelTitle = ""
         resumeData = nil
+        downloadErrorText = nil
         statusMessage = "接引已取消"
     }
     
@@ -554,19 +804,30 @@ class LLMManager: ObservableObject {
             }
             try fileManager.moveItem(at: tempURL, to: destinationURL)
             
+            self.isDownloading = false
+            self.downloadingModelTitle = ""
+            self.downloadSpeedDesc = ""
+            self.estimatedTimeRemaining = ""
+            self.downloadErrorText = nil
+            self.statusMessage = "法器接引成功，戒灵已唤醒！"
+            
             fetchLocalModels()
-            statusMessage = "法器重铸成功，正在唤醒..."
+            UserDefaults.standard.set(filename, forKey: "selectedModelName")
+            
             Task {
                 await self.loadModel(filename: filename)
             }
         } catch {
-            statusMessage = "保存法器失败"
+            self.isDownloading = false
+            self.downloadErrorText = "保存法器失败: \(error.localizedDescription)"
+            self.statusMessage = "保存法器失败"
             print("文件移动错误:", error)
+            try? fileManager.removeItem(at: tempURL)
         }
     }
 }
 
-// 辅助代理类，用于处理下载进度
+// 辅助代理类，用于处理下载进度与安全转存
 class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
     var progressHandler: (Double, Int64, Int64) -> Void
     var completionHandler: (URL?, Error?) -> Void
@@ -582,7 +843,35 @@ class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        completionHandler(location, nil)
+        // 1. 严格检查 HTTP 状态码
+        if let httpResponse = downloadTask.response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            let error = NSError(
+                domain: "LLMDownloadError",
+                code: httpResponse.statusCode,
+                userInfo: [NSLocalizedDescriptionKey: "下载服务器响应异常 (HTTP \(httpResponse.statusCode))，建议在设置中切换下载线路重试。"]
+            )
+            completionHandler(nil, error)
+            return
+        }
+        
+        // 2. ⚠️ 解决系统时序销毁临时文件 Bug：必须在代理方法返回前同步复制/移动到安全临时目录
+        let fileManager = FileManager.default
+        let safeTempDir = fileManager.temporaryDirectory.appendingPathComponent("ModelDownloads", isDirectory: true)
+        let safeTempURL = safeTempDir.appendingPathComponent("dl_\(UUID().uuidString).gguf")
+        
+        do {
+            if !fileManager.fileExists(atPath: safeTempDir.path) {
+                try fileManager.createDirectory(at: safeTempDir, withIntermediateDirectories: true)
+            }
+            if fileManager.fileExists(atPath: safeTempURL.path) {
+                try fileManager.removeItem(at: safeTempURL)
+            }
+            try fileManager.moveItem(at: location, to: safeTempURL)
+            completionHandler(safeTempURL, nil)
+        } catch {
+            print("【LLM】移动临时下载文件失败: \(error)")
+            completionHandler(nil, error)
+        }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -607,24 +896,34 @@ struct PromptBuilder {
         return .chatML // 默认兼容度最好的 ChatML
     }
     
-    static func build(systemPrompt: String, history: [ChatMessage], modelFilename: String) -> String {
+    static func build(systemPrompt: String, history: [ChatMessage], modelFilename: String, fewShots: [(String, String)] = []) -> String {
         let template = detectTemplate(from: modelFilename)
         var fullPrompt = ""
         
         switch template {
         case .chatML:
             fullPrompt += "<|im_start|>system\n\(systemPrompt)<|im_end|>\n"
+            for shot in fewShots {
+                fullPrompt += "<|im_start|>\(shot.0)\n\(shot.1)<|im_end|>\n"
+            }
             for msg in history {
                 let role = msg.role == .user ? "user" : "assistant"
                 fullPrompt += "<|im_start|>\(role)\n\(msg.content)<|im_end|>\n"
             }
-            fullPrompt += "<|im_start|>assistant\n<think>\n\n</think>\n" // 为推理模型加入逃逸符
+            if modelFilename.lowercased().contains("r1") {
+                fullPrompt += "<|im_start|>assistant\n<think>\n\n</think>\n"
+            } else {
+                fullPrompt += "<|im_start|>assistant\n"
+            }
             
         case .gemma:
             // Gemma 的特殊格式：不建议显式声明 system，通常合并到第一次 user prompt 中
             let systemContext = systemPrompt + "\n\n"
             var isFirstUser = true
             
+            for shot in fewShots {
+                fullPrompt += "<start_of_turn>\(shot.0)\n\(shot.1)<end_of_turn>\n"
+            }
             for msg in history {
                 let role = msg.role == .user ? "user" : "model"
                 fullPrompt += "<start_of_turn>\(role)\n"
@@ -642,6 +941,9 @@ struct PromptBuilder {
             
         case .llama3:
             fullPrompt += "<|start_header_id|>system<|end_header_id|>\n\n\(systemPrompt)<|eot_id|>"
+            for shot in fewShots {
+                fullPrompt += "<|start_header_id|>\(shot.0)<|end_header_id|>\n\n\(shot.1)<|eot_id|>"
+            }
             for msg in history {
                 let role = msg.role == .user ? "user" : "assistant"
                 fullPrompt += "<|start_header_id|>\(role)<|end_header_id|>\n\n\(msg.content)<|eot_id|>"

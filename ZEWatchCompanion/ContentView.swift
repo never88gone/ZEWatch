@@ -19,6 +19,7 @@ extension Color {
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var selectedTab: Int = 1
     
     @FetchRequest(
         sortDescriptors: [],
@@ -27,21 +28,29 @@ struct ContentView: View {
     
     var body: some View {
         if let player = profiles.first {
-            TabView {
+            TabView(selection: $selectedTab) {
                 DashboardView(player: player)
                     .tabItem {
                         Label("洞府", systemImage: "building.columns")
                     }
+                    .tag(0)
+                    .accessibilityIdentifier("tab_dashboard")
                 
-                AICompanionView(player: player)
-                    .tabItem {
-                        Label("识海", systemImage: "aqi.high")
-                    }
+                AICompanionView(player: player, onGoToSettings: {
+                    selectedTab = 2
+                })
+                .tabItem {
+                    Label("识海", systemImage: "aqi.high")
+                }
+                .tag(1)
+                .accessibilityIdentifier("tab_companion")
                 
                 CompanionSettingsView(player: player)
                     .tabItem {
                         Label("须弥戒", systemImage: "gearshape.fill")
                     }
+                    .tag(2)
+                    .accessibilityIdentifier("tab_settings")
             }
             .tint(.cultivPrimary)
             .preferredColorScheme(.dark)

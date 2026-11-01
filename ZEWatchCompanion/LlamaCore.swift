@@ -1,7 +1,7 @@
 import Foundation
+import llama
 
 #if os(iOS)
-// import llama - Now handled by Bridging Header
 
 enum LlamaError: Error {
     case couldNotInitializeContext
@@ -48,11 +48,13 @@ actor LlamaContext {
         self.model = model
         self.context = context
         self.tokens_list = []
-        self.batch = llama_batch_init(2048, 0, 1)
+        self.batch = llama_batch_init(4096, 0, 1)
         self.temporary_invalid_cchars = []
         
         let sparams = llama_sampler_chain_default_params()
         self.sampling = llama_sampler_chain_init(sparams)
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_k(40))
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_p(0.9, 1))
         llama_sampler_chain_add(self.sampling, llama_sampler_init_temp(0.7))
         llama_sampler_chain_add(self.sampling, llama_sampler_init_dist(UInt32(Date().timeIntervalSince1970)))
         
@@ -86,7 +88,7 @@ actor LlamaContext {
 
         let n_threads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
         var ctx_params = llama_context_default_params()
-        ctx_params.n_ctx = 2048
+        ctx_params.n_ctx = 4096
         ctx_params.n_threads = Int32(n_threads)
         ctx_params.n_threads_batch = Int32(n_threads)
 
@@ -100,6 +102,9 @@ actor LlamaContext {
 
     func completion_init(text: String) {
         is_done = false
+        
+        // 重置采样器状态，清除先前的 token 滞留
+        llama_sampler_reset(sampling)
         
         // 清理上一次对话的 KV 缓存，因为目前逻辑是每次都将包含历史的 fullPrompt 从头灌入
         let memory = llama_get_memory(context)
@@ -120,21 +125,28 @@ actor LlamaContext {
         }
 
         n_cur = batch.n_tokens
+        let maxNewTokens: Int32 = 256
+        n_len = min(4096, n_cur + maxNewTokens)
+        print("【识海】推演就绪: 输入 Token 数=\(n_cur), 最大终止 Token=\(n_len)")
     }
 
     func completion_loop() -> String {
         guard !is_done else { return "" }
         
         let new_token_id = llama_sampler_sample(sampling, context, batch.n_tokens - 1)
+        let isEog = llama_vocab_is_eog(vocab, new_token_id)
+        let isControl = llama_vocab_is_control(vocab, new_token_id)
 
         // 1. 硬件级/EOG Token 检测
-        if llama_vocab_is_eog(vocab, new_token_id) || n_cur >= n_len {
+        if isEog || n_cur >= n_len {
+            print("【识海】推演自然终结: token=\(new_token_id), isEog=\(isEog), n_cur=\(n_cur)/\(n_len)")
             is_done = true
             return ""
         }
         
         // 2. 控制 Token 直接跳过
-        if llama_vocab_is_control(vocab, new_token_id) {
+        if isControl {
+            print("【识海】跳过控制Token: \(new_token_id)")
             decode_and_update(token_id: new_token_id)
             return ""
         }
@@ -142,10 +154,21 @@ actor LlamaContext {
         let new_token_cchars = token_to_piece(token: new_token_id)
         temporary_invalid_cchars.append(contentsOf: new_token_cchars)
         
+        let new_token_str: String
         if let string = String(validatingUTF8: temporary_invalid_cchars + [0]) {
             temporary_invalid_cchars.removeAll()
-            let newText = string
-            generatedBuffer += newText
+            new_token_str = string
+        } else if (0..<temporary_invalid_cchars.count).contains(where: { $0 != 0 && String(validatingUTF8: Array(temporary_invalid_cchars.suffix($0)) + [0]) != nil }) {
+            let string = String(cString: temporary_invalid_cchars + [0])
+            temporary_invalid_cchars.removeAll()
+            new_token_str = string
+        } else {
+            new_token_str = ""
+        }
+        
+        if !new_token_str.isEmpty {
+            generatedBuffer += new_token_str
+            print("【Token输出】\(new_token_str)", terminator: "")
             
             // 3. 全局滑动窗口匹配停止词 (截断并拦截)
             let stopSequences = [
@@ -154,34 +177,24 @@ actor LlamaContext {
                 "\nuser", 
                 "\nassistant",
                 "user:",
-                "assistant:",
-                "<|im"
+                "assistant:"
             ]
             
             for stop in stopSequences {
                 if let range = generatedBuffer.range(of: stop, options: .caseInsensitive) {
                     is_done = true
-                    // 找到停止词，截断缓冲区并退出
-                    let stopIndex = range.lowerBound
-                    let validText = String(generatedBuffer[..<stopIndex])
-                    // 这里的返回值需要是这一个 token 增加的有效文本（如果有的话）。
-                    // 简化处理：由于 rawResponse 会追加这个函数的返回值，当遇到中止时，
-                    // 只要最后返回 "" 且外层依靠 `generatedBuffer` 就更稳定。但原始方式是直接返回截断后的新文本。
-                    if let stopInNewText = newText.range(of: stop, options: .caseInsensitive) {
-                        return String(newText[..<stopInNewText.lowerBound])
+                    print("\n【识海】命中停止词: '\(stop)'")
+                    if let stopInNewText = new_token_str.range(of: stop, options: .caseInsensitive) {
+                        return String(new_token_str[..<stopInNewText.lowerBound])
                     } else {
                         return ""
                     }
                 }
             }
-            
-            decode_and_update(token_id: new_token_id)
-            return newText
-        } else {
-            // 字节补全中，暂不返回字符
-            decode_and_update(token_id: new_token_id)
-            return ""
         }
+        
+        decode_and_update(token_id: new_token_id)
+        return new_token_str
     }
 
     private func decode_and_update(token_id: llama_token) {

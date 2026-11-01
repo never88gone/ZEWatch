@@ -1,0 +1,87 @@
+appId: com.nevergone.zrxx.ios
+---
+# ==========================================================
+# ZEWatch Companion 大模型全生命周期 UI 自动化测试
+# 覆盖功能：
+#   1. 下载 (Download)
+#   2. 取消 (Cancel)
+#   3. 对话 (Chat)
+#   4. 删除 (Delete)
+# ==========================================================
+
+- launchApp:
+    clearState: false
+
+# ----------------------------------------------------------
+# 一、验证下载与取消流程
+# ----------------------------------------------------------
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "识海空明 · 挑选法器"
+    timeout: 10000
+- assertVisible: "默认精选大模型（点击接引下载）："
+
+# 1. 触发下载
+- tapOn: "接引此法器（下载 约 390 MB）"
+- extendedWaitUntil:
+    visible: "天道引灵中 · 接引法器"
+    timeout: 10000
+- takeScreenshot: "01_download_progress"
+
+# 2. 取消下载
+- tapOn: "取消"
+- extendedWaitUntil:
+    visible: "识海空明 · 挑选法器"
+    timeout: 10000
+- takeScreenshot: "02_download_cancelled"
+
+# ----------------------------------------------------------
+# 二、模型唤醒与对话功能验证
+# ----------------------------------------------------------
+- runScript:
+    file: ../scripts/inject_test_model.sh
+
+- tapOn: "须弥戒"
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "立即唤醒戒灵"
+    timeout: 10000
+- tapOn: "立即唤醒戒灵"
+- extendedWaitUntil:
+    visible: "向墨老祈告..."
+    timeout: 10000
+- takeScreenshot: "03_chat_screen_ready"
+
+# 发送神念祈告，验证墨老回复
+- tapOn: "向墨老祈告..."
+- inputText: "墨老，请传我无上修仙心法！"
+- tapOn:
+    id: "send_message_button"
+- extendedWaitUntil:
+    visible: ".*老夫.*"
+    timeout: 15000
+- takeScreenshot: "04_chat_response_received"
+
+# ----------------------------------------------------------
+# 三、验证销毁删除与状态回退
+# ----------------------------------------------------------
+- tapOn: "须弥戒"
+- extendedWaitUntil:
+    visible: "法器库管理 (大模型)"
+    timeout: 10000
+- assertVisible: "qwen2.5-0.5b-instruct-q4_k_m.gguf"
+- takeScreenshot: "05_settings_models_list"
+
+# 触发销毁删除
+- tapOn: "Trash"
+- extendedWaitUntil:
+    visible: "法器囊空空如也（安装包未内置大模型，请点击下方下载）"
+    timeout: 8000
+- takeScreenshot: "06_model_deleted_in_settings"
+
+# 验证识海界面同步恢复空明
+- tapOn: "识海"
+- extendedWaitUntil:
+    visible: "识海空明 · 挑选法器"
+    timeout: 8000
+- takeScreenshot: "07_back_to_initial_guide"

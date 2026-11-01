@@ -1,0 +1,20 @@
+appId: com.nevergone.zrxx.ios
+---
+- launchApp:
+    clearState: false
+- tapOn: "识海"
+- assertVisible: "识海空明 · 挑选法器"
+# 1. 验证开始下载大模型
+- tapOn: "接引此法器（下载 约 390 MB）"
+- extendedWaitUntil:
+    visible: "天道引灵中 · 接引法器"
+    timeout: 10000
+- takeScreenshot: "01_download_progress"
+
+# 2. 验证中途取消大模型下载
+- tapOn: "取消"
+- extendedWaitUntil:
+    visible: "识海空明 · 挑选法器"
+    timeout: 10000
+- assertVisible: "默认精选大模型（点击接引下载）："
+- takeScreenshot: "02_download_cancelled"

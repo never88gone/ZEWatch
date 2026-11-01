@@ -11,6 +11,12 @@ Thank you for using "Tanghulu Cultivation"! If you encounter any issues, please 
 ### Q: 应用如何使用我的健康数据？
 **A:** 本应用通过 Apple HealthKit 读取您的运动数据（步数、卡路里消耗、运动记录、睡眠、心率等），并将其转化为游戏内的"五行灵气"。所有数据处理完全在您的本地设备上完成，**绝不会上传至任何服务器**。您可以随时在系统"设置 → 健康 → 数据访问与设备"中管理本应用的数据权限。
 
+### Q: 为什么安装包体积这么小？大模型如何下载？
+**A:** 为了避免占用用户宝贵的手机初始下载流量与存储空间，应用采用了极简轻量化设计，安装包内未预置大型模型文件。进入应用后，仙友可在“须弥戒（设置）”或点击识海右上角的“法器阁”，根据自身设备性能按需选择官方推荐的轻量大模型（如 Qwen2.5 0.5B / 1.5B 等），配备高速直连镜像通道，数十秒即可接引就绪。亦支持仙友导入已有的本地 .gguf 心法法宝。
+
+### Q: 大模型对话会消耗我的联网流量或泄露我的对话内容吗？
+**A:** 绝不会。大模型下载完成后将长期存储在您的手机本地沙盒中。所有的神念对话交互均基于开源 llama.cpp 在您的手机芯片上离线运算，完全无需联网，绝不向任何云端回传任何信息。
+
 ### Q: How does the app use my health data?
 **A:** This app reads your activity data (steps, calories, workouts, sleep, heart rate, etc.) via Apple HealthKit and converts it into in-game "Five Elements Qi". All data processing happens entirely on your local device and is **never uploaded to any server**. You can manage data permissions at any time in system Settings → Health → Data Access & Devices.
 

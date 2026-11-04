@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA5B00012F738CEA0055BE24 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5F00012F738CEA0055BE24 /* DashboardView.swift */; };
+		08AC1D88144BE3EF85A7B7F6 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6469EACE85A9296DC409FE9 /* TimeTranslator.swift */; };
 		0B73769A4CF9F1CD26571419 /* SkillLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C107C64561A3F37CEF4D44 /* SkillLibraryView.swift */; };
 		0CCF731515750270E088A5B3 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8240F240476E9C09A53260B7 /* ConnectivityManager.swift */; };
 		1BC88142BE4F23F76B736DB8 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4BF3CF72FB5388C1E4A687 /* Persistence.swift */; };
@@ -38,20 +38,26 @@
 		64D761CC3E4BB47F45CDABB5 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E512676C47DFBE26818833 /* ConnectivityManager.swift */; };
 		65648CFBDAD09DE68280F9D8 /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 0BB66F311FD578122D14006D /* llama */; };
 		6C62D5FEF4E59D6D44E01BB6 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E637512B514157111C3AE30 /* CoreDataModels.swift */; };
+		7B2E642DD4FCB04F02F19B4D /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F6013DFB944A475F98B76 /* WatchFaceModel.swift */; };
 		7C8EABC5E674B0E7B08B93B9 /* ZEWatchCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FBA5287BF4851E2522A5A2 /* ZEWatchCompanionApp.swift */; };
 		7CD3C8D4FF0BE6761B494759 /* ZEWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3803AE422F0D10490047BF4A /* ZEWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8B258A44C5B2D8A9ADC12924 /* CultivationWatchFaceComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */; };
 		99E76BA5FF09A5BC7E1AB14C /* LlamaCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B440CCEA2433A7FBC105D6 /* LlamaCore.swift */; };
 		9AF637F7068CDCA7527FBAAE /* CultivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5AAC534F34042FEBFD5F1D /* CultivationEngine.swift */; };
 		9EF41D1FCC462FD74753FF0B /* ExplorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866D60038B4EB9586B2D5C71 /* ExplorationView.swift */; };
 		B3D3BEBA54AE60321A5ECB13 /* TrainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7701A19F259D942AC10F98 /* TrainingView.swift */; };
 		B3FEBB87494BD6092BD4A9C5 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6469EACE85A9296DC409FE9 /* TimeTranslator.swift */; };
 		B8E8424B985E4157E7B190C2 /* WatchFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411356B86B1B7E51170928A /* WatchFaceView.swift */; };
+		C0C1538AF91E07C3C63DD54E /* WatchFaceStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25980D57E9EB5FF4EA7D06FD /* WatchFaceStudioView.swift */; };
 		C4589625DEDE2409EFDC4FD2 /* LLMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3408D664A620CBED353AE629 /* LLMManager.swift */; };
 		CB55C24D897C2A32088BF543 /* CompanionSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8FEAF9696B392296A58A7 /* CompanionSettingsView.swift */; };
 		CBC5A71D176144A90120E053 /* MissionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9460687E96B700BC8C1B1BBA /* MissionEngine.swift */; };
+		D49028C50EAFE7ED66B470D2 /* CultivationWatchFaceComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */; };
+		DA5B00012F738CEA0055BE24 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5F00012F738CEA0055BE24 /* DashboardView.swift */; };
 		DBE5612880BF81F390776A5D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A8EFA21B4DD3937A505 /* ContentView.swift */; };
 		EEE6EAD4470D4C573D9100B4 /* ElementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2187135F6E75D2794A7F00AE /* ElementEngine.swift */; };
 		F35371BBD077FF067D2759A2 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4235A433DA39256D21C403F2 /* EventEngine.swift */; };
+		F4B8FB9A9342F40D75AECCD2 /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F6013DFB944A475F98B76 /* WatchFaceModel.swift */; };
 		F55B676235ED12F4181ABF38 /* CreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E74631DF8AC22CD72022E35 /* CreationView.swift */; };
 		FD99979563C80D9BBE559F20 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4865B7ABE61C4ED9B1AADE /* HealthManager.swift */; };
 		FE1A77BE2EF3B03826E91ABD /* TribulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73176FEFB8D5865B35EB65B9 /* TribulationView.swift */; };
@@ -82,11 +88,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DA5F00012F738CEA0055BE24 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		0065DFCA69B3EC786D4E4B62 /* LibLlama.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
 		0411356B86B1B7E51170928A /* WatchFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
 		1E74631DF8AC22CD72022E35 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
 		2187135F6E75D2794A7F00AE /* ElementEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ElementEngine.swift; sourceTree = "<group>"; };
+		25980D57E9EB5FF4EA7D06FD /* WatchFaceStudioView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceStudioView.swift; sourceTree = "<group>"; };
+		265F6013DFB944A475F98B76 /* WatchFaceModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceModel.swift; sourceTree = "<group>"; };
 		2D7E7D9237CAF1957D90B395 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		303F17D13191D69DF2336537 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3408D664A620CBED353AE629 /* LLMManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LLMManager.swift; sourceTree = "<group>"; };
@@ -133,7 +140,9 @@
 		CE5AAC534F34042FEBFD5F1D /* CultivationEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationEngine.swift; sourceTree = "<group>"; };
 		CF14BAB7B36EDBA425570AB3 /* ZEWatch.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = ZEWatch.xcdatamodel; sourceTree = "<group>"; };
 		D3163BB5812331FEC89B0816 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanion/ContentView.swift; sourceTree = SOURCE_ROOT; };
+		D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWatchFaceComponents.swift; sourceTree = "<group>"; };
 		D9B440CCEA2433A7FBC105D6 /* LlamaCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LlamaCore.swift; sourceTree = "<group>"; };
+		DA5F00012F738CEA0055BE24 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		E0A8FEAF9696B392296A58A7 /* CompanionSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CompanionSettingsView.swift; sourceTree = "<group>"; };
 		E1F97058DF21861A9C3F3739 /* MissionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
 		E5CA9CDD98D0D86078634EEF /* CultivationWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWidget.swift; sourceTree = "<group>"; };
@@ -189,6 +198,7 @@
 				E0A8FEAF9696B392296A58A7 /* CompanionSettingsView.swift */,
 				38E13B852F740D680055BE24 /* Assets.xcassets */,
 				38E13B872F7412630055BE24 /* Launch Screen.storyboard */,
+				25980D57E9EB5FF4EA7D06FD /* WatchFaceStudioView.swift */,
 			);
 			path = ZEWatchCompanion;
 			sourceTree = SOURCE_ROOT;
@@ -254,6 +264,8 @@
 				2187135F6E75D2794A7F00AE /* ElementEngine.swift */,
 				9B15291EC77C8CD3FD23A2EA /* SkillActionEngine.swift */,
 				86C107C64561A3F37CEF4D44 /* SkillLibraryView.swift */,
+				265F6013DFB944A475F98B76 /* WatchFaceModel.swift */,
+				D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */,
 			);
 			path = ZEWatch;
 			sourceTree = "<group>";
@@ -466,6 +478,10 @@
 				CB55C24D897C2A32088BF543 /* CompanionSettingsView.swift in Sources */,
 				271FA4E926CBE07CD681E17A /* LlamaState.swift in Sources */,
 				330464F432CA0450357FF271 /* LibLlama.swift in Sources */,
+				F4B8FB9A9342F40D75AECCD2 /* WatchFaceModel.swift in Sources */,
+				D49028C50EAFE7ED66B470D2 /* CultivationWatchFaceComponents.swift in Sources */,
+				C0C1538AF91E07C3C63DD54E /* WatchFaceStudioView.swift in Sources */,
+				08AC1D88144BE3EF85A7B7F6 /* TimeTranslator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +512,8 @@
 				EEE6EAD4470D4C573D9100B4 /* ElementEngine.swift in Sources */,
 				29DF90DF3ECB47B3E5F937B4 /* SkillActionEngine.swift in Sources */,
 				0B73769A4CF9F1CD26571419 /* SkillLibraryView.swift in Sources */,
+				7B2E642DD4FCB04F02F19B4D /* WatchFaceModel.swift in Sources */,
+				8B258A44C5B2D8A9ADC12924 /* CultivationWatchFaceComponents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -888,17 +906,6 @@
 			relativePath = Packages/llama;
 		};
 /* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		0727260F64031E34792E0010 /* XCRemoteSwiftPackageReference "llama.cpp" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ggerganov/llama.cpp.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		0BB66F311FD578122D14006D /* llama */ = {

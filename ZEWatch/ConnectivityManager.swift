@@ -47,6 +47,11 @@ public class ConnectivityManager: NSObject, ObservableObject, WCSessionDelegate 
             self.playerStats = message
             print("[WCSession] 实时收到修真数据透传: \(message)")
             
+            // 收到表盘配置时自动更新
+            if message["watchFaceConfig"] != nil {
+                WatchFaceSettingsManager.shared.update(from: message)
+            }
+            
             #if os(iOS)
             // 收到数据后，触发大模型生成天道意志
             Task {
@@ -61,6 +66,11 @@ public class ConnectivityManager: NSObject, ObservableObject, WCSessionDelegate 
         DispatchQueue.main.async {
             self.playerStats = applicationContext
             print("[WCSession] 从挂起队列提取了最新修真数据: \(applicationContext)")
+            
+            // 收到表盘配置时自动更新
+            if applicationContext["watchFaceConfig"] != nil {
+                WatchFaceSettingsManager.shared.update(from: applicationContext)
+            }
             
             #if os(iOS)
             // 收到上下文数据后，同样触发大模型

@@ -80,6 +80,56 @@ struct DashboardView: View {
                             .padding(.horizontal)
                         }
                         
+                        // MARK: - Apple Watch 表盘捷径卡片
+                        NavigationLink {
+                            WatchFaceStudioView(player: player)
+                        } label: {
+                            HStack(spacing: 14) {
+                                ZStack {
+                                    Circle()
+                                        .fill(WatchFaceSettingsManager.shared.config.themeColor.primaryColor.opacity(0.18))
+                                        .frame(width: 48, height: 48)
+                                    Image(systemName: "applewatch.side.right")
+                                        .font(.title3)
+                                        .foregroundColor(WatchFaceSettingsManager.shared.config.themeColor.primaryColor)
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 3) {
+                                    HStack(spacing: 6) {
+                                        Text("修仙表盘工坊")
+                                            .font(.subheadline.bold())
+                                            .foregroundColor(.white)
+                                        Text("即时同步")
+                                            .font(.system(size: 8, weight: .bold))
+                                            .padding(.horizontal, 4)
+                                            .padding(.vertical, 1)
+                                            .background(Color.green.opacity(0.2))
+                                            .foregroundColor(.green)
+                                            .cornerRadius(4)
+                                    }
+                                    Text("当前样式: \(WatchFaceSettingsManager.shared.config.style.title) · 点击更换")
+                                        .font(.caption2)
+                                        .foregroundColor(.cultivMuted)
+                                }
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.cultivMuted)
+                            }
+                            .padding(14)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(Color.white.opacity(0.05))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                            )
+                            .padding(.horizontal)
+                        }
+                        
                         Spacer()
                     }
                 }
@@ -99,6 +149,25 @@ struct DashboardView: View {
             }
             .navigationTitle("洞府大盘")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        WatchFaceStudioView(player: player)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "applewatch")
+                                .font(.caption)
+                            Text("表盘")
+                                .font(.caption.bold())
+                        }
+                        .foregroundColor(.cultivSecondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.white.opacity(0.08))
+                        .cornerRadius(12)
+                    }
+                }
+            }
         }
     }
 }

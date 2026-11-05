@@ -7,60 +7,82 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08AC1D88144BE3EF85A7B7F6 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6469EACE85A9296DC409FE9 /* TimeTranslator.swift */; };
-		0B73769A4CF9F1CD26571419 /* SkillLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C107C64561A3F37CEF4D44 /* SkillLibraryView.swift */; };
-		0CCF731515750270E088A5B3 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8240F240476E9C09A53260B7 /* ConnectivityManager.swift */; };
-		1BC88142BE4F23F76B736DB8 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4BF3CF72FB5388C1E4A687 /* Persistence.swift */; };
-		271FA4E926CBE07CD681E17A /* LlamaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1475244BB66D0D5927FE5 /* LlamaState.swift */; };
-		29DF90DF3ECB47B3E5F937B4 /* SkillActionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B15291EC77C8CD3FD23A2EA /* SkillActionEngine.swift */; };
-		2D26559E8DEDB69F765D23BB /* CultivationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CA9CDD98D0D86078634EEF /* CultivationWidget.swift */; };
-		3254FDE57B56D9F05A1A5EAD /* MissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F97058DF21861A9C3F3739 /* MissionView.swift */; };
-		330464F432CA0450357FF271 /* LibLlama.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0065DFCA69B3EC786D4E4B62 /* LibLlama.swift */; };
-		382CD5D72F77B52E0015A355 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382CD5D62F77B52E0015A355 /* ChatMessage.swift */; };
-		386135322F72419200538B3A /* WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386135302F72419200538B3A /* WatchApp.swift */; };
-		386135332F72419200538B3A /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3861352F2F72419200538B3A /* MotionManager.swift */; };
-		386135342F72419200538B3A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386135252F72419200538B3A /* ContentView.swift */; };
+		01B127943D70628BD92C65FB /* GameKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680989ED63C0B048A161D856 /* GameKitManager.swift */; };
+		09C53FE54EE06564CB88ACDA /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C8294F0A9D52DC43CFD4A6 /* HealthManager.swift */; };
+		0AB27694DF0F71AF87A3BAC3 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */; };
+		1077CD60F34C34CC849D6B25 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF2662A5AD41B102C62B0C1 /* MotionManager.swift */; };
+		18FB46645FDA73D4575F1538 /* SwordFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7958C06740BE3667F9336621 /* SwordFaceView.swift */; };
+		1C7A3BC62878B01DC27672D7 /* MissionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD79289469DAC16E33E8A35F /* MissionEngine.swift */; };
+		1CD02A4D8FB17BC73020C5B4 /* CreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D572A0781995B849900BD6 /* CreationView.swift */; };
+		1D84382140F646C8A6D198F1 /* LLMManager+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF4D853A705E30604F8F0EF /* LLMManager+Download.swift */; };
+		1EEBD34325C5AF62315D40F7 /* SwordFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7958C06740BE3667F9336621 /* SwordFaceView.swift */; };
+		217D723FF12A8A920432806E /* LLMModelConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1262AD96C737E2A6993A3AF /* LLMModelConfig.swift */; };
+		21E4951A67387FC3B3A20AB4 /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65B919483A57841D844BF9 /* WatchFaceModel.swift */; };
+		262C702AB5C56EE215BAE3E8 /* AstronomyFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9462A3736DB5824D4294805F /* AstronomyFaceView.swift */; };
+		28D6F94911FAB86CC8E85283 /* TaijiFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */; };
+		370C258DA7E7B47AADC4B43F /* LibLlama.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DB2499047C5F43889A8F6E /* LibLlama.swift */; };
+		37B3E6F9B57BA7EAC5CA45AE /* ModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B73791265C5EE4FDFFFEDF /* ModelSelectionView.swift */; };
 		386135352F72419200538B3A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 386135242F72419200538B3A /* Assets.xcassets */; };
 		386135372F72419200538B3A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3861352E2F72419200538B3A /* Localizable.strings */; };
-		38CA88982FB4610E00E29C61 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CA88972FB4610E00E29C61 /* HealthManager.swift */; };
-		38E13B742F738CEA0055BE24 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B6F2F738CEA0055BE24 /* CoreDataModels.swift */; };
-		38E13B752F738CEA0055BE24 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B732F738CEA0055BE24 /* Persistence.swift */; };
-		38E13B762F738CEA0055BE24 /* AICompanionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B6E2F738CEA0055BE24 /* AICompanionView.swift */; };
-		38E13B772F738CEA0055BE24 /* CreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B702F738CEA0055BE24 /* CreationView.swift */; };
-		38E13B782F738CEA0055BE24 /* CultivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B712F738CEA0055BE24 /* CultivationEngine.swift */; };
-		38E13B792F738CEA0055BE24 /* GameKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E13B722F738CEA0055BE24 /* GameKitManager.swift */; };
 		38E13B832F73FCC40055BE24 /* ZEWatch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3916EB76AFA57E9BCD45C3D /* ZEWatch.xcdatamodeld */; };
 		38E13B862F740D680055BE24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38E13B852F740D680055BE24 /* Assets.xcassets */; };
 		38E13B882F7412630055BE24 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38E13B872F7412630055BE24 /* Launch Screen.storyboard */; };
+		3BDDA5F3A1ECB7A7A6BBC851 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F2E8D1C9682B433F7CAB5D /* Persistence.swift */; };
+		3C9D29A7190CE6AD700A7D2D /* TaijiFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */; };
+		3D173B74E4464F2DE7B82D3E /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A737AB13CF014BD539622D /* HealthManager.swift */; };
+		3F0414F7E60A60C3054E2FB4 /* WatchFaceStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */; };
 		3FB4EB4FF080186E59722A4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 303F17D13191D69DF2336537 /* Foundation.framework */; };
+		40F6087AF5FFA4D6852C9C34 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */; };
+		437B006F5758A99449064798 /* SkillLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED8ACA04471368DCD79A9DB /* SkillLibraryView.swift */; };
+		46536759D16145CEAB644E18 /* ZEWatchCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FAD56FD5F7AC9302D1E137 /* ZEWatchCompanionApp.swift */; };
+		47DCF9C84E89612CC032734F /* CreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310C2B956ED4C08C6652F803 /* CreationView.swift */; };
+		4D258D8C1FD791B3D1ECA7BB /* SkillActionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D036B9193DE8B79C365EC0B /* SkillActionEngine.swift */; };
 		510739015E3A5C744E08926F /* ZEWatch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3916EB76AFA57E9BCD45C3D /* ZEWatch.xcdatamodeld */; };
-		635A3F0BDB9E92D83317121A /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE08744A80D58E672D00992F /* StatusView.swift */; };
-		64D761CC3E4BB47F45CDABB5 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E512676C47DFBE26818833 /* ConnectivityManager.swift */; };
+		5D1C98AA814BB49727CF325D /* ExplorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB90F652B23B6009A19F175 /* ExplorationView.swift */; };
+		5D6CB3EB7646BBB2FC15061C /* LLMManager+Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B1F4036DA671A0127853CB /* LLMManager+Inference.swift */; };
 		65648CFBDAD09DE68280F9D8 /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 0BB66F311FD578122D14006D /* llama */; };
-		6C62D5FEF4E59D6D44E01BB6 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E637512B514157111C3AE30 /* CoreDataModels.swift */; };
-		7B2E642DD4FCB04F02F19B4D /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F6013DFB944A475F98B76 /* WatchFaceModel.swift */; };
-		7C8EABC5E674B0E7B08B93B9 /* ZEWatchCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FBA5287BF4851E2522A5A2 /* ZEWatchCompanionApp.swift */; };
+		657B416B6C231717D3D8C92B /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2C4CCEE68E2E0E02C4FE10 /* StatusView.swift */; };
+		6678844F4695FFBAA1B82D97 /* AICompanionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC2809342E85D476C805862 /* AICompanionView.swift */; };
+		677A609E37F2440A83E57526 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F23CF4DA1C30D2597CC3BAE /* DashboardView.swift */; };
+		6798CDC91374E628AF9F6A82 /* TribulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D892132454C05F706660C236 /* TribulationView.swift */; };
+		67F1937E40266E94A49EFB85 /* TribulationFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */; };
+		766E61050CBF0698CCB749C5 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */; };
+		7780A908374130FCEADA510C /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E743AF15ED6947BEC56DA27D /* PrivacyPolicyView.swift */; };
 		7CD3C8D4FF0BE6761B494759 /* ZEWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3803AE422F0D10490047BF4A /* ZEWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8B258A44C5B2D8A9ADC12924 /* CultivationWatchFaceComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */; };
-		99E76BA5FF09A5BC7E1AB14C /* LlamaCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B440CCEA2433A7FBC105D6 /* LlamaCore.swift */; };
-		9AF637F7068CDCA7527FBAAE /* CultivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5AAC534F34042FEBFD5F1D /* CultivationEngine.swift */; };
-		9EF41D1FCC462FD74753FF0B /* ExplorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866D60038B4EB9586B2D5C71 /* ExplorationView.swift */; };
-		B3D3BEBA54AE60321A5ECB13 /* TrainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7701A19F259D942AC10F98 /* TrainingView.swift */; };
-		B3FEBB87494BD6092BD4A9C5 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6469EACE85A9296DC409FE9 /* TimeTranslator.swift */; };
-		B8E8424B985E4157E7B190C2 /* WatchFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411356B86B1B7E51170928A /* WatchFaceView.swift */; };
-		C0C1538AF91E07C3C63DD54E /* WatchFaceStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25980D57E9EB5FF4EA7D06FD /* WatchFaceStudioView.swift */; };
-		C4589625DEDE2409EFDC4FD2 /* LLMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3408D664A620CBED353AE629 /* LLMManager.swift */; };
-		CB55C24D897C2A32088BF543 /* CompanionSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8FEAF9696B392296A58A7 /* CompanionSettingsView.swift */; };
-		CBC5A71D176144A90120E053 /* MissionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9460687E96B700BC8C1B1BBA /* MissionEngine.swift */; };
-		D49028C50EAFE7ED66B470D2 /* CultivationWatchFaceComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */; };
-		DA5B00012F738CEA0055BE24 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5F00012F738CEA0055BE24 /* DashboardView.swift */; };
-		DBE5612880BF81F390776A5D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A8EFA21B4DD3937A505 /* ContentView.swift */; };
-		EEE6EAD4470D4C573D9100B4 /* ElementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2187135F6E75D2794A7F00AE /* ElementEngine.swift */; };
-		F35371BBD077FF067D2759A2 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4235A433DA39256D21C403F2 /* EventEngine.swift */; };
-		F4B8FB9A9342F40D75AECCD2 /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F6013DFB944A475F98B76 /* WatchFaceModel.swift */; };
-		F55B676235ED12F4181ABF38 /* CreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E74631DF8AC22CD72022E35 /* CreationView.swift */; };
-		FD99979563C80D9BBE559F20 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4865B7ABE61C4ED9B1AADE /* HealthManager.swift */; };
-		FE1A77BE2EF3B03826E91ABD /* TribulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73176FEFB8D5865B35EB65B9 /* TribulationView.swift */; };
+		8BC79751EA5B87707BF93EF1 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514551D6BFE7DE5955DE6C7F /* EventEngine.swift */; };
+		8D9188A1EE5518EDDEEE7776 /* TrainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC33283A38680AE4B168D99C /* TrainingView.swift */; };
+		8F95C249FFFD090C791803AC /* WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB2F285F84E7A1D8BCEC36F /* WatchApp.swift */; };
+		8FC4BC2AFB70A945D74F9B4E /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */; };
+		91CB33DA1BEBC9ED6ED5946A /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65B919483A57841D844BF9 /* WatchFaceModel.swift */; };
+		967BDF1539B74068C77D93BB /* CultivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD02881D7AA818E83506207 /* CultivationEngine.swift */; };
+		9FC93942899E13A9A91495B2 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356AB883C01102E17BA80636 /* ConnectivityManager.swift */; };
+		A2C7B055032B00866A613D8A /* GrottoFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */; };
+		A88F4334BA9A3E908AAE4F1A /* MissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B8C849740F5F954637A8A /* MissionView.swift */; };
+		AB15B31B5F2441E6B0CAE055 /* LlamaCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC809589B9342FCDEFCC5B /* LlamaCore.swift */; };
+		ABB4CBB1D531B767F00A43C1 /* GrottoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17D54F295B30BD6E6402CD6 /* GrottoView.swift */; };
+		B5A0C57A293204FA3DDD3A7E /* CultivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEF0C38A7ABAA7F5E733B08 /* CultivationEngine.swift */; };
+		B800D0A19876D8EEA064E692 /* LLMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB9F13C8E7D9D5E3B201175 /* LLMManager.swift */; };
+		BBF956ECE73A58A6F5B426C0 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874EA1062A33686CDACAB5C /* Persistence.swift */; };
+		BD8B2419CB372F23E86DBA55 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4B890C754D5A3AB19A5CA /* ContentView.swift */; };
+		CA19C95C5CC851B839A264F6 /* AstronomyFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9462A3736DB5824D4294805F /* AstronomyFaceView.swift */; };
+		CB3B57C3EC4B33945053924E /* CultivationWatchFaceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */; };
+		CCB18D1B65AD99DC70BB8D62 /* ElementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D7D13705DD81F01ABE2315 /* ElementEngine.swift */; };
+		D2AA906DA4EBB00806F20BF6 /* AlchemyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79B931D6D043FBE2B8AA2CA /* AlchemyView.swift */; };
+		D6F8F36E73A382163CE52F02 /* WatchPrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7259E339DA45201BC2B2E7B /* WatchPrivacyPolicyView.swift */; };
+		DAC3BA2FDA2E6C56E9EBE163 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C28DB5B6D8545D8373A6FFA /* ContentView.swift */; };
+		DAE976BF0676F78974EEC134 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1C64740C053D46165BE3FB /* MessageBubbleView.swift */; };
+		E2AFBDB8EE88322BBF1CD350 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356AB883C01102E17BA80636 /* ConnectivityManager.swift */; };
+		E52A9C9DB9CF7A3F01AAFE2F /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FD6B75D4B97EB730A3971 /* CoreDataModels.swift */; };
+		E88F20218D3136A558AE0BF7 /* GrottoFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */; };
+		E8CE04807CE9B79FDA142BEC /* WatchFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7927632020604803A9EC75A /* WatchFaceView.swift */; };
+		EF858E283D63BC60470472F3 /* CultivationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AB534BBDC27D157CF4123C /* CultivationWidget.swift */; };
+		F326DCB591CB8423EC89F590 /* LlamaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D391CEC682D4CC58A6FC0431 /* LlamaState.swift */; };
+		F46A0D523DE9064EBA228AEC /* TribulationFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */; };
+		F80AA1E2533AB246D4727541 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */; };
+		F8BFDED73FD294B125E3BAAB /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EF5BF2B3DE909D70FED1B1 /* ChatMessage.swift */; };
+		FC83F88D5B28A160EAD25513 /* CultivationWatchFaceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */; };
+		FDA7DEA2CA81A8E6423D4C58 /* CompanionSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A7F0ACD18CEF92F75E22C4 /* CompanionSettingsView.swift */; };
+		FFDC68DBDC2DE7EF6685D7FB /* AICompanionHeaderViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96B4213B8B4972111E73B4 /* AICompanionHeaderViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,67 +110,77 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0065DFCA69B3EC786D4E4B62 /* LibLlama.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
-		0411356B86B1B7E51170928A /* WatchFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
-		1E74631DF8AC22CD72022E35 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
-		2187135F6E75D2794A7F00AE /* ElementEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ElementEngine.swift; sourceTree = "<group>"; };
-		25980D57E9EB5FF4EA7D06FD /* WatchFaceStudioView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceStudioView.swift; sourceTree = "<group>"; };
-		265F6013DFB944A475F98B76 /* WatchFaceModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceModel.swift; sourceTree = "<group>"; };
-		2D7E7D9237CAF1957D90B395 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		00C8294F0A9D52DC43CFD4A6 /* HealthManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
+		02B73791265C5EE4FDFFFEDF /* ModelSelectionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModelSelectionView.swift; sourceTree = "<group>"; };
+		0C28DB5B6D8545D8373A6FFA /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		12EF5BF2B3DE909D70FED1B1 /* ChatMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		1F2C4CCEE68E2E0E02C4FE10 /* StatusView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
+		1FEF0C38A7ABAA7F5E733B08 /* CultivationEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationEngine.swift; sourceTree = "<group>"; };
+		2CD02881D7AA818E83506207 /* CultivationEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationEngine.swift; sourceTree = "<group>"; };
 		303F17D13191D69DF2336537 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		3408D664A620CBED353AE629 /* LLMManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LLMManager.swift; sourceTree = "<group>"; };
+		310C2B956ED4C08C6652F803 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
+		33D572A0781995B849900BD6 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
+		348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWatchFaceContainer.swift; sourceTree = "<group>"; };
+		356AB883C01102E17BA80636 /* ConnectivityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		3803AE422F0D10490047BF4A /* ZEWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZEWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		382CD5D62F77B52E0015A355 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		386135242F72419200538B3A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		386135252F72419200538B3A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		386135262F72419200538B3A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3861352D2F72419200538B3A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		3861352F2F72419200538B3A /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
-		386135302F72419200538B3A /* WatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchApp.swift; sourceTree = "<group>"; };
-		38CA88972FB4610E00E29C61 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
+		38BC809589B9342FCDEFCC5B /* LlamaCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LlamaCore.swift; sourceTree = "<group>"; };
 		38CA88992FB461DF00E29C61 /* ZEWatchCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZEWatchCompanion.entitlements; sourceTree = "<group>"; };
 		38CA889A2FB461DF00E29C61 /* ZEWatchCompanionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZEWatchCompanionDebug.entitlements; sourceTree = "<group>"; };
 		38CA889B2FB4659300E29C61 /* ZEWatchDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZEWatchDebug.entitlements; sourceTree = "<group>"; };
-		38E13B6E2F738CEA0055BE24 /* AICompanionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AICompanionView.swift; sourceTree = "<group>"; };
-		38E13B6F2F738CEA0055BE24 /* CoreDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
-		38E13B702F738CEA0055BE24 /* CreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
-		38E13B712F738CEA0055BE24 /* CultivationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CultivationEngine.swift; sourceTree = "<group>"; };
-		38E13B722F738CEA0055BE24 /* GameKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameKitManager.swift; sourceTree = "<group>"; };
-		38E13B732F738CEA0055BE24 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		38E13B822F7392860055BE24 /* llama.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = llama.h; sourceTree = "<group>"; };
 		38E13B852F740D680055BE24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		38E13B872F7412630055BE24 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		4235A433DA39256D21C403F2 /* EventEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EventEngine.swift; sourceTree = "<group>"; };
-		48596A8EFA21B4DD3937A505 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		4C7701A19F259D942AC10F98 /* TrainingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TrainingView.swift; sourceTree = "<group>"; };
-		55E512676C47DFBE26818833 /* ConnectivityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
-		704C3560CF4A5EDC573B6EDC /* ZEWatchCompanionApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanionApp.swift; sourceTree = "<group>"; };
-		73176FEFB8D5865B35EB65B9 /* TribulationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TribulationView.swift; sourceTree = "<group>"; };
-		8240F240476E9C09A53260B7 /* ConnectivityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
-		866D60038B4EB9586B2D5C71 /* ExplorationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExplorationView.swift; sourceTree = "<group>"; };
-		86C107C64561A3F37CEF4D44 /* SkillLibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SkillLibraryView.swift; sourceTree = "<group>"; };
-		8E637512B514157111C3AE30 /* CoreDataModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
-		8FD2B8C0CD52911AB4F64EB7 /* ZEWatchCompanionApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanion/ZEWatchCompanionApp.swift; sourceTree = SOURCE_ROOT; };
-		9460687E96B700BC8C1B1BBA /* MissionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionEngine.swift; sourceTree = "<group>"; };
-		9B15291EC77C8CD3FD23A2EA /* SkillActionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SkillActionEngine.swift; sourceTree = "<group>"; };
-		A5FE3C3EC49FB644EC8D4BEF /* LLMManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LLMManager.swift; sourceTree = "<group>"; };
-		AD4865B7ABE61C4ED9B1AADE /* HealthManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
-		AE08744A80D58E672D00992F /* StatusView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
-		C2FBA5287BF4851E2522A5A2 /* ZEWatchCompanionApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanionApp.swift; sourceTree = "<group>"; };
-		C6469EACE85A9296DC409FE9 /* TimeTranslator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TimeTranslator.swift; sourceTree = "<group>"; };
-		CD4BF3CF72FB5388C1E4A687 /* Persistence.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		CE5AAC534F34042FEBFD5F1D /* CultivationEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationEngine.swift; sourceTree = "<group>"; };
+		3C96B4213B8B4972111E73B4 /* AICompanionHeaderViews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AICompanionHeaderViews.swift; sourceTree = "<group>"; };
+		3DF2662A5AD41B102C62B0C1 /* MotionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
+		3EB9F13C8E7D9D5E3B201175 /* LLMManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LLMManager.swift; sourceTree = "<group>"; };
+		3ED8ACA04471368DCD79A9DB /* SkillLibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SkillLibraryView.swift; sourceTree = "<group>"; };
+		4AB90F652B23B6009A19F175 /* ExplorationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExplorationView.swift; sourceTree = "<group>"; };
+		4C1C64740C053D46165BE3FB /* MessageBubbleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
+		514551D6BFE7DE5955DE6C7F /* EventEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EventEngine.swift; sourceTree = "<group>"; };
+		5F23CF4DA1C30D2597CC3BAE /* DashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		60A737AB13CF014BD539622D /* HealthManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
+		680989ED63C0B048A161D856 /* GameKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameKitManager.swift; sourceTree = "<group>"; };
+		6F65B919483A57841D844BF9 /* WatchFaceModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceModel.swift; sourceTree = "<group>"; };
+		72FAD56FD5F7AC9302D1E137 /* ZEWatchCompanionApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanionApp.swift; sourceTree = "<group>"; };
+		74AB534BBDC27D157CF4123C /* CultivationWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWidget.swift; sourceTree = "<group>"; };
+		7958C06740BE3667F9336621 /* SwordFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwordFaceView.swift; sourceTree = "<group>"; };
+		79A7F0ACD18CEF92F75E22C4 /* CompanionSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CompanionSettingsView.swift; sourceTree = "<group>"; };
+		86DB2499047C5F43889A8F6E /* LibLlama.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
+		9462A3736DB5824D4294805F /* AstronomyFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AstronomyFaceView.swift; sourceTree = "<group>"; };
+		96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceStudioView.swift; sourceTree = "<group>"; };
+		9D036B9193DE8B79C365EC0B /* SkillActionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SkillActionEngine.swift; sourceTree = "<group>"; };
+		A11B8C849740F5F954637A8A /* MissionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
+		AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
+		B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
+		B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrottoFaceView.swift; sourceTree = "<group>"; };
+		B5D7D13705DD81F01ABE2315 /* ElementEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ElementEngine.swift; sourceTree = "<group>"; };
+		B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TribulationFaceView.swift; sourceTree = "<group>"; };
+		B79B931D6D043FBE2B8AA2CA /* AlchemyView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlchemyView.swift; sourceTree = "<group>"; };
+		B85FD6B75D4B97EB730A3971 /* CoreDataModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
+		BAC2809342E85D476C805862 /* AICompanionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AICompanionView.swift; sourceTree = "<group>"; };
+		BDB2F285F84E7A1D8BCEC36F /* WatchApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchApp.swift; sourceTree = "<group>"; };
+		C1262AD96C737E2A6993A3AF /* LLMModelConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LLMModelConfig.swift; sourceTree = "<group>"; };
+		C874EA1062A33686CDACAB5C /* Persistence.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		CC33283A38680AE4B168D99C /* TrainingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TrainingView.swift; sourceTree = "<group>"; };
+		CEF4D853A705E30604F8F0EF /* LLMManager+Download.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "LLMManager+Download.swift"; sourceTree = "<group>"; };
 		CF14BAB7B36EDBA425570AB3 /* ZEWatch.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = ZEWatch.xcdatamodel; sourceTree = "<group>"; };
-		D3163BB5812331FEC89B0816 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanion/ContentView.swift; sourceTree = SOURCE_ROOT; };
-		D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWatchFaceComponents.swift; sourceTree = "<group>"; };
-		D9B440CCEA2433A7FBC105D6 /* LlamaCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LlamaCore.swift; sourceTree = "<group>"; };
-		DA5F00012F738CEA0055BE24 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		E0A8FEAF9696B392296A58A7 /* CompanionSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CompanionSettingsView.swift; sourceTree = "<group>"; };
-		E1F97058DF21861A9C3F3739 /* MissionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
-		E5CA9CDD98D0D86078634EEF /* CultivationWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWidget.swift; sourceTree = "<group>"; };
+		D1F2E8D1C9682B433F7CAB5D /* Persistence.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		D391CEC682D4CC58A6FC0431 /* LlamaState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LlamaState.swift; sourceTree = "<group>"; };
+		D4B1F4036DA671A0127853CB /* LLMManager+Inference.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "LLMManager+Inference.swift"; sourceTree = "<group>"; };
+		D892132454C05F706660C236 /* TribulationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TribulationView.swift; sourceTree = "<group>"; };
+		E743AF15ED6947BEC56DA27D /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		E7927632020604803A9EC75A /* WatchFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
+		E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TaijiFaceView.swift; sourceTree = "<group>"; };
+		F17D54F295B30BD6E6402CD6 /* GrottoView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrottoView.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7081920ABCD /* ZEWatchCompanion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZEWatchCompanion-Bridging-Header.h"; sourceTree = "<group>"; };
 		F1AFACC36A2B475EE6ED1DE0 /* ZEWatchCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZEWatchCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FAD1475244BB66D0D5927FE5 /* LlamaState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LlamaState.swift; sourceTree = "<group>"; };
+		F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TimeTranslator.swift; sourceTree = "<group>"; };
+		F7259E339DA45201BC2B2E7B /* WatchPrivacyPolicyView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchPrivacyPolicyView.swift; sourceTree = "<group>"; };
+		F7D4B890C754D5A3AB19A5CA /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FD79289469DAC16E33E8A35F /* MissionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionEngine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,37 +203,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AB277E484B3921C2C0D98F4 /* WatchFace */ = {
+			isa = PBXGroup;
+			children = (
+				E7927632020604803A9EC75A /* WatchFaceView.swift */,
+				74AB534BBDC27D157CF4123C /* CultivationWidget.swift */,
+				348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */,
+				E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */,
+				B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */,
+				B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */,
+				7958C06740BE3667F9336621 /* SwordFaceView.swift */,
+				9462A3736DB5824D4294805F /* AstronomyFaceView.swift */,
+			);
+			name = WatchFace;
+			path = WatchFace;
+			sourceTree = "<group>";
+		};
 		0D49DD9176DC3C5A066A5BCD /* ZEWatchCompanion */ = {
 			isa = PBXGroup;
 			children = (
 				38CA889A2FB461DF00E29C61 /* ZEWatchCompanionDebug.entitlements */,
 				38CA88992FB461DF00E29C61 /* ZEWatchCompanion.entitlements */,
-				38CA88972FB4610E00E29C61 /* HealthManager.swift */,
-				38E13B6E2F738CEA0055BE24 /* AICompanionView.swift */,
-				DA5F00012F738CEA0055BE24 /* DashboardView.swift */,
-				38E13B6F2F738CEA0055BE24 /* CoreDataModels.swift */,
-				38E13B702F738CEA0055BE24 /* CreationView.swift */,
-				38E13B712F738CEA0055BE24 /* CultivationEngine.swift */,
-				38E13B722F738CEA0055BE24 /* GameKitManager.swift */,
-				38E13B732F738CEA0055BE24 /* Persistence.swift */,
 				38E13B6C2F7367370055BE24 /* Models */,
-				8FD2B8C0CD52911AB4F64EB7 /* ZEWatchCompanionApp.swift */,
-				D3163BB5812331FEC89B0816 /* ContentView.swift */,
-				A5FE3C3EC49FB644EC8D4BEF /* LLMManager.swift */,
-				704C3560CF4A5EDC573B6EDC /* ZEWatchCompanionApp.swift */,
-				2D7E7D9237CAF1957D90B395 /* ContentView.swift */,
-				C2FBA5287BF4851E2522A5A2 /* ZEWatchCompanionApp.swift */,
-				48596A8EFA21B4DD3937A505 /* ContentView.swift */,
-				3408D664A620CBED353AE629 /* LLMManager.swift */,
-				D9B440CCEA2433A7FBC105D6 /* LlamaCore.swift */,
 				F1A2B3C4D5E6F7081920ABCD /* ZEWatchCompanion-Bridging-Header.h */,
-				E0A8FEAF9696B392296A58A7 /* CompanionSettingsView.swift */,
 				38E13B852F740D680055BE24 /* Assets.xcassets */,
 				38E13B872F7412630055BE24 /* Launch Screen.storyboard */,
-				25980D57E9EB5FF4EA7D06FD /* WatchFaceStudioView.swift */,
+				DDEE539994BCC2028F002E57 /* App */,
+				A426A816695CB60DB18DD40B /* Services */,
+				1DD542095813792BB8EE36FE /* Features */,
 			);
 			path = ZEWatchCompanion;
 			sourceTree = SOURCE_ROOT;
+		};
+		0E430C8F58F15716D7B665C8 /* LLM */ = {
+			isa = PBXGroup;
+			children = (
+				38BC809589B9342FCDEFCC5B /* LlamaCore.swift */,
+				3EB9F13C8E7D9D5E3B201175 /* LLMManager.swift */,
+				C1262AD96C737E2A6993A3AF /* LLMModelConfig.swift */,
+				CEF4D853A705E30604F8F0EF /* LLMManager+Download.swift */,
+				D4B1F4036DA671A0127853CB /* LLMManager+Inference.swift */,
+			);
+			name = LLM;
+			path = LLM;
+			sourceTree = "<group>";
+		};
+		100D24E59F3CDC6FCBE4DEFB /* Policy */ = {
+			isa = PBXGroup;
+			children = (
+				F7259E339DA45201BC2B2E7B /* WatchPrivacyPolicyView.swift */,
+			);
+			name = Policy;
+			path = Policy;
+			sourceTree = "<group>";
 		};
 		15D01C955AE1A9F5D43730F4 /* llama_cpp_sources */ = {
 			isa = PBXGroup;
@@ -210,6 +264,55 @@
 			);
 			name = llama_cpp_sources;
 			sourceTree = SOURCE_ROOT;
+		};
+		1DD542095813792BB8EE36FE /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				FCCF6D195E47A73EA6DF5D42 /* Main */,
+				941BD47609FE0A44CDD75172 /* Dashboard */,
+				DB2BAD1717AF586E8A1AA496 /* Cultivation */,
+				26CF82366D8F0E0B1055D4EB /* WatchFace */,
+				A3ADEFC79E315C5CF7795178 /* AICompanion */,
+				4EC84D89FB3DCF7099D744C6 /* Settings */,
+			);
+			name = Features;
+			path = Features;
+			sourceTree = "<group>";
+		};
+		203225BC3378650514B2C49F /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		24AA5003C98CF1D21D58CD7D /* Mission */ = {
+			isa = PBXGroup;
+			children = (
+				A11B8C849740F5F954637A8A /* MissionView.swift */,
+			);
+			name = Mission;
+			path = Mission;
+			sourceTree = "<group>";
+		};
+		26CF82366D8F0E0B1055D4EB /* WatchFace */ = {
+			isa = PBXGroup;
+			children = (
+				96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */,
+			);
+			name = WatchFace;
+			path = WatchFace;
+			sourceTree = "<group>";
+		};
+		3077DE9A19FAD4801A5CDB0A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BDB2F285F84E7A1D8BCEC36F /* WatchApp.swift */,
+			);
+			name = App;
+			path = App;
+			sourceTree = "<group>";
 		};
 		3803AE352F0D10490047BF4A = {
 			isa = PBXGroup;
@@ -238,34 +341,15 @@
 			children = (
 				38CA889B2FB4659300E29C61 /* ZEWatchDebug.entitlements */,
 				386135242F72419200538B3A /* Assets.xcassets */,
-				386135252F72419200538B3A /* ContentView.swift */,
 				386135262F72419200538B3A /* Info.plist */,
 				3861352E2F72419200538B3A /* Localizable.strings */,
-				3861352F2F72419200538B3A /* MotionManager.swift */,
-				386135302F72419200538B3A /* WatchApp.swift */,
-				AD4865B7ABE61C4ED9B1AADE /* HealthManager.swift */,
-				CD4BF3CF72FB5388C1E4A687 /* Persistence.swift */,
-				CE5AAC534F34042FEBFD5F1D /* CultivationEngine.swift */,
-				1E74631DF8AC22CD72022E35 /* CreationView.swift */,
-				AE08744A80D58E672D00992F /* StatusView.swift */,
-				E1F97058DF21861A9C3F3739 /* MissionView.swift */,
-				9460687E96B700BC8C1B1BBA /* MissionEngine.swift */,
-				73176FEFB8D5865B35EB65B9 /* TribulationView.swift */,
-				866D60038B4EB9586B2D5C71 /* ExplorationView.swift */,
-				C6469EACE85A9296DC409FE9 /* TimeTranslator.swift */,
-				0411356B86B1B7E51170928A /* WatchFaceView.swift */,
 				E3916EB76AFA57E9BCD45C3D /* ZEWatch.xcdatamodeld */,
-				E5CA9CDD98D0D86078634EEF /* CultivationWidget.swift */,
-				4C7701A19F259D942AC10F98 /* TrainingView.swift */,
-				8E637512B514157111C3AE30 /* CoreDataModels.swift */,
-				4235A433DA39256D21C403F2 /* EventEngine.swift */,
-				8240F240476E9C09A53260B7 /* ConnectivityManager.swift */,
-				55E512676C47DFBE26818833 /* ConnectivityManager.swift */,
-				2187135F6E75D2794A7F00AE /* ElementEngine.swift */,
-				9B15291EC77C8CD3FD23A2EA /* SkillActionEngine.swift */,
-				86C107C64561A3F37CEF4D44 /* SkillLibraryView.swift */,
-				265F6013DFB944A475F98B76 /* WatchFaceModel.swift */,
-				D679B87117D5864F5CA94E65 /* CultivationWatchFaceComponents.swift */,
+				203225BC3378650514B2C49F /* Common */,
+				3077DE9A19FAD4801A5CDB0A /* App */,
+				55A31E5321CE298EEB8F99C5 /* Models */,
+				DE02A12DEB125926B455ADBB /* Services */,
+				9AD053846E178771B0E021DC /* Features */,
+				100D24E59F3CDC6FCBE4DEFB /* Policy */,
 			);
 			path = ZEWatch;
 			sourceTree = "<group>";
@@ -273,8 +357,41 @@
 		38E13B6C2F7367370055BE24 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				382CD5D62F77B52E0015A355 /* ChatMessage.swift */,
+				AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */,
+				C874EA1062A33686CDACAB5C /* Persistence.swift */,
+				12EF5BF2B3DE909D70FED1B1 /* ChatMessage.swift */,
 			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4532EE85828ACE7ADB91C215 /* Exploration */ = {
+			isa = PBXGroup;
+			children = (
+				4AB90F652B23B6009A19F175 /* ExplorationView.swift */,
+			);
+			name = Exploration;
+			path = Exploration;
+			sourceTree = "<group>";
+		};
+		4EC84D89FB3DCF7099D744C6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				79A7F0ACD18CEF92F75E22C4 /* CompanionSettingsView.swift */,
+				E743AF15ED6947BEC56DA27D /* PrivacyPolicyView.swift */,
+			);
+			name = Settings;
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		55A31E5321CE298EEB8F99C5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B85FD6B75D4B97EB730A3971 /* CoreDataModels.swift */,
+				D1F2E8D1C9682B433F7CAB5D /* Persistence.swift */,
+				F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */,
+				6F65B919483A57841D844BF9 /* WatchFaceModel.swift */,
+			);
+			name = Models;
 			path = Models;
 			sourceTree = "<group>";
 		};
@@ -286,6 +403,90 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		79ABE044368F6ED0D399583A /* Health */ = {
+			isa = PBXGroup;
+			children = (
+				00C8294F0A9D52DC43CFD4A6 /* HealthManager.swift */,
+			);
+			name = Health;
+			path = Health;
+			sourceTree = "<group>";
+		};
+		925FEA66F31BD5F0FA1B2C76 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				F7D4B890C754D5A3AB19A5CA /* ContentView.swift */,
+			);
+			name = Main;
+			path = Main;
+			sourceTree = "<group>";
+		};
+		941BD47609FE0A44CDD75172 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5F23CF4DA1C30D2597CC3BAE /* DashboardView.swift */,
+			);
+			name = Dashboard;
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		9AD053846E178771B0E021DC /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				925FEA66F31BD5F0FA1B2C76 /* Main */,
+				FCC73385602B048151862EE6 /* Cultivation */,
+				DFA81E3A7DADBD848F20CB43 /* Training */,
+				24AA5003C98CF1D21D58CD7D /* Mission */,
+				4532EE85828ACE7ADB91C215 /* Exploration */,
+				DD352F1D4379F61F345BFCC1 /* Skills */,
+				0AB277E484B3921C2C0D98F4 /* WatchFace */,
+			);
+			name = Features;
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A3ADEFC79E315C5CF7795178 /* AICompanion */ = {
+			isa = PBXGroup;
+			children = (
+				BAC2809342E85D476C805862 /* AICompanionView.swift */,
+				3C96B4213B8B4972111E73B4 /* AICompanionHeaderViews.swift */,
+				4C1C64740C053D46165BE3FB /* MessageBubbleView.swift */,
+				02B73791265C5EE4FDFFFEDF /* ModelSelectionView.swift */,
+			);
+			name = AICompanion;
+			path = AICompanion;
+			sourceTree = "<group>";
+		};
+		A426A816695CB60DB18DD40B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B2FD399A34E27D213E5C325A /* Cultivation */,
+				79ABE044368F6ED0D399583A /* Health */,
+				AE9A21F84891251426435477 /* GameKit */,
+				0E430C8F58F15716D7B665C8 /* LLM */,
+			);
+			name = Services;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AE9A21F84891251426435477 /* GameKit */ = {
+			isa = PBXGroup;
+			children = (
+				680989ED63C0B048A161D856 /* GameKitManager.swift */,
+			);
+			name = GameKit;
+			path = GameKit;
+			sourceTree = "<group>";
+		};
+		B2FD399A34E27D213E5C325A /* Cultivation */ = {
+			isa = PBXGroup;
+			children = (
+				1FEF0C38A7ABAA7F5E733B08 /* CultivationEngine.swift */,
+			);
+			name = Cultivation;
+			path = Cultivation;
+			sourceTree = "<group>";
+		};
 		D12857A47F4C253127F49B8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,11 +495,64 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DB2BAD1717AF586E8A1AA496 /* Cultivation */ = {
+			isa = PBXGroup;
+			children = (
+				33D572A0781995B849900BD6 /* CreationView.swift */,
+			);
+			name = Cultivation;
+			path = Cultivation;
+			sourceTree = "<group>";
+		};
+		DD352F1D4379F61F345BFCC1 /* Skills */ = {
+			isa = PBXGroup;
+			children = (
+				3ED8ACA04471368DCD79A9DB /* SkillLibraryView.swift */,
+			);
+			name = Skills;
+			path = Skills;
+			sourceTree = "<group>";
+		};
+		DDEE539994BCC2028F002E57 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				72FAD56FD5F7AC9302D1E137 /* ZEWatchCompanionApp.swift */,
+			);
+			name = App;
+			path = App;
+			sourceTree = "<group>";
+		};
+		DE02A12DEB125926B455ADBB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2CD02881D7AA818E83506207 /* CultivationEngine.swift */,
+				FD79289469DAC16E33E8A35F /* MissionEngine.swift */,
+				B5D7D13705DD81F01ABE2315 /* ElementEngine.swift */,
+				514551D6BFE7DE5955DE6C7F /* EventEngine.swift */,
+				9D036B9193DE8B79C365EC0B /* SkillActionEngine.swift */,
+				60A737AB13CF014BD539622D /* HealthManager.swift */,
+				3DF2662A5AD41B102C62B0C1 /* MotionManager.swift */,
+				356AB883C01102E17BA80636 /* ConnectivityManager.swift */,
+			);
+			name = Services;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		DFA81E3A7DADBD848F20CB43 /* Training */ = {
+			isa = PBXGroup;
+			children = (
+				CC33283A38680AE4B168D99C /* TrainingView.swift */,
+				D892132454C05F706660C236 /* TribulationView.swift */,
+			);
+			name = Training;
+			path = Training;
+			sourceTree = "<group>";
+		};
 		E3F6EC0F5E11F354CDC6584B /* LlamaWrapper */ = {
 			isa = PBXGroup;
 			children = (
-				FAD1475244BB66D0D5927FE5 /* LlamaState.swift */,
-				0065DFCA69B3EC786D4E4B62 /* LibLlama.swift */,
+				86DB2499047C5F43889A8F6E /* LibLlama.swift */,
+				D391CEC682D4CC58A6FC0431 /* LlamaState.swift */,
 			);
 			name = LlamaWrapper;
 			path = ZEWatchCompanion/LlamaWrapper;
@@ -311,6 +565,27 @@
 			name = "ggml-cpu-auto";
 			path = .;
 			sourceTree = SOURCE_ROOT;
+		};
+		FCC73385602B048151862EE6 /* Cultivation */ = {
+			isa = PBXGroup;
+			children = (
+				1F2C4CCEE68E2E0E02C4FE10 /* StatusView.swift */,
+				310C2B956ED4C08C6652F803 /* CreationView.swift */,
+				F17D54F295B30BD6E6402CD6 /* GrottoView.swift */,
+				B79B931D6D043FBE2B8AA2CA /* AlchemyView.swift */,
+			);
+			name = Cultivation;
+			path = Cultivation;
+			sourceTree = "<group>";
+		};
+		FCCF6D195E47A73EA6DF5D42 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				0C28DB5B6D8545D8373A6FFA /* ContentView.swift */,
+			);
+			name = Main;
+			path = Main;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -460,28 +735,41 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C8EABC5E674B0E7B08B93B9 /* ZEWatchCompanionApp.swift in Sources */,
-				DBE5612880BF81F390776A5D /* ContentView.swift in Sources */,
-				C4589625DEDE2409EFDC4FD2 /* LLMManager.swift in Sources */,
-				64D761CC3E4BB47F45CDABB5 /* ConnectivityManager.swift in Sources */,
-				99E76BA5FF09A5BC7E1AB14C /* LlamaCore.swift in Sources */,
-				38CA88982FB4610E00E29C61 /* HealthManager.swift in Sources */,
 				38E13B832F73FCC40055BE24 /* ZEWatch.xcdatamodeld in Sources */,
-				38E13B742F738CEA0055BE24 /* CoreDataModels.swift in Sources */,
-				38E13B752F738CEA0055BE24 /* Persistence.swift in Sources */,
-				38E13B762F738CEA0055BE24 /* AICompanionView.swift in Sources */,
-				DA5B00012F738CEA0055BE24 /* DashboardView.swift in Sources */,
-				38E13B772F738CEA0055BE24 /* CreationView.swift in Sources */,
-				38E13B782F738CEA0055BE24 /* CultivationEngine.swift in Sources */,
-				38E13B792F738CEA0055BE24 /* GameKitManager.swift in Sources */,
-				382CD5D72F77B52E0015A355 /* ChatMessage.swift in Sources */,
-				CB55C24D897C2A32088BF543 /* CompanionSettingsView.swift in Sources */,
-				271FA4E926CBE07CD681E17A /* LlamaState.swift in Sources */,
-				330464F432CA0450357FF271 /* LibLlama.swift in Sources */,
-				F4B8FB9A9342F40D75AECCD2 /* WatchFaceModel.swift in Sources */,
-				D49028C50EAFE7ED66B470D2 /* CultivationWatchFaceComponents.swift in Sources */,
-				C0C1538AF91E07C3C63DD54E /* WatchFaceStudioView.swift in Sources */,
-				08AC1D88144BE3EF85A7B7F6 /* TimeTranslator.swift in Sources */,
+				46536759D16145CEAB644E18 /* ZEWatchCompanionApp.swift in Sources */,
+				40F6087AF5FFA4D6852C9C34 /* CoreDataModels.swift in Sources */,
+				BBF956ECE73A58A6F5B426C0 /* Persistence.swift in Sources */,
+				F8BFDED73FD294B125E3BAAB /* ChatMessage.swift in Sources */,
+				B5A0C57A293204FA3DDD3A7E /* CultivationEngine.swift in Sources */,
+				09C53FE54EE06564CB88ACDA /* HealthManager.swift in Sources */,
+				01B127943D70628BD92C65FB /* GameKitManager.swift in Sources */,
+				AB15B31B5F2441E6B0CAE055 /* LlamaCore.swift in Sources */,
+				B800D0A19876D8EEA064E692 /* LLMManager.swift in Sources */,
+				217D723FF12A8A920432806E /* LLMModelConfig.swift in Sources */,
+				1D84382140F646C8A6D198F1 /* LLMManager+Download.swift in Sources */,
+				5D6CB3EB7646BBB2FC15061C /* LLMManager+Inference.swift in Sources */,
+				DAC3BA2FDA2E6C56E9EBE163 /* ContentView.swift in Sources */,
+				677A609E37F2440A83E57526 /* DashboardView.swift in Sources */,
+				1CD02A4D8FB17BC73020C5B4 /* CreationView.swift in Sources */,
+				3F0414F7E60A60C3054E2FB4 /* WatchFaceStudioView.swift in Sources */,
+				6678844F4695FFBAA1B82D97 /* AICompanionView.swift in Sources */,
+				FFDC68DBDC2DE7EF6685D7FB /* AICompanionHeaderViews.swift in Sources */,
+				DAE976BF0676F78974EEC134 /* MessageBubbleView.swift in Sources */,
+				37B3E6F9B57BA7EAC5CA45AE /* ModelSelectionView.swift in Sources */,
+				FDA7DEA2CA81A8E6423D4C58 /* CompanionSettingsView.swift in Sources */,
+				7780A908374130FCEADA510C /* PrivacyPolicyView.swift in Sources */,
+				370C258DA7E7B47AADC4B43F /* LibLlama.swift in Sources */,
+				F326DCB591CB8423EC89F590 /* LlamaState.swift in Sources */,
+				F80AA1E2533AB246D4727541 /* ColorTheme.swift in Sources */,
+				0AB27694DF0F71AF87A3BAC3 /* TimeTranslator.swift in Sources */,
+				21E4951A67387FC3B3A20AB4 /* WatchFaceModel.swift in Sources */,
+				E2AFBDB8EE88322BBF1CD350 /* ConnectivityManager.swift in Sources */,
+				FC83F88D5B28A160EAD25513 /* CultivationWatchFaceContainer.swift in Sources */,
+				28D6F94911FAB86CC8E85283 /* TaijiFaceView.swift in Sources */,
+				F46A0D523DE9064EBA228AEC /* TribulationFaceView.swift in Sources */,
+				A2C7B055032B00866A613D8A /* GrottoFaceView.swift in Sources */,
+				1EEBD34325C5AF62315D40F7 /* SwordFaceView.swift in Sources */,
+				262C702AB5C56EE215BAE3E8 /* AstronomyFaceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,31 +777,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				386135322F72419200538B3A /* WatchApp.swift in Sources */,
-				386135332F72419200538B3A /* MotionManager.swift in Sources */,
-				386135342F72419200538B3A /* ContentView.swift in Sources */,
-				FD99979563C80D9BBE559F20 /* HealthManager.swift in Sources */,
-				1BC88142BE4F23F76B736DB8 /* Persistence.swift in Sources */,
-				9AF637F7068CDCA7527FBAAE /* CultivationEngine.swift in Sources */,
-				F55B676235ED12F4181ABF38 /* CreationView.swift in Sources */,
-				635A3F0BDB9E92D83317121A /* StatusView.swift in Sources */,
-				3254FDE57B56D9F05A1A5EAD /* MissionView.swift in Sources */,
-				CBC5A71D176144A90120E053 /* MissionEngine.swift in Sources */,
-				FE1A77BE2EF3B03826E91ABD /* TribulationView.swift in Sources */,
-				9EF41D1FCC462FD74753FF0B /* ExplorationView.swift in Sources */,
-				B3FEBB87494BD6092BD4A9C5 /* TimeTranslator.swift in Sources */,
-				B8E8424B985E4157E7B190C2 /* WatchFaceView.swift in Sources */,
 				510739015E3A5C744E08926F /* ZEWatch.xcdatamodeld in Sources */,
-				2D26559E8DEDB69F765D23BB /* CultivationWidget.swift in Sources */,
-				B3D3BEBA54AE60321A5ECB13 /* TrainingView.swift in Sources */,
-				6C62D5FEF4E59D6D44E01BB6 /* CoreDataModels.swift in Sources */,
-				F35371BBD077FF067D2759A2 /* EventEngine.swift in Sources */,
-				0CCF731515750270E088A5B3 /* ConnectivityManager.swift in Sources */,
-				EEE6EAD4470D4C573D9100B4 /* ElementEngine.swift in Sources */,
-				29DF90DF3ECB47B3E5F937B4 /* SkillActionEngine.swift in Sources */,
-				0B73769A4CF9F1CD26571419 /* SkillLibraryView.swift in Sources */,
-				7B2E642DD4FCB04F02F19B4D /* WatchFaceModel.swift in Sources */,
-				8B258A44C5B2D8A9ADC12924 /* CultivationWatchFaceComponents.swift in Sources */,
+				8F95C249FFFD090C791803AC /* WatchApp.swift in Sources */,
+				8FC4BC2AFB70A945D74F9B4E /* ColorTheme.swift in Sources */,
+				E52A9C9DB9CF7A3F01AAFE2F /* CoreDataModels.swift in Sources */,
+				3BDDA5F3A1ECB7A7A6BBC851 /* Persistence.swift in Sources */,
+				766E61050CBF0698CCB749C5 /* TimeTranslator.swift in Sources */,
+				91CB33DA1BEBC9ED6ED5946A /* WatchFaceModel.swift in Sources */,
+				967BDF1539B74068C77D93BB /* CultivationEngine.swift in Sources */,
+				1C7A3BC62878B01DC27672D7 /* MissionEngine.swift in Sources */,
+				CCB18D1B65AD99DC70BB8D62 /* ElementEngine.swift in Sources */,
+				8BC79751EA5B87707BF93EF1 /* EventEngine.swift in Sources */,
+				4D258D8C1FD791B3D1ECA7BB /* SkillActionEngine.swift in Sources */,
+				3D173B74E4464F2DE7B82D3E /* HealthManager.swift in Sources */,
+				1077CD60F34C34CC849D6B25 /* MotionManager.swift in Sources */,
+				9FC93942899E13A9A91495B2 /* ConnectivityManager.swift in Sources */,
+				BD8B2419CB372F23E86DBA55 /* ContentView.swift in Sources */,
+				657B416B6C231717D3D8C92B /* StatusView.swift in Sources */,
+				47DCF9C84E89612CC032734F /* CreationView.swift in Sources */,
+				ABB4CBB1D531B767F00A43C1 /* GrottoView.swift in Sources */,
+				D2AA906DA4EBB00806F20BF6 /* AlchemyView.swift in Sources */,
+				8D9188A1EE5518EDDEEE7776 /* TrainingView.swift in Sources */,
+				6798CDC91374E628AF9F6A82 /* TribulationView.swift in Sources */,
+				A88F4334BA9A3E908AAE4F1A /* MissionView.swift in Sources */,
+				5D1C98AA814BB49727CF325D /* ExplorationView.swift in Sources */,
+				437B006F5758A99449064798 /* SkillLibraryView.swift in Sources */,
+				E8CE04807CE9B79FDA142BEC /* WatchFaceView.swift in Sources */,
+				EF858E283D63BC60470472F3 /* CultivationWidget.swift in Sources */,
+				CB3B57C3EC4B33945053924E /* CultivationWatchFaceContainer.swift in Sources */,
+				3C9D29A7190CE6AD700A7D2D /* TaijiFaceView.swift in Sources */,
+				67F1937E40266E94A49EFB85 /* TribulationFaceView.swift in Sources */,
+				E88F20218D3136A558AE0BF7 /* GrottoFaceView.swift in Sources */,
+				18FB46645FDA73D4575F1538 /* SwordFaceView.swift in Sources */,
+				CA19C95C5CC851B839A264F6 /* AstronomyFaceView.swift in Sources */,
+				D6F8F36E73A382163CE52F02 /* WatchPrivacyPolicyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,7 +849,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20261101181239;
+				CURRENT_PROJECT_VERSION = 20261105085800;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 876385K952;
 				ENABLE_BITCODE = NO;
@@ -578,7 +875,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				MTL_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/llama.cpp/ggml/src";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -726,7 +1023,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20261101181239;
+				CURRENT_PROJECT_VERSION = 20261105085800;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=watchos*]" = 876385K952;
 				ENABLE_PREVIEWS = YES;
@@ -745,7 +1042,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -771,7 +1068,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20261101181239;
+				CURRENT_PROJECT_VERSION = 20261105085800;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=watchos*]" = 876385K952;
 				ENABLE_PREVIEWS = YES;
@@ -789,7 +1086,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -820,7 +1117,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20261101181239;
+				CURRENT_PROJECT_VERSION = 20261105085800;
 				DEVELOPMENT_TEAM = 876385K952;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 876385K952;
 				ENABLE_BITCODE = NO;
@@ -846,7 +1143,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				MTL_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/llama.cpp/ggml/src";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nevergone.zrxx.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";

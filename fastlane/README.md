@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios beta
 ```
 
-GitLab CI 专用：编译、打包并仅上传到 TestFlight（不提交审核）
+CI/CD 自动化：自动递增 Build Number、编译打包并上传到 TestFlight
 
 ### ios upload_metadata
 

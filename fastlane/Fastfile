@@ -63,7 +63,7 @@ platform :ios do
 
   desc "本地专用：仅上传元数据与截图到 App Store Connect（不提交审核，便于预览和反复修改）"
   lane :upload_metadata do |options|
-    target_version = options[:app_version] || "1.0.2"
+    target_version = options[:app_version] || "1.0.3"
 
     deliver(
       force: true, # 跳过命令行 HTML 确认
@@ -72,7 +72,7 @@ platform :ios do
       metadata_path: "./fastlane/metadata",
       screenshots_path: "./fastlane/screenshots",
       skip_screenshots: options[:skip_screenshots] || false,
-      overwrite_screenshots: false,
+      overwrite_screenshots: true,
       run_precheck_before_submit: false,
       submit_for_review: false
     )
@@ -80,8 +80,8 @@ platform :ios do
 
   desc "本地专用：指定已上传的构建版本、同步最新截图与元数据，并直接自动提交 App Store 审核"
   lane :submit_review do |options|
-    target_build = options[:build_number] || "20261030213436"
-    target_version = options[:app_version] || "1.0.2"
+    target_build = options[:build_number]
+    target_version = options[:app_version] || "1.0.3"
     skip_screens = options[:skip_screenshots] || false
 
     deliver(
@@ -93,7 +93,7 @@ platform :ios do
       screenshots_path: "./fastlane/screenshots",
       skip_screenshots: skip_screens,
       skip_metadata: options[:skip_metadata] || false,
-      overwrite_screenshots: false,
+      overwrite_screenshots: true,
       run_precheck_before_submit: false, # 禁用 API Key 不支持的 IAP 检查
       submit_for_review: true, # 自动提交审核！
       automatic_release: true, # 审核通过后自动发布
@@ -108,8 +108,8 @@ platform :ios do
 
   desc "本地专用：上传已构建好的 ipa、等待处理、关联版本并自动提交审核"
   lane :upload_and_submit do |options|
-    target_version = options[:app_version] || "1.0.2"
-    target_build = options[:build_number] || "20261101181239"
+    target_version = options[:app_version] || "1.0.3"
+    target_build = options[:build_number] || Time.now.strftime("%Y%m%d%H%M%S")
     ipa_path = options[:ipa] || "ZEWatchCompanion.ipa"
 
     # 1. 上传二进制包并等待 Apple 服务端处理完成 (变为 VALID)
@@ -122,11 +122,12 @@ platform :ios do
     deliver(
       force: true,
       skip_binary_upload: true,
-      skip_screenshots: true,
+      skip_screenshots: false,
       app_version: target_version,
       build_number: target_build,
       metadata_path: "./fastlane/metadata",
-      overwrite_screenshots: false,
+      screenshots_path: "./fastlane/screenshots",
+      overwrite_screenshots: true,
       run_precheck_before_submit: false,
       submit_for_review: true,
       automatic_release: true,
@@ -141,7 +142,7 @@ platform :ios do
 
   desc "本地专用全流程：本地构建、上传二进制包、同步资料截图并提交审核"
   lane :release do |options|
-    target_version = options[:app_version] || "1.0.2"
+    target_version = options[:app_version] || "1.0.3"
     new_build = options[:build_number] || Time.now.strftime("%Y%m%d%H%M%S")
 
     # 1. 自动递增并写入最新 build number

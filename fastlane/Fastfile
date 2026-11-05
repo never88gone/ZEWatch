@@ -122,12 +122,12 @@ platform :ios do
     deliver(
       force: true,
       skip_binary_upload: true,
-      skip_screenshots: false,
+      skip_screenshots: true,
+      skip_metadata: true,
       app_version: target_version,
       build_number: target_build,
       metadata_path: "./fastlane/metadata",
-      screenshots_path: "./fastlane/screenshots",
-      overwrite_screenshots: true,
+      overwrite_screenshots: false,
       run_precheck_before_submit: false,
       submit_for_review: true,
       automatic_release: true,
@@ -163,13 +163,14 @@ platform :ios do
       }
     )
 
-    # 3. 上传二进制包、截图与元数据，并提交审核
+    # 3. 上传二进制包、关联版本并提交审核
     deliver(
       force: true,
       app_version: target_version,
       build_number: new_build,
       metadata_path: "./fastlane/metadata",
-      screenshots_path: "./fastlane/screenshots",
+      skip_screenshots: true,
+      skip_metadata: true,
       overwrite_screenshots: false,
       run_precheck_before_submit: false,
       submit_for_review: true,

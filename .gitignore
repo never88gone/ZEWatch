@@ -45,7 +45,7 @@ build_duo/
 .agent/
 all_files.txt
 git_stat.txt
-Training/
+/Training/
 
 # Swift Package Manager 本地状态
 .build/

@@ -21,15 +21,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Select latest Xcode
+      - name: Select Xcode
         run: |
-          sudo xcode-select -s /Applications/Xcode_16.app || sudo xcode-select -s /Applications/Xcode.app
+          # 优先使用 GitHub Actions runner 镜像维护并配套齐全模拟器运行时的 Xcode.app (当前为 Xcode 16.4)
+          sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
+          xcrun simctl list runtimes
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: '3.3'
 
       - name: Install Dependencies
         run: |

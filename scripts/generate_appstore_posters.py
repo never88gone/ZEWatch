@@ -44,11 +44,9 @@ def draw_pill_badge(base_img, text, cx, cy, font, fill_color=(255, 215, 0)):
     rx = cx - pw // 2
     ry = cy - ph // 2
     
-    # 在独立透明图层上合成，保证完美的半透明质感
     layer = Image.new("RGBA", base_img.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
     
-    # 雅致半透明暗金底色与高光金边
     draw.rounded_rectangle(
         [rx, ry, rx + pw, ry + ph],
         radius=ph // 2,
@@ -108,7 +106,7 @@ def render_poster(badge, title, subtitle, screenshot_path, output_path, canvas_s
     scale = ch / 2796.0
     
     font_badge = ImageFont.truetype(FONT_SANS, int(34 * scale))
-    font_title = ImageFont.truetype(FONT_SERIF, int(94 * scale))
+    font_title = ImageFont.truetype(FONT_SERIF, int(92 * scale))
     font_sub = ImageFont.truetype(FONT_SANS, int(42 * scale))
     
     # 顶部小徽章胶囊
@@ -170,7 +168,7 @@ def render_poster(badge, title, subtitle, screenshot_path, output_path, canvas_s
         img.paste(watch_frame, (wx, wy), watch_frame)
         
         watch_tag_font = ImageFont.truetype(FONT_SANS, int(26 * scale))
-        img = draw_pill_badge(img, "腕间实时同步流转", wx + bw // 2, wy + bh + int(48 * scale), watch_tag_font, (100, 225, 255))
+        img = draw_pill_badge(img, "腕间本命灵气联动", wx + bw // 2, wy + bh + int(48 * scale), watch_tag_font, (100, 225, 255))
     
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     img.convert("RGB").save(output_path, "PNG", quality=95)
@@ -178,94 +176,92 @@ def render_poster(badge, title, subtitle, screenshot_path, output_path, canvas_s
 
 def generate_all():
     src = "AppStore_Screenshots/iPhone_Duo_Outer"
+    watch_img = "fastlane/screenshots/zh-Hans/watch_1_taiji.png"
     
     pages = [
         {
-            "name": "1_宣传页_修仙表盘工坊.png",
-            "badge": "修仙表盘工坊 · 震撼上线",
-            "title": "万千灵盘 · 一念化境",
-            "subtitle": "五大专属修仙表盘 · 实时同步 Apple Watch",
-            "screenshot": os.path.join(src, "1_修仙表盘工坊.png"),
-            "extra_watch": "/Users/never88gone/.gemini/antigravity/brain/3d53d6b9-28dc-448d-aa2a-d1e21705b69a/watch_face_taiji.png",
-            "glow": (30, 80, 160),
-            "gold": True
-        },
-        {
-            "name": "2_宣传页_洞府大盘.png",
-            "badge": "全新健康修行体系",
+            "name": "1_宣传页_洞府大盘.png",
+            "badge": "全新健康修真体系 · 震撼登场",
             "title": "步履为阶 · 渡劫飞升",
-            "subtitle": "日常步数化作五行真元 · 随时感应天地灵气",
+            "subtitle": "日常步数化作五行真气 · 随时感应天地灵气",
             "screenshot": os.path.join(src, "2_洞府大盘.png"),
-            "extra_watch": None,
+            "extra_watch": watch_img if os.path.exists(watch_img) else None,
             "glow": (180, 110, 30),
             "gold": True
         },
         {
-            "name": "3_宣传页_识海伴修.png",
-            "badge": "端侧 AI 智能仙尊",
-            "title": "老爷爷随身 · 识海伴修",
-            "subtitle": "戒指中的仙尊残魂 · 随时点拨传音指引道途",
+            "name": "2_宣传页_识海伴修.png",
+            "badge": "纯本地离线端侧 AI · 零云端隐私泄露",
+            "title": "戒灵墨老 · 随身点化",
+            "subtitle": "性格毒舌护短 · 真实感知运动历程倾囊传道",
             "screenshot": os.path.join(src, "3_识海伴修.png"),
             "extra_watch": None,
-            "glow": (140, 40, 160),
+            "glow": (40, 130, 140),
             "gold": False
         },
         {
-            "name": "4_宣传页_天降机缘.png",
-            "badge": "健身正向激励",
-            "title": "天降机缘 · 气运造化",
-            "subtitle": "达成运动里程 · 开启仙道气运盲盒获得修为",
+            "name": "3_宣传页_天降机缘.png",
+            "badge": "每日向道自律奖励",
+            "title": "天降机缘 · 仙道宝箱",
+            "subtitle": "达成健身运动目标触发奇遇 · 开启惊喜修为加成",
             "screenshot": os.path.join(src, "4_天降机缘.png"),
             "extra_watch": None,
-            "glow": (200, 140, 20),
+            "glow": (150, 40, 160),
             "gold": True
         },
         {
-            "name": "5_宣传页_法器宝阁.png",
-            "badge": "完全离线 · 极客隐私",
-            "title": "端侧神念 · 零网络泄露",
-            "subtitle": "本地沙盒极速推理大模型 · 隐私安全固若金汤",
+            "name": "4_宣传页_法器宝阁.png",
+            "badge": "轻量化模型管理中心",
+            "title": "法器宝阁 · 灵魄自由",
+            "subtitle": "低显存量化大模型按需接引 · 本地 GGUF 自由导入",
             "screenshot": os.path.join(src, "5_法器宝阁.png"),
             "extra_watch": None,
-            "glow": (20, 140, 120),
+            "glow": (30, 90, 180),
             "gold": False
         },
         {
-            "name": "6_宣传页_健康五行法则.png",
-            "badge": "HealthKit 深度融合",
-            "title": "健康法则 · 灵脉归一",
-            "subtitle": "步数/心率/卡路里/睡眠 · 完美映射五行道果",
+            "name": "5_宣传页_健康五行法则.png",
+            "badge": "Apple HealthKit 深度契合",
+            "title": "五行法则 · 融汇一身",
+            "subtitle": "活动卡路里、步数与深度睡眠 · 真实折算五行灵气",
             "screenshot": os.path.join(src, "6_健康五行法则.png"),
             "extra_watch": None,
-            "glow": (40, 120, 80),
+            "glow": (35, 120, 60),
             "gold": True
         }
     ]
     
-    # 1. 6.7 英寸 (1290 x 2796)
-    out_67 = "AppStore_Screenshots/Promotional_Pages/6.7-inch"
+    # 1. 渲染 6.7 英寸 (1290 x 2796)
+    out_dir_67 = "AppStore_Screenshots/Promotional_Pages/6.7-inch"
+    fastlane_dir = "fastlane/screenshots/zh-Hans"
     for p in pages:
+        out_path = os.path.join(out_dir_67, p["name"])
         render_poster(
             badge=p["badge"],
             title=p["title"],
             subtitle=p["subtitle"],
             screenshot_path=p["screenshot"],
-            output_path=os.path.join(out_67, p["name"]),
+            output_path=out_path,
             canvas_size=(1290, 2796),
             extra_watch_path=p["extra_watch"],
             glow_rgb=p["glow"],
             is_gold_badge=p["gold"]
         )
-        
-    # 2. iPhone Duo (1398 x 2034)
-    out_duo = "AppStore_Screenshots/Promotional_Pages/iPhone_Duo"
+        # 同步复制到 fastlane 目录
+        fl_path = os.path.join(fastlane_dir, p["name"])
+        import shutil
+        shutil.copy2(out_path, fl_path)
+
+    # 2. 渲染 iPhone Duo (1398 x 2034)
+    out_dir_duo = "AppStore_Screenshots/Promotional_Pages/iPhone_Duo"
     for p in pages:
+        out_path = os.path.join(out_dir_duo, p["name"])
         render_poster(
             badge=p["badge"],
             title=p["title"],
             subtitle=p["subtitle"],
             screenshot_path=p["screenshot"],
-            output_path=os.path.join(out_duo, p["name"]),
+            output_path=out_path,
             canvas_size=(1398, 2034),
             extra_watch_path=p["extra_watch"],
             glow_rgb=p["glow"],

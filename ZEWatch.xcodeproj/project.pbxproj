@@ -31,6 +31,7 @@
 		3C9D29A7190CE6AD700A7D2D /* TaijiFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */; };
 		3D173B74E4464F2DE7B82D3E /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A737AB13CF014BD539622D /* HealthManager.swift */; };
 		3F0414F7E60A60C3054E2FB4 /* WatchFaceStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */; };
+		A3F0414F7E60A60C30542FB5 /* WatchFaceGuideSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96607309192FDB0EBA9700D /* WatchFaceGuideSheet.swift */; };
 		3FB4EB4FF080186E59722A4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 303F17D13191D69DF2336537 /* Foundation.framework */; };
 		40F6087AF5FFA4D6852C9C34 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */; };
 		437B006F5758A99449064798 /* SkillLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED8ACA04471368DCD79A9DB /* SkillLibraryView.swift */; };
@@ -151,6 +152,7 @@
 		86DB2499047C5F43889A8F6E /* LibLlama.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
 		9462A3736DB5824D4294805F /* AstronomyFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AstronomyFaceView.swift; sourceTree = "<group>"; };
 		96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceStudioView.swift; sourceTree = "<group>"; };
+		A96607309192FDB0EBA9700D /* WatchFaceGuideSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceGuideSheet.swift; sourceTree = "<group>"; };
 		9D036B9193DE8B79C365EC0B /* SkillActionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SkillActionEngine.swift; sourceTree = "<group>"; };
 		A11B8C849740F5F954637A8A /* MissionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
 		AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 			isa = PBXGroup;
 			children = (
 				96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */,
+				A96607309192FDB0EBA9700D /* WatchFaceGuideSheet.swift */,
 			);
 			name = WatchFace;
 			path = WatchFace;
@@ -752,6 +755,7 @@
 				677A609E37F2440A83E57526 /* DashboardView.swift in Sources */,
 				1CD02A4D8FB17BC73020C5B4 /* CreationView.swift in Sources */,
 				3F0414F7E60A60C3054E2FB4 /* WatchFaceStudioView.swift in Sources */,
+				A3F0414F7E60A60C30542FB5 /* WatchFaceGuideSheet.swift in Sources */,
 				6678844F4695FFBAA1B82D97 /* AICompanionView.swift in Sources */,
 				FFDC68DBDC2DE7EF6685D7FB /* AICompanionHeaderViews.swift in Sources */,
 				DAE976BF0676F78974EEC134 /* MessageBubbleView.swift in Sources */,

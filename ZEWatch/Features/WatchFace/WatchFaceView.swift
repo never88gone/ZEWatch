@@ -167,6 +167,12 @@ struct WatchFacePickerSheet: View {
                     settingsManager.config = newConfig
                     settingsManager.broadcastConfig()
                     
+                    NotificationCenter.default.post(
+                        name: .watchFaceConfigDidSync,
+                        object: nil,
+                        userInfo: settingsManager.dictionaryRepresentation()
+                    )
+                    
                     WKInterfaceDevice.current().play(.success)
                     dismiss()
                 }) {

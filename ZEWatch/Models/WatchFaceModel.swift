@@ -198,6 +198,6 @@ public class WatchFaceSettingsManager: ObservableObject {
     /// 发送配置同步到远端设备 (Watch 或 iPhone)
     public func broadcastConfig() {
         let payload = dictionaryRepresentation()
-        ConnectivityManager.shared.sendSyncData(payload)
+        ConnectivityManager.shared.sendWatchFaceConfig(payload)
     }
 }

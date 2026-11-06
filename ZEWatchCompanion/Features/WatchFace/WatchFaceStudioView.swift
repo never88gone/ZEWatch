@@ -14,7 +14,8 @@ public struct WatchFaceStudioView: View {
     @State private var showAuraEffect: Bool
     
     @State private var showSyncSuccessAlert: Bool = false
-    @State private var showComplicationGuide: Bool = false
+    @State private var showGuideSheet: Bool = false
+    @ObservedObject private var connectivityManager = ConnectivityManager.shared
     
     public init(player: PlayerProfile) {
         self.player = player
@@ -46,7 +47,7 @@ public struct WatchFaceStudioView: View {
                 // 5. 核心同步按钮
                 syncActionButton
                 
-                // 6. 系统表盘复杂功能添加指引
+                // 6. 系统表盘与常驻设置指引入口
                 complicationGuideCard
             }
             .padding(.horizontal, 16)
@@ -56,10 +57,13 @@ public struct WatchFaceStudioView: View {
         .navigationTitle("修仙表盘工坊")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
-        .alert("表盘已同步", isPresented: $showSyncSuccessAlert) {
+        .sheet(isPresented: $showGuideSheet) {
+            WatchFaceGuideSheet()
+        }
+        .alert("灵盘已契约", isPresented: $showSyncSuccessAlert) {
             Button("好", role: .cancel) { }
         } message: {
-            Text("修仙表盘样式已成功同步至 Apple Watch！抬腕即可感受灵气流转。")
+            Text("修仙表盘已成功下发！打开 Apple Watch 上的【ZEWatch】即可立即激活本命灵盘；长按表盘更可直接参悟切换。")
         }
     }
     
@@ -301,95 +305,103 @@ public struct WatchFaceStudioView: View {
     
     // MARK: - 5. 核心同步按钮
     private var syncActionButton: some View {
-        Button(action: {
-            let impact = UIImpactFeedbackGenerator(style: .heavy)
-            impact.impactOccurred()
-            
-            var newConfig = settingsManager.config
-            newConfig.style = previewStyle
-            newConfig.themeColor = previewTheme
-            newConfig.timeMode = previewTimeMode
-            newConfig.showGauges = showGauges
-            newConfig.showWeatherBuff = showWeatherBuff
-            newConfig.showAuraEffect = showAuraEffect
-            
-            settingsManager.config = newConfig
-            settingsManager.broadcastConfig()
-            
-            showSyncSuccessAlert = true
-        }) {
-            HStack(spacing: 8) {
-                Image(systemName: "applewatch.radiowaves.left.and.right")
-                    .font(.headline)
-                Text("同步到 Apple Watch")
-                    .font(.headline.bold())
+        VStack(spacing: 8) {
+            // 实时连接状态胶囊指示
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(connectivityManager.isWatchConnected ? Color.themeGreenPrimary : Color.themeGoldPrimary)
+                    .frame(width: 7, height: 7)
+                Text(connectivityManager.isWatchConnected ? "Apple Watch 实时直连已就绪" : "Apple Watch 保活通道就绪 (抬腕即契约)")
+                    .font(.system(size: 11, design: .serif))
+                    .foregroundColor(connectivityManager.isWatchConnected ? .themeGreenPrimary : .themeGoldPrimary)
             }
-            .foregroundColor(.black)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
             .background(
-                LinearGradient(
-                    colors: [previewTheme.primaryColor, previewTheme.primaryColor.opacity(0.85)],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
+                Capsule()
+                    .fill(Color.white.opacity(0.04))
             )
-            .cornerRadius(14)
-            .shadow(color: previewTheme.glowColor, radius: 8, x: 0, y: 4)
+            
+            Button(action: {
+                let impact = UIImpactFeedbackGenerator(style: .heavy)
+                impact.impactOccurred()
+                
+                var newConfig = settingsManager.config
+                newConfig.style = previewStyle
+                newConfig.themeColor = previewTheme
+                newConfig.timeMode = previewTimeMode
+                newConfig.showGauges = showGauges
+                newConfig.showWeatherBuff = showWeatherBuff
+                newConfig.showAuraEffect = showAuraEffect
+                
+                settingsManager.config = newConfig
+                settingsManager.broadcastConfig()
+                
+                showSyncSuccessAlert = true
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "applewatch.radiowaves.left.and.right")
+                        .font(.headline)
+                    Text("同步至 Apple Watch 灵盘")
+                        .font(.headline.bold())
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(
+                    LinearGradient(
+                        colors: [previewTheme.primaryColor, previewTheme.primaryColor.opacity(0.85)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .cornerRadius(14)
+                .shadow(color: previewTheme.glowColor, radius: 8, x: 0, y: 4)
+            }
         }
-        .padding(.top, 8)
+        .padding(.top, 4)
     }
     
-    // MARK: - 6. 复杂功能设置指引卡片
+    // MARK: - 6. 系统表盘与常驻设置指引入口
     private var complicationGuideCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Button(action: {
-                withAnimation {
-                    showComplicationGuide.toggle()
-                }
-            }) {
-                HStack {
+        Button(action: {
+            showGuideSheet = true
+        }) {
+            HStack(spacing: 10) {
+                ZStack {
+                    Circle()
+                        .fill(Color.themeCyanPrimary.opacity(0.15))
+                        .frame(width: 36, height: 36)
                     Image(systemName: "questionmark.circle.fill")
-                        .foregroundColor(.cultivSecondary)
-                    Text("如何在 Apple Watch 官方表盘中添加修仙组件？")
-                        .font(.caption.bold())
-                        .foregroundColor(.cultivSecondary)
-                    Spacer()
-                    Image(systemName: showComplicationGuide ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 18))
+                        .foregroundColor(.themeCyanPrimary)
+                }
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Apple Watch 表盘使用完全指南")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    Text("如何常驻全屏修仙灵盘与添加官方复杂功能")
                         .font(.caption2)
                         .foregroundColor(.cultivMuted)
                 }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption.bold())
+                    .foregroundColor(.cultivMuted)
             }
-            .buttonStyle(.plain)
-            
-            if showComplicationGuide {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("您可以将【ZEWatch 修仙】添加到苹果官方表盘（如模块、加州、大文字等）作为复杂功能：")
-                        .font(.caption2)
-                        .foregroundColor(.cultivMuted)
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("1. 在 Apple Watch 上长按表盘，点击【编辑】；")
-                        Text("2. 左右轻扫至【复杂功能 (Complications)】槽位；")
-                        Text("3. 点击任意槽位，上下滚动找到【ZEWatch】；")
-                        Text("4. 选择【当前境界】或【灵气收集簿】，即可随时在官方表盘上直观查看修仙进度！")
-                    }
-                    .font(.caption2)
-                    .foregroundColor(.white.opacity(0.85))
-                    .padding(.leading, 4)
-                }
-                .padding(.top, 4)
-                .transition(.opacity)
-            }
+            .padding(14)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color(white: 0.08))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                    )
+            )
         }
-        .padding(14)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.04))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.08), lineWidth: 1)
-                )
-        )
+        .buttonStyle(.plain)
     }
 }

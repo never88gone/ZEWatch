@@ -182,7 +182,7 @@ def generate_all():
     pages = [
         {
             "name": "1_宣传页_修仙表盘工坊.png",
-            "badge": "1.0.2 震撼上线 · 修仙表盘",
+            "badge": "修仙表盘工坊 · 震撼上线",
             "title": "万千灵盘 · 一念化境",
             "subtitle": "五大专属修仙表盘 · 实时同步 Apple Watch",
             "screenshot": os.path.join(src, "1_修仙表盘工坊.png"),

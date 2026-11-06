@@ -18,6 +18,17 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.nevergone.zrxx.url</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>zewatch</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>20261105091148</string>
 	<key>ITSAppUsesNonExemptEncryption</key>

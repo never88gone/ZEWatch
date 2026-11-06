@@ -13,6 +13,9 @@ struct ContentView: View {
     private var profiles: FetchedResults<PlayerProfile>
     
     @State private var showThunderstorm = false
+    @State private var selectedTab: Int = 0
+    @State private var syncNoticeBanner: String? = nil
+    @State private var syncRippleEffect: Bool = false
     #if targetEnvironment(simulator)
     @AppStorage("hasShownHealthKitOnboarding") private var hasShownHealthKitOnboarding = true
     #else
@@ -23,47 +26,96 @@ struct ContentView: View {
         if let player = profiles.first {
             ZStack {
                 #if os(watchOS)
-                // 已有角色，进入主游戏界面，遵守表腕界面的横滑 TabView 原则
-                TabView {
+                // 已有角色，进入主游戏界面，遵守表腕界面的横滑 TabView 原则，支持程序化选页
+                TabView(selection: $selectedTab) {
                     NavigationStack {
                         WatchFaceView(player: player)
                     }
                     .tabItem { Label("本命", systemImage: "clock.badge.eye") }
+                    .tag(0)
                     
                     NavigationStack {
                         AlchemySection(player: player)
                     }
                     .tabItem { Label("丹房", systemImage: "laurel.leading") }
+                    .tag(1)
                     
                     NavigationStack {
                         StatusView(player: player)
                     }
                     .tabItem { Label("灵牌", systemImage: "person.crop.circle") }
+                    .tag(2)
                     
                     NavigationStack {
                         GrottoView(player: player)
                     }
                     .tabItem { Label("洞府", systemImage: "house.fill") }
+                    .tag(3)
                     
                     NavigationStack {
                         MissionView(player: player)
                     }
                     .tabItem { Label("试炼", systemImage: "scroll.fill") }
+                    .tag(4)
                     
                     NavigationStack {
                         TrainingView(player: player)
                     }
                     .tabItem { Label("修行", systemImage: "flame.fill") }
+                    .tag(5)
                     
                     NavigationStack {
                         ExplorationView(player: player)
                     }
                     .tabItem { Label("游历", systemImage: "map.fill") }
+                    .tag(6)
                     
                     NavigationStack {
                         SkillLibraryView(player: player)
                     }
                     .tabItem { Label("藏经阁", systemImage: "books.vertical.fill") }
+                    .tag(7)
+                }
+                
+                // 收到手机同步时的灵气涟漪波纹
+                if syncRippleEffect {
+                    Circle()
+                        .stroke(Color.themeGoldPrimary.opacity(0.85), lineWidth: 3)
+                        .scaleEffect(syncRippleEffect ? 2.6 : 0.2)
+                        .opacity(syncRippleEffect ? 0 : 1)
+                        .animation(.easeOut(duration: 0.8), value: syncRippleEffect)
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
+                        .zIndex(150)
+                }
+                
+                // 收到表盘同步时的仙道 HUD 悬浮横幅
+                if let bannerText = syncNoticeBanner {
+                    VStack {
+                        HStack(spacing: 5) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor(.themeGoldPrimary)
+                            Text(bannerText)
+                                .font(.system(size: 11, weight: .bold, design: .serif))
+                                .foregroundColor(.white)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(
+                            Capsule()
+                                .fill(Color.cultivBg.opacity(0.95))
+                                .overlay(
+                                    Capsule()
+                                        .stroke(Color.themeGoldPrimary.opacity(0.8), lineWidth: 1)
+                                )
+                                .shadow(color: .black.opacity(0.6), radius: 6)
+                        )
+                        .padding(.top, 4)
+                        Spacer()
+                    }
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(250)
                 }
                 
                 // 全屏雷劫 Overlay
@@ -100,6 +152,32 @@ struct ContentView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     withAnimation {
                         showThunderstorm = false
+                    }
+                }
+                #endif
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .watchFaceConfigDidSync)) { notification in
+                #if os(watchOS)
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                    selectedTab = 0 // 自动切回【本命】表盘
+                    syncRippleEffect = true
+                    
+                    if let dict = notification.userInfo?["watchFaceConfig"] as? [String: Any],
+                       let styleName = dict["style"] as? String,
+                       let style = WatchFaceStyle(rawValue: styleName) {
+                        syncNoticeBanner = "契约【\(style.title)】已生效"
+                    } else {
+                        syncNoticeBanner = "修仙灵盘已同步"
+                    }
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    syncRippleEffect = false
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.2) {
+                    withAnimation(.easeOut(duration: 0.4)) {
+                        syncNoticeBanner = nil
                     }
                 }
                 #endif

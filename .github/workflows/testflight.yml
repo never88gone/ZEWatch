@@ -21,10 +21,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Select Xcode
+      - name: Select Xcode 26
         run: |
-          # 优先使用 GitHub Actions runner 镜像维护并配套齐全模拟器运行时的 Xcode.app (当前为 Xcode 16.4)
-          sudo xcode-select -s /Applications/Xcode.app
+          # 苹果 App Store 要求必须使用 Xcode 26 及以上版本 (iOS 26 SDK) 进行构建分发
+          for xcode in /Applications/Xcode_26.3.app /Applications/Xcode_26.2.app /Applications/Xcode_26.1.app /Applications/Xcode_26.0.app /Applications/Xcode_26*.app; do
+            if [ -d "$xcode" ]; then
+              echo "Selecting $xcode..."
+              sudo xcode-select -s "$xcode"
+              break
+            fi
+          done
           xcodebuild -version
           xcrun simctl list runtimes
 

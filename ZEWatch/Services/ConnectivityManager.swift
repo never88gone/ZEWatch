@@ -8,10 +8,6 @@ import WatchKit
 import WidgetKit
 #endif
 
-public extension Notification.Name {
-    static let watchFaceConfigDidSync = Notification.Name("com.nevergone.zrxx.watchface_did_sync")
-}
-
 public class ConnectivityManager: NSObject, ObservableObject, WCSessionDelegate {
     public static let shared = ConnectivityManager()
     
@@ -28,58 +24,8 @@ public class ConnectivityManager: NSObject, ObservableObject, WCSessionDelegate 
         }
     }
     
-    // MARK: - 专用表盘配置高可靠同步通道 (三通道并发)
-    public func sendWatchFaceConfig(_ data: [String: Any]) {
-        guard WCSession.isSupported() else { return }
-        let session = WCSession.default
-        
-        if session.activationState != .activated {
-            session.activate()
-        }
-        
-        print("[WCSession] 开始分发修仙表盘配置... Reachable=\(session.isReachable)")
-        
-        // 通道 1：即时直连 (若手表在前台活跃，毫秒级响应)
-        if session.isReachable {
-            session.sendMessage(data, replyHandler: { reply in
-                print("[WCSession] 实时表盘配置直传成功已应答: \(reply)")
-            }, errorHandler: { error in
-                print("[WCSession] 实时直传异常: \(error.localizedDescription)")
-            })
-        }
-        
-        // 通道 2：高可靠后台队列 (保证设备息屏/锁屏或后台时 100% 投递)
-        session.transferUserInfo(data)
-        print("[WCSession] 表盘配置已成功压入 transferUserInfo 保活投递队列")
-        
-        // 通道 3：最新上下文持久同步 (保障下次启动或刷新时获得最新状态)
-        do {
-            try session.updateApplicationContext(data)
-            print("[WCSession] 表盘配置已同步更新至 ApplicationContext")
-        } catch {
-            print("[WCSession] ApplicationContext 刷新警告: \(error)")
-        }
-        
-        #if os(iOS)
-        // 通道 4：表盘复杂功能快速刷新通道 (若支持且有配额，立即触发高优刷新)
-        if session.isPaired && session.isWatchAppInstalled && session.remainingComplicationUserInfoTransfers > 0 {
-            session.transferCurrentComplicationUserInfo(data)
-            print("[WCSession] 已向手表 Complication 通道下发高优刷新指令 (剩余配额: \(session.remainingComplicationUserInfoTransfers))")
-        }
-        #endif
-        
-        DispatchQueue.main.async {
-            self.lastSyncDate = Date()
-        }
-    }
-    
     // MARK: - 通用修仙数据同步接口
     public func sendSyncData(_ data: [String: Any]) {
-        if data["watchFaceConfig"] != nil {
-            sendWatchFaceConfig(data)
-            return
-        }
-        
         guard WCSession.isSupported() else { return }
         let session = WCSession.default
         
@@ -104,32 +50,6 @@ public class ConnectivityManager: NSObject, ObservableObject, WCSessionDelegate 
             self.playerStats = payload
             self.lastSyncDate = Date()
             print("[WCSession] 收到来自 [\(source)] 的修真数据载荷")
-            
-            // 1. 处理表盘配置同步
-            if payload["watchFaceConfig"] != nil {
-                print("[WCSession] 成功解析到修仙表盘新配置，准备触发全端变身！")
-                WatchFaceSettingsManager.shared.update(from: payload)
-                
-                // 广播全局通知
-                NotificationCenter.default.post(
-                    name: .watchFaceConfigDidSync,
-                    object: nil,
-                    userInfo: payload
-                )
-                
-                #if os(watchOS)
-                // 灵感触感：仙道契约双连震动，让手腕立刻感受明显反馈
-                WKInterfaceDevice.current().play(.success)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) {
-                    WKInterfaceDevice.current().play(.directionUp)
-                }
-                
-                // 刷新表盘小组件
-                #if canImport(WidgetKit)
-                WidgetCenter.shared.reloadAllTimelines()
-                #endif
-                #endif
-            }
             
             #if os(iOS)
             // 收到数据后，触发大模型生成天道意志

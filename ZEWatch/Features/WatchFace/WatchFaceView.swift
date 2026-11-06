@@ -7,206 +7,197 @@ import WatchKit
 
 public struct WatchFaceView: View {
     @ObservedObject var player: PlayerProfile
-    @ObservedObject var settingsManager = WatchFaceSettingsManager.shared
-    @EnvironmentObject var healthManager: HealthManager
-    @Environment(\.scenePhase) private var scenePhase
+    @ObservedObject var healthManager = HealthManager.shared
     
-    @State private var showingStylePicker = false
-    
-    // 是否处于微光熄屏节能状态
-    private var isLuminanceReduced: Bool {
-        scenePhase != .active
-    }
+    @State private var currentTime: Date = Date()
+    @State private var breathAnim = false
+    let timer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
     
     public init(player: PlayerProfile) {
         self.player = player
     }
     
     public var body: some View {
-        ZStack(alignment: .topTrailing) {
-            // 核心修仙表盘容器
-            CultivationWatchFaceContainer(
-                player: player,
-                isLuminanceReduced: isLuminanceReduced,
-                isPreviewMode: false
+        ZStack {
+            // 暗黑背景，代表丹田气海
+            RadialGradient(
+                gradient: Gradient(colors: [Color.cultivPrimary.opacity(0.15), Color.black]),
+                center: .center,
+                startRadius: 10,
+                endRadius: 100
             )
-            .contentShape(Rectangle())
-            // 长按表盘触发样式参悟/切换
-            .onLongPressGesture(minimumDuration: 0.6) {
-                triggerHapticSelection()
-                showingStylePicker = true
-            }
+            .ignoresSafeArea()
             
-            // 右上角极简“灵盘”切换快捷按钮
-            if !isLuminanceReduced {
-                Button(action: {
-                    triggerHapticSelection()
-                    showingStylePicker = true
-                }) {
-                    Image(systemName: "slider.horizontal.2.square")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(settingsManager.config.themeColor.primaryColor.opacity(0.8))
-                        .padding(6)
-                        .background(Color.black.opacity(0.45))
-                        .clipShape(Circle())
+            VStack(spacing: 8) {
+                // 时间转换区域 (十二时辰 + 农历)
+                HStack(alignment: .lastTextBaseline) {
+                    Text(TimeTranslator.currentShiChen(date: currentTime))
+                        .font(.system(size: 40, weight: .light, design: .serif))
+                        .foregroundColor(.themeCyanPrimary)
+                        .shadow(color: Color.themeCyanPrimary.opacity(breathAnim ? 0.8 : 0.2), radius: breathAnim ? 8 : 2)
+                    
+                    Text(TimeTranslator.lunarDateString(date: currentTime))
+                        .font(.system(size: 11, design: .serif))
+                        .foregroundColor(.cultivMuted)
                 }
-                .buttonStyle(.plain)
                 .padding(.top, 4)
-                .padding(.trailing, 4)
+                
+                // 现实时间
+                Text(currentTime, style: .time)
+                    .font(.system(size: 9, design: .serif))
+                    .foregroundColor(.gray.opacity(0.4))
+                
+                // 天理感应
+                let weatherBuff = WeatherEngine.shared.currentBuff(for: WeatherManager.shared.currentWeather)
+                HStack(spacing: 4) {
+                    Image(systemName: weatherBuff.iconName)
+                        .font(.system(size: 10))
+                        .foregroundColor(weatherBuff.color)
+                    Text(weatherBuff.description)
+                        .font(.system(size: 9, weight: .medium, design: .serif))
+                        .foregroundColor(.white.opacity(0.8))
+                }
+                .padding(.vertical, 2)
+                .onTapGesture {
+                    WeatherManager.shared.startUpdating()
+                }
+                
+                FixedDivider()
+                
+                // 核心健康转化指标
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 2) {
+                            Text("炼体·金")
+                                .font(.system(size: 9, design: .serif))
+                                .foregroundColor(.themeGoldPrimary)
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 7))
+                                .foregroundColor(.red.opacity(0.8))
+                        }
+                        Text("\(Int(healthManager.todayEnergy))")
+                            .font(.system(size: 15, weight: .bold, design: .serif))
+                            .foregroundColor(.white)
+                        Text("卡路里")
+                            .font(.system(size: 8, design: .serif))
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                    VStack(alignment: .trailing, spacing: 2) {
+                        HStack(spacing: 2) {
+                            Image(systemName: "figure.walk")
+                                .font(.system(size: 7))
+                                .foregroundColor(.green.opacity(0.8))
+                            Text("游历·木")
+                                .font(.system(size: 9, design: .serif))
+                                .foregroundColor(.green)
+                        }
+                        Text("\(Int(healthManager.todaySteps))")
+                            .font(.system(size: 15, weight: .bold, design: .serif))
+                            .foregroundColor(.white)
+                        Text("今日步数")
+                            .font(.system(size: 8, design: .serif))
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding(.horizontal, 14)
+                
+                // 五行灵气微型量条
+                HStack(spacing: 7) {
+                    QiGaugeCell(label: "金", value: player.metalQi, maxValue: 5000, color: .themeGoldPrimary)
+                    QiGaugeCell(label: "木", value: player.woodQi, maxValue: 5000, color: .green)
+                    QiGaugeCell(label: "水", value: player.waterQi, maxValue: 5000, color: .themeCyanPrimary)
+                    QiGaugeCell(label: "火", value: player.fireQi, maxValue: 5000, color: .red)
+                    QiGaugeCell(label: "土", value: player.earthQi, maxValue: 5000, color: .brown)
+                }
+                .padding(.vertical, 2)
+                
+                // 当前境界
+                VStack(spacing: 2) {
+                    Text("「 \(CultivationEngine.shared.realmName(for: player.realm)) 」")
+                        .font(.system(size: 15, weight: .bold, design: .serif))
+                        .foregroundColor(.themeGoldPrimary)
+                        .shadow(color: Color.themeGoldPrimary.opacity(0.4), radius: 2)
+                    
+                    if let req = CultivationEngine.shared.requirementForNextRealm(currentLevel: player.realm) {
+                        ProgressView(value: Double(player.cultivationBase), total: Double(req))
+                            .tint(LinearGradient(colors: [.themeCyanPrimary, .blue], startPoint: .leading, endPoint: .trailing))
+                            .background(Color.white.opacity(0.1))
+                            .scaleEffect(y: 0.5)
+                            .padding(.horizontal, 24)
+                    }
+                }
+                .padding(.bottom, 6)
             }
         }
-        .navigationBarHidden(true)
-        .sheet(isPresented: $showingStylePicker) {
-            WatchFacePickerSheet(player: player, settingsManager: settingsManager)
+        .onReceive(timer) { input in
+            currentTime = input
         }
-    }
-    
-    private func triggerHapticSelection() {
-        WKInterfaceDevice.current().play(.click)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true)) {
+                breathAnim = true
+            }
+        }
     }
 }
 
-// MARK: - Watch 端表盘参悟与切换面板
-struct WatchFacePickerSheet: View {
-    @ObservedObject var player: PlayerProfile
-    @ObservedObject var settingsManager: WatchFaceSettingsManager
-    @Environment(\.dismiss) private var dismiss
+// 五行灵气量条单元
+struct QiGaugeCell: View {
+    let label: String
+    let value: Int64
+    let maxValue: Int64
+    let color: Color
     
-    @State private var selectedStyle: WatchFaceStyle
-    @State private var selectedTheme: WatchFaceThemeColor
-    @State private var selectedTimeMode: TimeDisplayMode
-    
-    init(player: PlayerProfile, settingsManager: WatchFaceSettingsManager) {
-        self.player = player
-        self.settingsManager = settingsManager
-        _selectedStyle = State(initialValue: settingsManager.config.style)
-        _selectedTheme = State(initialValue: settingsManager.config.themeColor)
-        _selectedTimeMode = State(initialValue: settingsManager.config.timeMode)
+    private var fillRatio: Double {
+        guard maxValue > 0 else { return 0 }
+        return min(1.0, Double(value) / Double(maxValue))
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 12) {
-                Text("参悟修仙表盘")
-                    .font(.system(size: 14, weight: .bold, design: .serif))
-                    .foregroundColor(selectedTheme.primaryColor)
-                    .padding(.top, 4)
-                
-                // 表盘样式列表
-                VStack(spacing: 8) {
-                    ForEach(WatchFaceStyle.allCases) { style in
-                        Button(action: {
-                            WKInterfaceDevice.current().play(.click)
-                            selectedStyle = style
-                            selectedTheme = style.recommendedTheme
-                        }) {
-                            HStack(spacing: 8) {
-                                Image(systemName: style.iconSystemName)
-                                    .font(.system(size: 14))
-                                    .foregroundColor(selectedStyle == style ? selectedTheme.primaryColor : .gray)
-                                    .frame(width: 20)
-                                
-                                Text(style.title)
-                                    .font(.system(size: 13, weight: .semibold, design: .serif))
-                                    .foregroundColor(.white)
-                                
-                                Spacer()
-                                
-                                if selectedStyle == style {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(selectedTheme.primaryColor)
-                                        .font(.system(size: 12))
-                                }
-                            }
-                            .padding(8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(selectedStyle == style ? selectedTheme.primaryColor.opacity(0.15) : Color.white.opacity(0.06))
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(selectedStyle == style ? selectedTheme.primaryColor : Color.clear, lineWidth: 1)
-                            )
-                        }
-                        .buttonStyle(.plain)
-                    }
+        VStack(spacing: 2) {
+            GeometryReader { geo in
+                ZStack(alignment: .bottom) {
+                    Rectangle()
+                        .fill(Color.white.opacity(0.08))
+                    Rectangle()
+                        .fill(color.opacity(0.85))
+                        .frame(height: geo.size.height * fillRatio)
                 }
-                
-                Divider().background(Color.white.opacity(0.15))
-                
-                // 灵蕴主色切换
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("灵蕴法相")
-                        .font(.system(size: 10, weight: .medium, design: .serif))
-                        .foregroundColor(.gray)
-                    
-                    HStack(spacing: 8) {
-                        ForEach(WatchFaceThemeColor.allCases) { theme in
-                            Circle()
-                                .fill(theme.primaryColor)
-                                .frame(width: 18, height: 18)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: selectedTheme == theme ? 2 : 0)
-                                )
-                                .onTapGesture {
-                                    WKInterfaceDevice.current().play(.click)
-                                    selectedTheme = theme
-                                }
-                        }
-                    }
-                }
-                
-                // 确认应用按钮
-                Button(action: {
-                    var newConfig = settingsManager.config
-                    newConfig.style = selectedStyle
-                    newConfig.themeColor = selectedTheme
-                    newConfig.timeMode = selectedTimeMode
-                    
-                    settingsManager.config = newConfig
-                    settingsManager.broadcastConfig()
-                    
-                    NotificationCenter.default.post(
-                        name: .watchFaceConfigDidSync,
-                        object: nil,
-                        userInfo: settingsManager.dictionaryRepresentation()
-                    )
-                    
-                    WKInterfaceDevice.current().play(.success)
-                    dismiss()
-                }) {
-                    Text("契约此表盘")
-                        .font(.system(size: 13, weight: .bold, design: .serif))
-                        .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .background(selectedTheme.primaryColor)
-                        .cornerRadius(8)
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 4)
-                .padding(.bottom, 8)
+                .cornerRadius(2)
             }
-            .padding(.horizontal, 6)
+            .frame(width: 12, height: 20)
+            
+            Text(label)
+                .font(.system(size: 9, weight: .bold, design: .serif))
+                .foregroundColor(color)
+            
+            Text(formatQi(value))
+                .font(.system(size: 7, design: .monospaced))
+                .foregroundColor(.white.opacity(0.7))
         }
+    }
+    
+    private func formatQi(_ v: Int64) -> String {
+        if v >= 1000 { return "\(v / 1000)k" }
+        return "\(v)"
     }
 }
 
-// 古典分割线
+// 优雅古典分割线
 struct FixedDivider: View {
     var body: some View {
         Rectangle()
             .fill(LinearGradient(colors: [.clear, .gray.opacity(0.5), .clear], startPoint: .leading, endPoint: .trailing))
             .frame(height: 1)
+            .padding(.horizontal, 14)
     }
 }
 
-// MARK: - ThunderboltScene (SpriteKit Tribulation Effects)
+// MARK: - ThunderboltScene (SpriteKit 雷劫动效)
 class ThunderboltScene: SKScene {
     override func sceneDidLoad() {
         super.sceneDidLoad()
-        backgroundColor = .clear // 透明背景
+        backgroundColor = .clear
         createRain()
         
         let wait = SKAction.wait(forDuration: 0.4, withRange: 0.8)
@@ -252,7 +243,6 @@ class ThunderboltScene: SKScene {
         lightning.alpha = 1.0
         addChild(lightning)
         
-        // 同步重度震动，模拟雷鸣天威
         WKInterfaceDevice.current().play(.failure)
         
         let fade = SKAction.fadeOut(withDuration: 0.2)

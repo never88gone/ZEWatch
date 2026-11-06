@@ -20,15 +20,6 @@ struct ContentView: View {
                     }
                     .tag(0)
                     .accessibilityIdentifier("tab_dashboard")
-                
-                NavigationStack {
-                    WatchFaceStudioView(player: player)
-                }
-                .tabItem {
-                    Label("灵盘", systemImage: "applewatch")
-                }
-                .tag(3)
-                .accessibilityIdentifier("tab_watchface")
 
                 AICompanionView(player: player, onGoToSettings: {
                     selectedTab = 2
@@ -52,7 +43,6 @@ struct ContentView: View {
                 if let page = ProcessInfo.processInfo.environment["APPSTORE_PAGE"] {
                     switch page {
                     case "dongfu": selectedTab = 0
-                    case "watchface": selectedTab = 3
                     case "companion": selectedTab = 1
                     case "model_selection": selectedTab = 1
                     case "settings": selectedTab = 2

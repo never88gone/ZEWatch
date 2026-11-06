@@ -11,15 +11,10 @@
 		09C53FE54EE06564CB88ACDA /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C8294F0A9D52DC43CFD4A6 /* HealthManager.swift */; };
 		0AB27694DF0F71AF87A3BAC3 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */; };
 		1077CD60F34C34CC849D6B25 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF2662A5AD41B102C62B0C1 /* MotionManager.swift */; };
-		18FB46645FDA73D4575F1538 /* SwordFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7958C06740BE3667F9336621 /* SwordFaceView.swift */; };
 		1C7A3BC62878B01DC27672D7 /* MissionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD79289469DAC16E33E8A35F /* MissionEngine.swift */; };
 		1CD02A4D8FB17BC73020C5B4 /* CreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D572A0781995B849900BD6 /* CreationView.swift */; };
 		1D84382140F646C8A6D198F1 /* LLMManager+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF4D853A705E30604F8F0EF /* LLMManager+Download.swift */; };
-		1EEBD34325C5AF62315D40F7 /* SwordFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7958C06740BE3667F9336621 /* SwordFaceView.swift */; };
 		217D723FF12A8A920432806E /* LLMModelConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1262AD96C737E2A6993A3AF /* LLMModelConfig.swift */; };
-		21E4951A67387FC3B3A20AB4 /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65B919483A57841D844BF9 /* WatchFaceModel.swift */; };
-		262C702AB5C56EE215BAE3E8 /* AstronomyFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9462A3736DB5824D4294805F /* AstronomyFaceView.swift */; };
-		28D6F94911FAB86CC8E85283 /* TaijiFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */; };
 		370C258DA7E7B47AADC4B43F /* LibLlama.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DB2499047C5F43889A8F6E /* LibLlama.swift */; };
 		37B3E6F9B57BA7EAC5CA45AE /* ModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B73791265C5EE4FDFFFEDF /* ModelSelectionView.swift */; };
 		386135352F72419200538B3A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 386135242F72419200538B3A /* Assets.xcassets */; };
@@ -28,10 +23,7 @@
 		38E13B862F740D680055BE24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38E13B852F740D680055BE24 /* Assets.xcassets */; };
 		38E13B882F7412630055BE24 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38E13B872F7412630055BE24 /* Launch Screen.storyboard */; };
 		3BDDA5F3A1ECB7A7A6BBC851 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F2E8D1C9682B433F7CAB5D /* Persistence.swift */; };
-		3C9D29A7190CE6AD700A7D2D /* TaijiFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */; };
 		3D173B74E4464F2DE7B82D3E /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A737AB13CF014BD539622D /* HealthManager.swift */; };
-		3F0414F7E60A60C3054E2FB4 /* WatchFaceStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */; };
-		A3F0414F7E60A60C30542FB5 /* WatchFaceGuideSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96607309192FDB0EBA9700D /* WatchFaceGuideSheet.swift */; };
 		3FB4EB4FF080186E59722A4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 303F17D13191D69DF2336537 /* Foundation.framework */; };
 		40F6087AF5FFA4D6852C9C34 /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */; };
 		437B006F5758A99449064798 /* SkillLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED8ACA04471368DCD79A9DB /* SkillLibraryView.swift */; };
@@ -46,7 +38,6 @@
 		6678844F4695FFBAA1B82D97 /* AICompanionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC2809342E85D476C805862 /* AICompanionView.swift */; };
 		677A609E37F2440A83E57526 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F23CF4DA1C30D2597CC3BAE /* DashboardView.swift */; };
 		6798CDC91374E628AF9F6A82 /* TribulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D892132454C05F706660C236 /* TribulationView.swift */; };
-		67F1937E40266E94A49EFB85 /* TribulationFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */; };
 		766E61050CBF0698CCB749C5 /* TimeTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */; };
 		7780A908374130FCEADA510C /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E743AF15ED6947BEC56DA27D /* PrivacyPolicyView.swift */; };
 		7CD3C8D4FF0BE6761B494759 /* ZEWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3803AE422F0D10490047BF4A /* ZEWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -54,10 +45,8 @@
 		8D9188A1EE5518EDDEEE7776 /* TrainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC33283A38680AE4B168D99C /* TrainingView.swift */; };
 		8F95C249FFFD090C791803AC /* WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB2F285F84E7A1D8BCEC36F /* WatchApp.swift */; };
 		8FC4BC2AFB70A945D74F9B4E /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */; };
-		91CB33DA1BEBC9ED6ED5946A /* WatchFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65B919483A57841D844BF9 /* WatchFaceModel.swift */; };
 		967BDF1539B74068C77D93BB /* CultivationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD02881D7AA818E83506207 /* CultivationEngine.swift */; };
 		9FC93942899E13A9A91495B2 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356AB883C01102E17BA80636 /* ConnectivityManager.swift */; };
-		A2C7B055032B00866A613D8A /* GrottoFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */; };
 		A88F4334BA9A3E908AAE4F1A /* MissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B8C849740F5F954637A8A /* MissionView.swift */; };
 		AB15B31B5F2441E6B0CAE055 /* LlamaCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC809589B9342FCDEFCC5B /* LlamaCore.swift */; };
 		ABB4CBB1D531B767F00A43C1 /* GrottoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17D54F295B30BD6E6402CD6 /* GrottoView.swift */; };
@@ -65,8 +54,6 @@
 		B800D0A19876D8EEA064E692 /* LLMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB9F13C8E7D9D5E3B201175 /* LLMManager.swift */; };
 		BBF956ECE73A58A6F5B426C0 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874EA1062A33686CDACAB5C /* Persistence.swift */; };
 		BD8B2419CB372F23E86DBA55 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4B890C754D5A3AB19A5CA /* ContentView.swift */; };
-		CA19C95C5CC851B839A264F6 /* AstronomyFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9462A3736DB5824D4294805F /* AstronomyFaceView.swift */; };
-		CB3B57C3EC4B33945053924E /* CultivationWatchFaceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */; };
 		CCB18D1B65AD99DC70BB8D62 /* ElementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D7D13705DD81F01ABE2315 /* ElementEngine.swift */; };
 		D2AA906DA4EBB00806F20BF6 /* AlchemyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79B931D6D043FBE2B8AA2CA /* AlchemyView.swift */; };
 		D6F8F36E73A382163CE52F02 /* WatchPrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7259E339DA45201BC2B2E7B /* WatchPrivacyPolicyView.swift */; };
@@ -74,14 +61,11 @@
 		DAE976BF0676F78974EEC134 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1C64740C053D46165BE3FB /* MessageBubbleView.swift */; };
 		E2AFBDB8EE88322BBF1CD350 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356AB883C01102E17BA80636 /* ConnectivityManager.swift */; };
 		E52A9C9DB9CF7A3F01AAFE2F /* CoreDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FD6B75D4B97EB730A3971 /* CoreDataModels.swift */; };
-		E88F20218D3136A558AE0BF7 /* GrottoFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */; };
 		E8CE04807CE9B79FDA142BEC /* WatchFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7927632020604803A9EC75A /* WatchFaceView.swift */; };
 		EF858E283D63BC60470472F3 /* CultivationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AB534BBDC27D157CF4123C /* CultivationWidget.swift */; };
 		F326DCB591CB8423EC89F590 /* LlamaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D391CEC682D4CC58A6FC0431 /* LlamaState.swift */; };
-		F46A0D523DE9064EBA228AEC /* TribulationFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */; };
 		F80AA1E2533AB246D4727541 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */; };
 		F8BFDED73FD294B125E3BAAB /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EF5BF2B3DE909D70FED1B1 /* ChatMessage.swift */; };
-		FC83F88D5B28A160EAD25513 /* CultivationWatchFaceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */; };
 		FDA7DEA2CA81A8E6423D4C58 /* CompanionSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A7F0ACD18CEF92F75E22C4 /* CompanionSettingsView.swift */; };
 		FFDC68DBDC2DE7EF6685D7FB /* AICompanionHeaderViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96B4213B8B4972111E73B4 /* AICompanionHeaderViews.swift */; };
 /* End PBXBuildFile section */
@@ -121,7 +105,6 @@
 		303F17D13191D69DF2336537 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		310C2B956ED4C08C6652F803 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
 		33D572A0781995B849900BD6 /* CreationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreationView.swift; sourceTree = "<group>"; };
-		348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWatchFaceContainer.swift; sourceTree = "<group>"; };
 		356AB883C01102E17BA80636 /* ConnectivityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		3803AE422F0D10490047BF4A /* ZEWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZEWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		386135242F72419200538B3A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -144,22 +127,15 @@
 		5F23CF4DA1C30D2597CC3BAE /* DashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		60A737AB13CF014BD539622D /* HealthManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		680989ED63C0B048A161D856 /* GameKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameKitManager.swift; sourceTree = "<group>"; };
-		6F65B919483A57841D844BF9 /* WatchFaceModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceModel.swift; sourceTree = "<group>"; };
 		72FAD56FD5F7AC9302D1E137 /* ZEWatchCompanionApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZEWatchCompanionApp.swift; sourceTree = "<group>"; };
 		74AB534BBDC27D157CF4123C /* CultivationWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CultivationWidget.swift; sourceTree = "<group>"; };
-		7958C06740BE3667F9336621 /* SwordFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwordFaceView.swift; sourceTree = "<group>"; };
 		79A7F0ACD18CEF92F75E22C4 /* CompanionSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CompanionSettingsView.swift; sourceTree = "<group>"; };
 		86DB2499047C5F43889A8F6E /* LibLlama.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
-		9462A3736DB5824D4294805F /* AstronomyFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AstronomyFaceView.swift; sourceTree = "<group>"; };
-		96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceStudioView.swift; sourceTree = "<group>"; };
-		A96607309192FDB0EBA9700D /* WatchFaceGuideSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceGuideSheet.swift; sourceTree = "<group>"; };
 		9D036B9193DE8B79C365EC0B /* SkillActionEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SkillActionEngine.swift; sourceTree = "<group>"; };
 		A11B8C849740F5F954637A8A /* MissionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
 		AE72E51C3B41D93E6112B767 /* CoreDataModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
 		B04ADE3F7B03DAE02DA95A23 /* ColorTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
-		B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrottoFaceView.swift; sourceTree = "<group>"; };
 		B5D7D13705DD81F01ABE2315 /* ElementEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ElementEngine.swift; sourceTree = "<group>"; };
-		B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TribulationFaceView.swift; sourceTree = "<group>"; };
 		B79B931D6D043FBE2B8AA2CA /* AlchemyView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlchemyView.swift; sourceTree = "<group>"; };
 		B85FD6B75D4B97EB730A3971 /* CoreDataModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreDataModels.swift; sourceTree = "<group>"; };
 		BAC2809342E85D476C805862 /* AICompanionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AICompanionView.swift; sourceTree = "<group>"; };
@@ -175,7 +151,6 @@
 		D892132454C05F706660C236 /* TribulationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TribulationView.swift; sourceTree = "<group>"; };
 		E743AF15ED6947BEC56DA27D /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		E7927632020604803A9EC75A /* WatchFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
-		E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TaijiFaceView.swift; sourceTree = "<group>"; };
 		F17D54F295B30BD6E6402CD6 /* GrottoView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrottoView.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7081920ABCD /* ZEWatchCompanion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZEWatchCompanion-Bridging-Header.h"; sourceTree = "<group>"; };
 		F1AFACC36A2B475EE6ED1DE0 /* ZEWatchCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZEWatchCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,12 +185,6 @@
 			children = (
 				E7927632020604803A9EC75A /* WatchFaceView.swift */,
 				74AB534BBDC27D157CF4123C /* CultivationWidget.swift */,
-				348EA8BEF65B7B79E69BC3FD /* CultivationWatchFaceContainer.swift */,
-				E7F4BE474A0A2A93603CFA90 /* TaijiFaceView.swift */,
-				B6CD24CDBEAE38B1866EB724 /* TribulationFaceView.swift */,
-				B0D641930E3AEFEA2C4E59B5 /* GrottoFaceView.swift */,
-				7958C06740BE3667F9336621 /* SwordFaceView.swift */,
-				9462A3736DB5824D4294805F /* AstronomyFaceView.swift */,
 			);
 			name = WatchFace;
 			path = WatchFace;
@@ -301,8 +270,6 @@
 		26CF82366D8F0E0B1055D4EB /* WatchFace */ = {
 			isa = PBXGroup;
 			children = (
-				96607309192FDB0EBA94700C /* WatchFaceStudioView.swift */,
-				A96607309192FDB0EBA9700D /* WatchFaceGuideSheet.swift */,
 			);
 			name = WatchFace;
 			path = WatchFace;
@@ -392,7 +359,6 @@
 				B85FD6B75D4B97EB730A3971 /* CoreDataModels.swift */,
 				D1F2E8D1C9682B433F7CAB5D /* Persistence.swift */,
 				F24901E173BEFEDEECD5BAA5 /* TimeTranslator.swift */,
-				6F65B919483A57841D844BF9 /* WatchFaceModel.swift */,
 			);
 			name = Models;
 			path = Models;
@@ -754,8 +720,6 @@
 				DAC3BA2FDA2E6C56E9EBE163 /* ContentView.swift in Sources */,
 				677A609E37F2440A83E57526 /* DashboardView.swift in Sources */,
 				1CD02A4D8FB17BC73020C5B4 /* CreationView.swift in Sources */,
-				3F0414F7E60A60C3054E2FB4 /* WatchFaceStudioView.swift in Sources */,
-				A3F0414F7E60A60C30542FB5 /* WatchFaceGuideSheet.swift in Sources */,
 				6678844F4695FFBAA1B82D97 /* AICompanionView.swift in Sources */,
 				FFDC68DBDC2DE7EF6685D7FB /* AICompanionHeaderViews.swift in Sources */,
 				DAE976BF0676F78974EEC134 /* MessageBubbleView.swift in Sources */,
@@ -766,14 +730,7 @@
 				F326DCB591CB8423EC89F590 /* LlamaState.swift in Sources */,
 				F80AA1E2533AB246D4727541 /* ColorTheme.swift in Sources */,
 				0AB27694DF0F71AF87A3BAC3 /* TimeTranslator.swift in Sources */,
-				21E4951A67387FC3B3A20AB4 /* WatchFaceModel.swift in Sources */,
 				E2AFBDB8EE88322BBF1CD350 /* ConnectivityManager.swift in Sources */,
-				FC83F88D5B28A160EAD25513 /* CultivationWatchFaceContainer.swift in Sources */,
-				28D6F94911FAB86CC8E85283 /* TaijiFaceView.swift in Sources */,
-				F46A0D523DE9064EBA228AEC /* TribulationFaceView.swift in Sources */,
-				A2C7B055032B00866A613D8A /* GrottoFaceView.swift in Sources */,
-				1EEBD34325C5AF62315D40F7 /* SwordFaceView.swift in Sources */,
-				262C702AB5C56EE215BAE3E8 /* AstronomyFaceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -787,7 +744,6 @@
 				E52A9C9DB9CF7A3F01AAFE2F /* CoreDataModels.swift in Sources */,
 				3BDDA5F3A1ECB7A7A6BBC851 /* Persistence.swift in Sources */,
 				766E61050CBF0698CCB749C5 /* TimeTranslator.swift in Sources */,
-				91CB33DA1BEBC9ED6ED5946A /* WatchFaceModel.swift in Sources */,
 				967BDF1539B74068C77D93BB /* CultivationEngine.swift in Sources */,
 				1C7A3BC62878B01DC27672D7 /* MissionEngine.swift in Sources */,
 				CCB18D1B65AD99DC70BB8D62 /* ElementEngine.swift in Sources */,
@@ -808,12 +764,6 @@
 				437B006F5758A99449064798 /* SkillLibraryView.swift in Sources */,
 				E8CE04807CE9B79FDA142BEC /* WatchFaceView.swift in Sources */,
 				EF858E283D63BC60470472F3 /* CultivationWidget.swift in Sources */,
-				CB3B57C3EC4B33945053924E /* CultivationWatchFaceContainer.swift in Sources */,
-				3C9D29A7190CE6AD700A7D2D /* TaijiFaceView.swift in Sources */,
-				67F1937E40266E94A49EFB85 /* TribulationFaceView.swift in Sources */,
-				E88F20218D3136A558AE0BF7 /* GrottoFaceView.swift in Sources */,
-				18FB46645FDA73D4575F1538 /* SwordFaceView.swift in Sources */,
-				CA19C95C5CC851B839A264F6 /* AstronomyFaceView.swift in Sources */,
 				D6F8F36E73A382163CE52F02 /* WatchPrivacyPolicyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

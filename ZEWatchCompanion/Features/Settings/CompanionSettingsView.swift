@@ -6,7 +6,6 @@ struct CompanionSettingsView: View {
     @ObservedObject var player: PlayerProfile
     @ObservedObject var llm = LLMManager.shared
     @ObservedObject var healthManager = HealthManager.shared
-    @ObservedObject var watchFaceManager = WatchFaceSettingsManager.shared
     
     @AppStorage("hapticFeedbackEnabled") private var hapticEnabled = true
     @AppStorage("autoSettleOfflineGains") private var autoSettle = true
@@ -25,46 +24,6 @@ struct CompanionSettingsView: View {
         NavigationStack {
             ScrollViewReader { scrollProxy in
                 List {
-                    // MARK: - Apple Watch 表盘设置
-                Section {
-                    NavigationLink {
-                        WatchFaceStudioView(player: player)
-                    } label: {
-                        HStack(spacing: 12) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(watchFaceManager.config.themeColor.primaryColor.opacity(0.18))
-                                    .frame(width: 44, height: 44)
-                                
-                                Image(systemName: "applewatch")
-                                    .font(.title2)
-                                    .foregroundColor(watchFaceManager.config.themeColor.primaryColor)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 3) {
-                                HStack(spacing: 6) {
-                                    Text("修仙表盘工坊")
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
-                                    Text("仙表")
-                                        .font(.system(size: 9, weight: .bold))
-                                        .padding(.horizontal, 4)
-                                        .padding(.vertical, 1)
-                                        .background(watchFaceManager.config.themeColor.primaryColor)
-                                        .foregroundColor(.black)
-                                        .cornerRadius(4)
-                                }
-                                Text(watchFaceManager.config.style.title)
-                                    .font(.caption)
-                                    .foregroundColor(.cultivMuted)
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                } header: {
-                    Text("Apple Watch 腕间修仙")
-                }
-
                 // MARK: - 修行偏好
                 Section {
                     Toggle(isOn: $hapticEnabled) {

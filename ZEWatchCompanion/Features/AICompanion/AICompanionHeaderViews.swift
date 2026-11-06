@@ -1,4 +1,5 @@
 import SwiftUI
+import Symbols
 
 #if os(iOS)
 public struct ElderHeaderView: View {

@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 import CoreData
+import Symbols
 
 #if os(watchOS)
 import WatchKit
